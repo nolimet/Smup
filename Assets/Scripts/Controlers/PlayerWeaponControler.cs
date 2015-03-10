@@ -22,6 +22,7 @@ public class PlayerWeaponControler : MonoBehaviour
     {
         if (!canMainShoot)
             return;
+
         StartCoroutine(fireDelay(WeaponTable.FireRate[WeaponTable.Weapons.Cannon]));
         Debug.Log("fire");
     }
