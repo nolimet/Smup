@@ -3,7 +3,7 @@ using System.Collections;
 
 public class PlayerWeaponControler : MonoBehaviour
 {
-    bool canShoot = true;
+    bool canMainShoot = true;
     // Use this for initialization
     void Start()
     {
@@ -14,13 +14,13 @@ public class PlayerWeaponControler : MonoBehaviour
     void Update()
     {
         if (Input.GetButton(Axis.Fire))
-            Fire();
+            FireMain();
         
     }
 
-    void Fire()
+    void FireMain()
     {
-        if (!canShoot)
+        if (!canMainShoot)
             return;
         StartCoroutine(fireDelay(WeaponTable.FireRate[WeaponTable.Weapons.Cannon]));
         Debug.Log("fire");
@@ -28,8 +28,8 @@ public class PlayerWeaponControler : MonoBehaviour
 
     IEnumerator fireDelay(float fireRate)
     {
-        canShoot = false;
+        canMainShoot = false;
         yield return new WaitForSeconds(1f / fireRate);
-        canShoot = true;
+        canMainShoot = true;
     }
 }
