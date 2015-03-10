@@ -4,5 +4,6 @@ using System.Collections;
 public class Axis  {
 
     public const string Horizontal = "Horizontal",
-                    Vertical = "Vertical";
+                    Vertical = "Vertical",
+                    Fire = "Fire1";
 }
