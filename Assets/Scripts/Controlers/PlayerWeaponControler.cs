@@ -22,14 +22,14 @@ public class PlayerWeaponControler : MonoBehaviour
     {
         if (!canShoot)
             return;
-        StartCoroutine(fireDelay(2f));
+        StartCoroutine(fireDelay(WeaponTable.FireRate[WeaponTable.Weapons.Cannon]));
         Debug.Log("fire");
     }
 
-    IEnumerator fireDelay(float delay)
+    IEnumerator fireDelay(float fireRate)
     {
         canShoot = false;
-        yield return new WaitForSeconds(delay);
+        yield return new WaitForSeconds(1f / fireRate);
         canShoot = true;
     }
 }
