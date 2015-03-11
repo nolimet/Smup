@@ -18,7 +18,7 @@ public class WeaponTable
     /// <summary>
     /// damage dealt per bullet
     /// </summary>
-    public static Dictionary<Weapons, int> DamagePerShot = new Dictionary<Weapons, int> { 
+    public static Dictionary<Weapons, float> DamagePerShot = new Dictionary<Weapons, float> { 
         {Weapons.Cannon,                10},
         {Weapons.Machine_Gun,            3}
     };
@@ -26,15 +26,15 @@ public class WeaponTable
     /// <summary>
     /// flying speed per bullet
     /// </summary>
-    public static Dictionary<Weapons, int> bulletSpeed = new Dictionary<Weapons, int>{
+    public static Dictionary<Weapons, float> bulletSpeed = new Dictionary<Weapons, float>{
         {Weapons.Cannon,                5},
-        {Weapons.Machine_Gun,            4}           
+        {Weapons.Machine_Gun,            7}           
     };
 
     /// <summary>
     /// bullet spray in degrees/eulerAngles
     /// </summary>
-    public static Dictionary<Weapons, int> Accuracy = new Dictionary<Weapons, int>{
+    public static Dictionary<Weapons, float> Accuracy = new Dictionary<Weapons, float>{
         {Weapons.Cannon,                5},
         {Weapons.Machine_Gun,            15}
     };

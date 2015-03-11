@@ -15,7 +15,8 @@ public class WeaponBase : MonoBehaviour {
     /// <param name="moveDirNormal">The move direction clamped between 1 & -1</param>
     /// <param name="speed">How quickly it will move</param>
     /// <param name="damage">The amount of damage that will be done on impact</param>
-    public virtual void Init(Vector2 moveDirNormal, float speed, float damage)
+    /// <param name="addVelo">Add Exstra velocity from for example the player or enemies</param>
+    public virtual void Init(Vector2 addVelo,Vector2 moveDirNormal, float speed, float damage)
     {
         this.moveDir = moveDirNormal;
         this.speed = speed;
@@ -24,7 +25,7 @@ public class WeaponBase : MonoBehaviour {
         if(!rigi)
             rigi = GetComponent<Rigidbody2D>();
 
-        rigi.velocity = moveDir * speed;
+        rigi.velocity = (moveDir * speed) + addVelo;
     }
 
     protected virtual void Start()
