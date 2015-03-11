@@ -11,7 +11,8 @@ GameObject:
   - 50: {fileID: 5049690}
   - 114: {fileID: 11493888}
   - 212: {fileID: 21214156}
-  m_Layer: 0
+  - 58: {fileID: 5810522}
+  m_Layer: 8
   m_Name: Machine_Gun
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -45,6 +46,19 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
+--- !u!58 &5810522
+CircleCollider2D:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 193392}
+  m_Enabled: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: .0799999982
 --- !u!114 &11493888
 MonoBehaviour:
   m_ObjectHideFlags: 1
