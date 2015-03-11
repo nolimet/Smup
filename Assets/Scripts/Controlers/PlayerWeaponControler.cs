@@ -17,7 +17,16 @@ public class PlayerWeaponControler : MonoBehaviour
     {
         if (Input.GetButton(Axis.Fire))
             FireMain();
-        
+        if (Input.anyKeyDown)
+            SwitchWeapon();
+    }
+
+    void SwitchWeapon()
+    {
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+            currentWeapon = WeaponTable.Weapons.Cannon;
+        else if (Input.GetKeyDown(KeyCode.Alpha2))
+            currentWeapon = WeaponTable.Weapons.Machine_Gun;
     }
 
     void FireMain()
