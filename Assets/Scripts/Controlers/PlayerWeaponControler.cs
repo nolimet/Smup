@@ -26,7 +26,7 @@ public class PlayerWeaponControler : MonoBehaviour
             return;
 
         StartCoroutine(fireDelay(WeaponTable.FireRate[currentWeapon]));
-        GameObject B = Instantiate(Resources.Load("Weapons/Cannon"), transform.position + (Vector3)weaponOffset, Quaternion.identity) as GameObject;
+        GameObject B = Instantiate(Resources.Load("Weapons/" + currentWeapon.ToString()), transform.position + (Vector3)weaponOffset, Quaternion.identity) as GameObject;
         WeaponBase W = B.GetComponent<WeaponBase>();
         W.Init(getFireAngle(),WeaponTable.bulletSpeed[currentWeapon],WeaponTable.DamagePerShot[currentWeapon]);
     }
