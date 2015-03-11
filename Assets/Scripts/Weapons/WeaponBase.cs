@@ -8,6 +8,7 @@ public class WeaponBase : MonoBehaviour {
     protected Vector2 moveDir;
     protected float speed, damage;
     protected Rigidbody2D rigi;
+    protected bool markedForRemove;
     /// <summary>
     /// Sets the paramaters that the bullet will use to move around
     /// </summary>
@@ -34,5 +35,34 @@ public class WeaponBase : MonoBehaviour {
     protected virtual void Update()
     {
         
+    }
+
+    public void OnCollisionEnter2D(Collision2D coll)
+    {
+        StartCoroutine(Remove(0.5f));
+    }
+
+    IEnumerator Remove(float delay)
+    {
+        if (!markedForRemove)
+        {
+            const float frag = 1f / 30;
+            SpriteRenderer r = GetComponent<SpriteRenderer>();
+            Color StartColor = r.color;
+            Color TargetColor = r.color;
+
+            TargetColor.a = 0;
+            markedForRemove = true;
+
+            yield return new WaitForSeconds(delay);
+
+            for (int i = 0; i < 30; i++)
+            {
+                r.color = Color.Lerp(StartColor, TargetColor, frag * i);
+                yield return new WaitForEndOfFrame();
+            }
+
+            Destroy(this.gameObject);
+        }
     }
 }
