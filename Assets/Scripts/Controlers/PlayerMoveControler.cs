@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-[RequireComponent(typeof(Rigidbody2D))]
+
+[RequireComponent(typeof(Rigidbody2D),typeof(BoxCollider2D))]
 public class PlayerMoveControler : MonoBehaviour {
 
     const float speed = 6f;

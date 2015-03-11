@@ -325,3 +325,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d43a851366ae6bc4996ba768b7ed2ca0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  weaponOffset: {x: .649999976, y: -.0500000007}
+  currentWeapon: 0

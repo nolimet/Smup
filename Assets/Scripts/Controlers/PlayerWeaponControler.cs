@@ -4,6 +4,8 @@ using System.Collections;
 public class PlayerWeaponControler : MonoBehaviour
 {
     bool canMainShoot = true;
+    public Vector2 weaponOffset;
+    public WeaponTable.Weapons currentWeapon;
     // Use this for initialization
     void Start()
     {
@@ -23,8 +25,18 @@ public class PlayerWeaponControler : MonoBehaviour
         if (!canMainShoot)
             return;
 
-        StartCoroutine(fireDelay(WeaponTable.FireRate[WeaponTable.Weapons.Cannon]));
-        Debug.Log("fire");
+        StartCoroutine(fireDelay(WeaponTable.FireRate[currentWeapon]));
+        GameObject B = Instantiate(Resources.Load("Weapons/Cannon"), transform.position + (Vector3)weaponOffset, Quaternion.identity) as GameObject;
+        WeaponBase W = B.GetComponent<WeaponBase>();
+        W.Init(getFireAngle(),WeaponTable.bulletSpeed[currentWeapon],WeaponTable.DamagePerShot[currentWeapon]);
+    }
+
+    Vector2 getFireAngle()
+    {
+        const float angleOffSet = 0;
+        float angle = angleOffSet + (Random.RandomRange(-0.5f, 0.5f) * WeaponTable.Accuracy[currentWeapon]);
+
+        return MathHelper.AngleToVector(angle);
     }
 
     IEnumerator fireDelay(float fireRate)
