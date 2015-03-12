@@ -40,7 +40,15 @@ public class WeaponBase : MonoBehaviour {
 
     public void OnCollisionEnter2D(Collision2D coll)
     {
+        if (!markedForRemove)
+          //  rigi.AddTorque(Random.Range(-10, 10));
         StartCoroutine(Remove(0.5f));
+    }
+
+    public void OnTriggerEnter2D(Collider2D other)
+    {
+        if (!markedForRemove)
+            StartCoroutine(Remove(0f));
     }
 
     IEnumerator Remove(float delay)

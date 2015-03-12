@@ -28,7 +28,7 @@ public class WeaponTable
     /// </summary>
     public static Dictionary<Weapons, float> bulletSpeed = new Dictionary<Weapons, float>{
         {Weapons.Cannon,                5},
-        {Weapons.Machine_Gun,            7}           
+        {Weapons.Machine_Gun,           10}           
     };
 
     /// <summary>

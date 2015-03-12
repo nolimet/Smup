@@ -17,7 +17,8 @@ public class PlayerStats : MonoBehaviour {
 	// Update is called once per frame
 	void Update () 
     {
-        currentEnergy += 16f * Time.deltaTime;
+        if (currentEnergy < maxEnergy) 
+            currentEnergy += 16f * Time.deltaTime;
         Energy.UpdateSize(currentEnergy);
 	}
 }
