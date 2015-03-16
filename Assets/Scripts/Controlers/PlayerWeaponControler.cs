@@ -3,12 +3,25 @@ using System.Collections;
 
 public class PlayerWeaponControler : MonoBehaviour
 {
+    public delegate void DelegateFireWeaon(WeaponTable.Weapons weaponFired);
+    public event DelegateFireWeaon onFireWeapon;
+
+    public static PlayerWeaponControler instance;
+
+    public static bool Firing = false;
+
     bool canMainShoot = true;
     public Vector2 weaponOffset;
     public WeaponTable.Weapons currentWeapon;
+     
 
     Rigidbody2D rigi;
     // Use this for initialization
+    void Awake()
+    {
+        instance = this;
+    }
+
     void Start()
     {
         rigi = GetComponent<Rigidbody2D>();
@@ -19,6 +32,8 @@ public class PlayerWeaponControler : MonoBehaviour
     {
         if (Input.GetButton(Axis.Fire))
             FireMain();
+        else
+            Firing = false;
         if (Input.anyKeyDown)
             SwitchWeapon();
     }
@@ -33,7 +48,10 @@ public class PlayerWeaponControler : MonoBehaviour
 
     void FireMain()
     {
-        if (!canMainShoot)
+        Firing = true;
+        if (!canMainShoot) 
+            return;
+        if (!PlayerStats.instance.canFire(WeaponTable.EnergyUse[currentWeapon] / WeaponTable.FireRate[currentWeapon]))
             return;
 
         StartCoroutine(fireDelay(WeaponTable.FireRate[currentWeapon]));
@@ -43,6 +61,9 @@ public class PlayerWeaponControler : MonoBehaviour
 
         B.transform.rotation = Quaternion.Euler(0, 0, angle);
         W.Init(getAddedVelocity(), MathHelper.AngleToVector(angle), WeaponTable.bulletSpeed[currentWeapon], WeaponTable.DamagePerShot[currentWeapon]);
+
+        if (onFireWeapon != null)
+            onFireWeapon(currentWeapon);
     }
 
     Vector2 getAddedVelocity()

@@ -1,11 +1,12 @@
 fileFormatVersion: 2
 guid: 9e2b687216efd9847b4388007ee88f36
-timeCreated: 1426511682
+timeCreated: 1426512264
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
     21300000: Kogels_0
     21300002: Kogels_1
+    21300004: Kogels_2
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -68,6 +69,16 @@ TextureImporter:
         y: 40
         width: 12
         height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Kogels_2
+      rect:
+        serializedVersion: 2
+        x: 9
+        y: 14
+        width: 24
+        height: 18
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
