@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+[RequireComponent(typeof(PolygonCollider2D))]
 [RequireComponent(typeof(Rigidbody2D))]
 public class WeaponBase : MonoBehaviour {
 
@@ -55,6 +56,8 @@ public class WeaponBase : MonoBehaviour {
     {
         if (!markedForRemove)
         {
+            GetComponent<PolygonCollider2D>().enabled = false;
+
             const float frag = 1f / 30;
             SpriteRenderer r = GetComponent<SpriteRenderer>();
             Color StartColor = r.color;
