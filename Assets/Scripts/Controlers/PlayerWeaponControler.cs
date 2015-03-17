@@ -44,6 +44,8 @@ public class PlayerWeaponControler : MonoBehaviour
             currentWeapon = WeaponTable.Weapons.Cannon;
         else if (Input.GetKeyDown(KeyCode.Alpha2))
             currentWeapon = WeaponTable.Weapons.Machine_Gun;
+        else if (Input.GetKeyDown(KeyCode.Alpha3))
+            currentWeapon = WeaponTable.Weapons.Shotgun;
     }
 
     void FireMain()
@@ -55,12 +57,21 @@ public class PlayerWeaponControler : MonoBehaviour
             return;
 
         StartCoroutine(fireDelay(WeaponTable.FireRate[currentWeapon]));
-        GameObject B = Instantiate(Resources.Load("Weapons/" + currentWeapon.ToString()), transform.position + (Vector3)weaponOffset, Quaternion.identity) as GameObject;
-        WeaponBase W = B.GetComponent<WeaponBase>();
-        float angle = (Random.Range(-0.5f, 0.5f) * WeaponTable.Accuracy[currentWeapon]);
 
-        B.transform.rotation = Quaternion.Euler(0, 0, angle);
-        W.Init(getAddedVelocity(), MathHelper.AngleToVector(angle), WeaponTable.bulletSpeed[currentWeapon], WeaponTable.DamagePerShot[currentWeapon]);
+
+        GameObject B;
+        WeaponBase W;
+        float angle;
+        for (int i = 0; i < WeaponTable.BulletsPerShot[currentWeapon]; i++)
+        {
+            B = Instantiate(Resources.Load("Weapons/" + currentWeapon.ToString()), transform.position + (Vector3)weaponOffset, Quaternion.identity) as GameObject;
+            W = B.GetComponent<WeaponBase>();
+
+            angle = (Random.Range(-0.5f, 0.5f) * WeaponTable.Accuracy[currentWeapon]);
+
+            B.transform.rotation = Quaternion.Euler(0, 0, angle);
+            W.Init(getAddedVelocity(), MathHelper.AngleToVector(angle), WeaponTable.bulletSpeed[currentWeapon], WeaponTable.DamagePerBullet[currentWeapon]);
+        }
 
         if (onFireWeapon != null)
             onFireWeapon(currentWeapon);

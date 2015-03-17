@@ -44,12 +44,14 @@ public class WeaponBase : MonoBehaviour {
         if (!markedForRemove)
           //  rigi.AddTorque(Random.Range(-10, 10));
         StartCoroutine(Remove(0.5f));
+        coll.gameObject.SendMessage("hit", damage, SendMessageOptions.DontRequireReceiver);
     }
 
     public void OnTriggerEnter2D(Collider2D other)
     {
         if (!markedForRemove)
             StartCoroutine(Remove(0f));
+       
     }
 
     IEnumerator Remove(float delay)

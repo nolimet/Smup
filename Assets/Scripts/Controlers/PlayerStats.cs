@@ -23,7 +23,7 @@ public class PlayerStats : MonoBehaviour {
     void PlayerWeapon_onFireWeapon(WeaponTable.Weapons weaponFired)
     {
         if (currentEnergy > 0)
-            currentEnergy -= WeaponTable.EnergyUse[weaponFired] / WeaponTable.EnergyUse[weaponFired];
+            currentEnergy -= WeaponTable.EnergyUse[weaponFired] / WeaponTable.FireRate[weaponFired];
     }
 	
 	// Update is called once per frame
