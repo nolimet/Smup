@@ -19,7 +19,7 @@ public class PlayerMoveControler : MonoBehaviour {
         if (Input.GetAxis(Axis.Horizontal) > 0)
             dir.x = speed * Input.GetAxis(Axis.Horizontal);
         if (Input.GetAxis(Axis.Horizontal) < 0)
-            dir.x = speed * 0.5f * Input.GetAxis(Axis.Horizontal);
+            dir.x = speed * 0.7f * Input.GetAxis(Axis.Horizontal);
 
         if (Input.GetAxis(Axis.Vertical) != 0)
             dir.y =  speed * 0.75f * Input.GetAxis(Axis.Vertical);
