@@ -14,7 +14,7 @@ public class PlayerThrusterEffect : MonoBehaviour {
     void UpdateThursters(Vector2 dir)
     {
         #region dir.y
-        if (dir.y < -0.8)
+        if (dir.y < -0.05)
         {
             for (int i = 0; i < Up.Length; i++)
             {
@@ -25,7 +25,7 @@ public class PlayerThrusterEffect : MonoBehaviour {
                 Down[i].emissionRate = 0;
             }
         }
-        else if(dir.y > 0.8)
+        else if(dir.y > 0.05)
         {
             for (int i = 0; i < Up.Length; i++)
             {
@@ -53,7 +53,7 @@ public class PlayerThrusterEffect : MonoBehaviour {
         }
         #endregion
         #region dir.x
-        if (dir.x < -0.1)
+        if (dir.x < -0.05)
         {
             for (int i = 0; i < Left.Length; i++)
             {
@@ -64,7 +64,7 @@ public class PlayerThrusterEffect : MonoBehaviour {
                 Right[i].emissionRate = 0;
             }
         }
-        else if (dir.x > 0.1)
+        else if (dir.x > 0.05)
         {
             for (int i = 0; i < Left.Length; i++)
             {
