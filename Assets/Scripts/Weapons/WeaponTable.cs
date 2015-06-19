@@ -53,7 +53,7 @@ public class WeaponTable
     public static Dictionary<Weapons, int> BulletsPerShot = new Dictionary<Weapons, int>{
         {Weapons.Cannon,                1},
         {Weapons.Machine_Gun,           2},
-        {Weapons.Shotgun,               10}
+        {Weapons.Shotgun,               20}
     };
     //should explain self
     public enum Weapons{
