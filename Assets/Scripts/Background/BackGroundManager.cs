@@ -28,8 +28,8 @@ public class BackGroundManager : MonoBehaviour
     [System.Serializable]
     class Layer
     {
-        public string name;
-        public Transform[] parts;
-        public float speed, startPoint, killPoint;
+        public string name = null;
+        public Transform[] parts = null;
+        public float speed = 0, startPoint = 0, killPoint = 0;
     }
 }

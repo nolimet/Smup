@@ -10,6 +10,7 @@ public class WeaponBase : MonoBehaviour {
     protected float speed, damage;
     protected Rigidbody2D rigi;
     protected bool markedForRemove;
+
     /// <summary>
     /// Sets the paramaters that the bullet will use to move around
     /// </summary>
@@ -34,17 +35,21 @@ public class WeaponBase : MonoBehaviour {
         rigi = GetComponent<Rigidbody2D>();
     }
 
-    protected virtual void Update()
+    protected virtual void OnEnable()
     {
-        
+        GetComponent<PolygonCollider2D>().enabled = true;
+         GetComponent<SpriteRenderer>().color = Color.white;
+        markedForRemove = false;
     }
 
     public void OnCollisionEnter2D(Collision2D coll)
     {
         if (!markedForRemove)
-          //  rigi.AddTorque(Random.Range(-10, 10));
-        StartCoroutine(Remove(0.5f));
-        coll.gameObject.SendMessage("hit", damage, SendMessageOptions.DontRequireReceiver);
+        {
+            //  rigi.AddTorque(Random.Range(-10, 10));
+            StartCoroutine(Remove(0.5f));
+            coll.gameObject.SendMessage("hit", damage, SendMessageOptions.DontRequireReceiver);
+        }
     }
 
     public void OnTriggerEnter2D(Collider2D other)
@@ -76,7 +81,8 @@ public class WeaponBase : MonoBehaviour {
                 yield return new WaitForEndOfFrame();
             }
 
-            Destroy(this.gameObject);
+            BulletPool.RemoveBullet(this);
+            
         }
     }
 }

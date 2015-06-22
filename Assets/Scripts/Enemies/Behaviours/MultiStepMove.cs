@@ -12,8 +12,9 @@ namespace Enemies
         [SerializeField]
         float waitBetweenPatern;
 
-        void Start()
+        protected override void Start()
         {
+            base.Start();
             if (MovePatern.Length != duration.Length)
                 Debug.LogError("delay and movePatern is not same length");
         }

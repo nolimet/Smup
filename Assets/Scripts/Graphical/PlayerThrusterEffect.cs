@@ -4,7 +4,7 @@ using System.Collections;
 public class PlayerThrusterEffect : MonoBehaviour {
 
     [SerializeField]
-    ParticleSystem[] Up, Down, Left, Right;
+    ParticleSystem[] Up = null, Down = null, Left = null, Right = null;
 
     void Update()
     {

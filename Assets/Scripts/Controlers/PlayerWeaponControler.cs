@@ -59,17 +59,16 @@ public class PlayerWeaponControler : MonoBehaviour
         StartCoroutine(fireDelay(WeaponTable.FireRate[currentWeapon]));
 
 
-        GameObject B;
         WeaponBase W;
         float angle;
         for (int i = 0; i < WeaponTable.BulletsPerShot[currentWeapon]; i++)
         {
-            B = Instantiate(Resources.Load("Weapons/" + currentWeapon.ToString()), transform.position + (Vector3)weaponOffset, Quaternion.identity) as GameObject;
-            W = B.GetComponent<WeaponBase>();
-
+            //B = Instantiate(Resources.Load("Weapons/" + currentWeapon.ToString()), transform.position + (Vector3)weaponOffset, Quaternion.identity) as GameObject;
+            W = BulletPool.GetBullet(currentWeapon);
+            W.transform.position = transform.position + (Vector3)weaponOffset;
             angle = (Random.Range(-0.5f, 0.5f) * WeaponTable.Accuracy[currentWeapon]);
 
-            B.transform.rotation = Quaternion.Euler(0, 0, angle);
+            W.transform.rotation = Quaternion.Euler(0, 0, angle);
             W.Init(getAddedVelocity(), MathHelper.AngleToVector(angle), WeaponTable.bulletSpeed[currentWeapon], WeaponTable.DamagePerBullet[currentWeapon]);
         }
 
