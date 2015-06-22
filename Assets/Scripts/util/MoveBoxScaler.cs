@@ -4,7 +4,7 @@ using System.Collections;
 public class MoveBoxScaler : MonoBehaviour {
 
     [SerializeField]
-    Camera camera;
+    new Camera camera;
 
     void Awake()
     {
