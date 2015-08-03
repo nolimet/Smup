@@ -6,8 +6,6 @@ public class PlayerWeaponControler : MonoBehaviour
     public delegate void DelegateFireWeaon(WeaponTable.Weapons weaponFired);
     public event DelegateFireWeaon onFireWeapon;
 
-    public static PlayerWeaponControler instance;
-
     public static bool Firing = false;
 
     bool canMainShoot = true;
@@ -17,10 +15,6 @@ public class PlayerWeaponControler : MonoBehaviour
 
     Rigidbody2D rigi;
     // Use this for initialization
-    void Awake()
-    {
-        instance = this;
-    }
 
     void Start()
     {
@@ -53,7 +47,7 @@ public class PlayerWeaponControler : MonoBehaviour
         Firing = true;
         if (!canMainShoot) 
             return;
-        if (!PlayerStats.instance.canFire(WeaponTable.EnergyUse[currentWeapon] / WeaponTable.FireRate[currentWeapon]))
+        if (!GameManager.playerStats.canFire(WeaponTable.EnergyUse[currentWeapon] / WeaponTable.FireRate[currentWeapon]))
             return;
 
         StartCoroutine(fireDelay(WeaponTable.FireRate[currentWeapon]));

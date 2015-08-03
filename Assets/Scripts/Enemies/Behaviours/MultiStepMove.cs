@@ -6,7 +6,8 @@ namespace Enemies
     public class MultiStepMove : Enemybase
     {
 
-        [SerializeField] Vector2[] MovePatern;
+        [SerializeField]
+        Vector2[] MovePatern;
         [SerializeField]
         float[] duration;
         [SerializeField]
@@ -22,7 +23,10 @@ namespace Enemies
         {
             int l = MovePatern.Length;
             Vector2 lastSpeed;
-            while (appFocus)
+            if (!r)
+                r = GetComponent<Rigidbody2D>();
+
+            while (isAlive)
             {
                 for (int i = 0; i < l; i++)
                 {
@@ -30,14 +34,19 @@ namespace Enemies
                     float k = duration[i] * TicksPerSecond;
                     for (int j = 0; j < k; j++)
                     {
-                        r.velocity = Vector2.Lerp(lastSpeed, MovePatern[i], (1f/k) * j) ;
+                        while (!appFocus)
+                            yield return new WaitForSeconds(TickTimeFrag);
+
+                        r.velocity = Vector2.Lerp(lastSpeed, MovePatern[i], (1f / k) * j);
                         yield return new WaitForSeconds(TickTimeFrag);
                     }
                     yield return new WaitForSeconds(waitBetweenPatern);
                 }
             }
 
+           
             r.velocity = Vector2.zero;
+            MoveBehaviourRunning = false;
         }
 
     }

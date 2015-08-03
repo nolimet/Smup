@@ -6,18 +6,14 @@ namespace Enemies
     [RequireComponent(typeof(Rigidbody2D))]
     public class Enemybase : MonoBehaviour
     {
-
-        protected bool appFocus;
+        protected bool appFocus = true, AttackBehaviourRunning = false, MoveBehaviourRunning = false, isAlive = false;
         protected Rigidbody2D r;
         protected const int TicksPerSecond = 30;
-        protected readonly float TickTimeFrag = 1f/TicksPerSecond;
+        protected readonly float TickTimeFrag = 1f / TicksPerSecond;
 
         int health;
 
-        virtual protected void Start()
-        {
-
-        }
+        virtual protected void Start(){}
 
         protected virtual IEnumerator EnemyMoveBehaviour()
         {
@@ -34,18 +30,47 @@ namespace Enemies
 
         void OnApplicationFocus(bool focus)
         {
+            
+            appFocus = focus;
+            if(!appFocus)
+            {
+                AttackBehaviourRunning = MoveBehaviourRunning = false;
+            }
+            // startCoroutines();
+        }
+
+        protected void OnEnable()
+        {
+            isAlive = true;
+            startBehaviours();
+        }
+
+        protected void startBehaviours()
+        {
             if (!r)
             {
                 r = GetComponent<Rigidbody2D>();
                 r.gravityScale = 0;
             }
-            appFocus = focus;
+            if (!MoveBehaviourRunning)
+            {
+                MoveBehaviourRunning = true;
+                StartCoroutine(EnemyMoveBehaviour());
+            }
 
-            StartCoroutine(EnemyMoveBehaviour());
-            StartCoroutine(EnemyAttackBehaviour());
+            if (!AttackBehaviourRunning)
+            {
+                AttackBehaviourRunning = true;
+                StartCoroutine(EnemyAttackBehaviour());
+            }
         }
 
-        public void Hit(float dmg)
+        public virtual void Hit(float dmg)
+        {
+
+        }
+
+        void GotRemoved()
         {
 
         }

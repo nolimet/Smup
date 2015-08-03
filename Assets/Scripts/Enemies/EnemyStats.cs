@@ -5,9 +5,9 @@ public class EnemyStats : MonoBehaviour {
 
     public enum Type
     {
-        shooter = 0,
-        WaveMover = 1,
-        SlowDownSpeedUp = 2
+        shooter = 89,
+        WaveMover = 90,
+        SlowDownSpeedUp = 91
         //ToDo add More types
     }
 
@@ -53,6 +53,7 @@ public class EnemyStats : MonoBehaviour {
             }
 
             GetComponent<Rigidbody2D>().isKinematic = true;
+            this.SendMessage("GotRemoved");
             EnemyPool.RemoveEnemy(this);
         }
     }

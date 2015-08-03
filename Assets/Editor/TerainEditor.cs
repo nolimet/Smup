@@ -17,72 +17,86 @@ public class TerainEditor : EditorWindow
     }
     #endregion
     #region local
-    Texture2D backgroundTexture = new Texture2D(1,1);
+    Texture2D backgroundTexture = null;
     Vector2 viewPosition = Vector2.zero;
     Color seeThrough = new Color(0, 0, 0, 0);
     Dictionary<Vector3,char> currentLevel;
+    EnemyStats.Type selectedType = EnemyStats.Type.shooter;
     float viewAspect { get { return 1f / zoomSize; } }
 
     //editor defined varibles
     float sideBarWidth = 250f;
-    int sizeX = 60, sizeY = 60;
-    int zoomSize = 10 ;
+    int sizeX = 60, sizeY = 50, zIndex = 0;
+    int zoomSize = 15 ;
+    string WaveName;
     // Update is called once per frame
     void OnGUI()
     {
+        //calculate background
         if (drawFieldSize(1))
             UpdateBackgroundTexture();
 
-        if (GUI.Button(new Rect(getSideBarX(), 45, sideBarWidth, 15), "Reset"))
+        //set enemy type
+        selectedType = (EnemyStats.Type)EditorGUI.EnumPopup(new Rect(getSideBarX(), 65, sideBarWidth, 15), "Selected Enemy", selectedType);
+
+        #region save, load and reset
+        //clear screen
+        if (GUI.Button(new Rect(getSideBarX(), 85, sideBarWidth, 15), "Reset"))
         {
             currentLevel = new Dictionary<Vector3, char>();
             viewPosition = new Vector2();
             UpdateBackgroundTexture();
         }
 
-        if (Event.current.type == (EventType.MouseDrag | EventType.MouseDown) && Event.current.button == 0) 
+        //save DAta
+        if (GUI.Button(new Rect(getSideBarX(), 105, sideBarWidth, 15), "SAVE WAVE"))
+            Save();
+        //load Data
+        if (GUI.Button(new Rect(getSideBarX(), 125, sideBarWidth, 15), "LOAD WAVE"))
+            Load();
+        #endregion
+
+        #region Controles
+        if (Event.current.type == EventType.MouseDrag && Event.current.button == 0 || Event.current.type == EventType.MouseDown && Event.current.button == 0) 
         {
-            addNewVoxel(Mathf.FloorToInt((Event.current.mousePosition.x * viewAspect) - viewPosition.x ), 0, Mathf.FloorToInt(((position.height - Event.current.mousePosition.y)* viewAspect) + viewPosition.y) , '0');
+            addNewVoxel(Mathf.FloorToInt((Event.current.mousePosition.x * viewAspect) - viewPosition.x ), Mathf.FloorToInt(((position.height - Event.current.mousePosition.y)* viewAspect) + viewPosition.y), zIndex, selectedType);
             UpdateBackgroundTexture();
-            //Debug.Log(new Vector3(Mathf.FloorToInt((Event.current.mousePosition.x * viewAspect)), 0, Mathf.FloorToInt((position.height - Event.current.mousePosition.y) * viewAspect)));
         }
-
-       /* if (Event.current.type == EventType.MouseDrag && Event.current.button ==1)
+        if (Event.current.type == EventType.MouseDrag && Event.current.button == 1 || Event.current.type == EventType.MouseDown && Event.current.button == 1)
         {
-            viewPosition += Event.current.delta * viewAspect;
+            RemoveVoxel(Mathf.FloorToInt((Event.current.mousePosition.x * viewAspect) - viewPosition.x), Mathf.FloorToInt(((position.height - Event.current.mousePosition.y) * viewAspect) + viewPosition.y), zIndex);
             UpdateBackgroundTexture();
         }
-
-        if(Event.current.type == EventType.ScrollWheel)
+            if (backgroundTexture == null)
         {
-            if (Event.current.delta.y > 0 && zoomSize < 30)
-                zoomSize++;
-            if (Event.current.delta.y < 0 && zoomSize > 1)
-                zoomSize--;
-
             UpdateBackgroundTexture();
-        }*/
+        }
+        #endregion
+
+        //draws backgound texture
         EditorGUI.DrawTextureTransparent(new Rect(0, 0, getSideBarX(), position.height), backgroundTexture);
     }
 
     #region internalFunctions
     void UpdateBackgroundTexture()
     {
-        backgroundTexture = new Texture2D(Mathf.FloorToInt(getSideBarX() * viewAspect), Mathf.FloorToInt(position.height * viewAspect), TextureFormat.ARGB32, false);
-        backgroundTexture.filterMode = FilterMode.Point;
-        backgroundTexture.anisoLevel = 0;
+        if (backgroundTexture == null)
+        {
+            backgroundTexture = new Texture2D(Mathf.FloorToInt(getSideBarX() * viewAspect), Mathf.FloorToInt(position.height * viewAspect), TextureFormat.ARGB32, false);
+            backgroundTexture.filterMode = FilterMode.Point;
+            backgroundTexture.anisoLevel = 0;
+        }
+        else
+            backgroundTexture.Resize(Mathf.FloorToInt(getSideBarX() * viewAspect), Mathf.FloorToInt(position.height * viewAspect));
+        
         for (int x = 0; x < backgroundTexture.width; x++)
         {
             for (int y = 0; y < backgroundTexture.height; y++)
             {
                 if (Inview(x - (int)viewPosition.x, y - (int)viewPosition.y))
                 {
-                    backgroundTexture.SetPixel(x, y, getVoxelColor(x - (int)viewPosition.x, 0, y + (int)viewPosition.y));
+                    backgroundTexture.SetPixel(x, y, getVoxelColor(x - (int)viewPosition.x, y + (int)viewPosition.y, zIndex));
                 }
-              //  else
-               // {
-               //     backgroundTexture.SetPixel(x - (int)viewPosition.x, y + (int)viewPosition.y, Color.black);
-               // }
             }
         }
         backgroundTexture.Apply();
@@ -132,12 +146,14 @@ public class TerainEditor : EditorWindow
         return position.width - sideBarWidth;
     }
 
-    void addNewVoxel(int x, int y, int z,char c)
+    void addNewVoxel(int x, int y, int z,EnemyStats.Type Type)
     {
         if (currentLevel == null)
             currentLevel = new Dictionary<Vector3, char>();
         if (!Inview(x, z))
             return;
+
+        char c = System.Convert.ToChar((int)Type);
 
         Vector3 v = new Vector3(x, y, z);
 
@@ -151,13 +167,29 @@ public class TerainEditor : EditorWindow
         }
     }
 
+    void RemoveVoxel(int x, int y, int z)
+    {
+        if (currentLevel == null)
+            currentLevel = new Dictionary<Vector3, char>();
+        if (!Inview(x, z))
+            return;
+
+        Vector3 v = new Vector3(x, y, z);
+        if (currentLevel.ContainsKey(v))
+        {
+            currentLevel.Remove(v);
+        }
+    }
+
     //Size is in voxels
     bool drawFieldSize(float y)
     {
         Vector2 s = new Vector2(sizeX, sizeY);
+        int z = zIndex;
         s = EditorGUI.Vector2Field(new Rect(getSideBarX(), y, sideBarWidth, 20), "Size", s);
+        z = EditorGUI.IntField(new Rect(getSideBarX(), 45, sideBarWidth, 15), "zIndex", z);
 
-        if (s.y != sizeY || s.x != sizeX)
+        if (s.y != sizeY || s.x != sizeX || z != zIndex)
         {
             if (s.y > 1)
                 sizeY = (int)s.y;
@@ -167,6 +199,10 @@ public class TerainEditor : EditorWindow
                 sizeX = (int)s.x;
             else
                 sizeX = 1;
+            if (z > 0)
+                zIndex = z;
+            else
+                zIndex = 0;
             return true;
         }
         return false;
@@ -183,15 +219,46 @@ public class TerainEditor : EditorWindow
         {
             switch (currentLevel[v])
             {
-                case '0':
+                case 'Y':
                     return Color.cyan;
-                case '1':
+                case 'Z':
                     return Color.green;
+                case '[':
+                    return Color.red;
+                case ' ':
+                    return Color.gray;
                 default:
                     return Color.gray;
             }
         }
         return Color.gray;
+    }
+
+    void Save()
+    {
+        int hz = 0;
+        foreach(Vector3 v in currentLevel.Keys)
+        {
+            if (v.z > hz)
+                hz = (int)v.z;
+        }
+        hz++;
+
+        WaveClass SaveData = new WaveClass(currentLevel, new Vector3(sizeX, sizeY, hz));
+
+        Serialization.Save("Wave1", Serialization.fileTypes.wave, SaveData);
+    }
+
+    void Load()
+    {
+        WaveClass loadedData = new WaveClass();
+        ;
+        if (!Serialization.Load("Wave1", Serialization.fileTypes.wave, ref loadedData))
+            return;
+
+        Debug.Log("Wave points: " + loadedData.waves.Length);
+        currentLevel = loadedData.Convert();
+        UpdateBackgroundTexture();
     }
     #endregion
     #endregion

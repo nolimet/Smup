@@ -11,7 +11,7 @@ public class EnemyPool : MonoBehaviour
 
     List<EnemyStats> ActivePool, InActivePool;
 
-    void Start()
+    void Awake()
     {
         if (instance == null)
             instance = this;
@@ -38,6 +38,8 @@ public class EnemyPool : MonoBehaviour
                 instance.InActivePool.Add(e);
             e.gameObject.SetActive(false);
         }
+
+        Debug.Log(e);
     }
 
     public static EnemyStats GetEnemy(EnemyStats.Type Type)
@@ -58,8 +60,10 @@ public class EnemyPool : MonoBehaviour
                 e = g.GetComponent<EnemyStats>();
 
                 instance.ActivePool.Add(e);
-                e.transform.SetParent(instance.transform);
+                e.transform.SetParent(instance.transform,false);
             }
+
+            e.gameObject.SendMessage("startBehaviours");
             return e;
         }
         return null;

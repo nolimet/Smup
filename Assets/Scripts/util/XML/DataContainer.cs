@@ -7,8 +7,8 @@ using System.IO;
 [XmlRoot("WaveData"), System.Serializable]
 public class DataContainer
 {
-    [XmlArray("waves"), XmlArrayItem("wave")]
-    public wave[] Test;
+    //[XmlArray("waves"), XmlArrayItem("wave")]
+    //public wave[] Test;
 
     public void Save(string path, string fileName)
     {
