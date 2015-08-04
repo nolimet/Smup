@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using System.Collections.Generic;
 using System;
 
 public class UpgradeMenu : MonoBehaviour
@@ -10,8 +11,10 @@ public class UpgradeMenu : MonoBehaviour
     UpgradeData upgrades;
 
     public Text UpgradeCurrency;
+    public UpgradeItem ParentUpgrade;
+    public Transform ContentParent;
 
-    public UpgradeObject hull, unlockShotgun, unlockMachineGun;
+    public List<UpgradeObject> Upgrades;
     #region private Functions
     void Awake()
     {
@@ -43,30 +46,45 @@ public class UpgradeMenu : MonoBehaviour
         return false;
     }
 
+    void addUpgrade(Func<bool> UpgradeFunc, Func<int> Pricefunc, string name, string discription)
+    {
+        UpgradeItem e = Instantiate(ParentUpgrade, Vector3.zero, Quaternion.identity) as UpgradeItem;
+        e.transform.SetParent(ContentParent, false);
+        e.gameObject.SetActive(true);
+        e.Name.text = name;
+        e.Discription.text = discription;
+
+        Upgrades.Add(new UpgradeObject(UpgradeFunc, Pricefunc, e));
+    }
     void InitUpgradeFunctions()
     {
-        hull.init(UpgradeHullLevel, GetHullUpgradePrice);
-        unlockShotgun.init(UnlockShotGun, UnlockShotGunPrice);
-        unlockMachineGun.init(UnlockMachineGun, UnlockMachineGunPrice);
+        addUpgrade(UpgradeHullLevel, GetHullUpgradePrice, "Hull Upgrade", "Upgrading the hull allows the ship to take more hits");
+        addUpgrade(UnlockShotGun, UnlockShotGunPrice, "Unlock Shotgun", "Unlock's the shotgun");
+        addUpgrade(ShotgunBulletsPerShot, ShotgunBulletPerShotPrice, "Fragments per shotgun shot", "Increases the number of framents shot out per shot");
+        addUpgrade(ShotgunDamagePerFragment, ShotgunDamagePerFragmentPrice, "Increase Damage per frament", "Increases the damage each frament does");
+        addUpgrade(UnlockMachineGun, UnlockMachineGunPrice, "Unlock Machinegun", "Unlocks the Machinegun");
     }
     #endregion
 
     #region public functions
-    public bool UpgradeHullLevel()
-    {
-        if (canBuy(GetHullUpgradePrice()))
+        #region ship
+        public bool UpgradeHullLevel()
         {
-            upgrades.hullUpgradeLevel++;
-            return true;
+            if (canBuy(GetHullUpgradePrice()))
+            {
+                upgrades.hullUpgradeLevel++;
+                return true;
+            }
+            return false;
         }
-        return false;
-    }
 
-    public int GetHullUpgradePrice()
-    {
-        return 50 * (int)Mathf.Pow(1.4f, upgrades.hullUpgradeLevel);
-    }
+        public int GetHullUpgradePrice()
+        {
+            return 50 * (int)Mathf.Pow(1.4f, upgrades.hullUpgradeLevel);
+        }
+    #endregion
 
+        #region ShotGun
     public bool UnlockShotGun()
     {
         if (canBuy(UnlockShotGunPrice()) && !upgrades.UnlockedShotgun)
@@ -76,59 +94,95 @@ public class UpgradeMenu : MonoBehaviour
         }
         return false;
     }
-
     public int UnlockShotGunPrice()
     {
         return 300;
     }
 
-    public bool UnlockMachineGun()
+    public bool ShotgunBulletsPerShot()
     {
-        if (canBuy(UnlockMachineGunPrice()) && !upgrades.UnlockedMachineGun)
+        if (canBuy(ShotgunBulletPerShotPrice()))
         {
-            upgrades.UnlockedMachineGun = true;
+            upgrades.ShotGunBulletsPerShot++;
             return true;
         }
         return false;
     }
-
-    public int UnlockMachineGunPrice()
+    public int ShotgunBulletPerShotPrice()
     {
-        return 700;
+        return (int)(75 * Mathf.Pow(1.3f, 1 + upgrades.ShotGunBulletsPerShot));
     }
+
+    public bool ShotgunDamagePerFragment()
+    {
+        if (canBuy(ShotgunDamagePerFragmentPrice()))
+        {
+            upgrades.ShotGunDamagePerFragment++;
+            return true;
+        }
+        return false;
+    }
+    public int ShotgunDamagePerFragmentPrice()
+    {
+        return (int)(125 * Mathf.Pow(1.3f, 1 + upgrades.ShotGunDamagePerFragment));
+    }
+        #endregion
+
+        #region MachineGun
+        public bool UnlockMachineGun()
+        {
+            if (canBuy(UnlockMachineGunPrice()) && !upgrades.UnlockedMachineGun)
+            {
+                upgrades.UnlockedMachineGun = true;
+                return true;
+            }
+            return false;
+        }
+
+        public int UnlockMachineGunPrice()
+        {
+            return 700;
+        }
+        #endregion
     #endregion
 
     [System.Serializable]
     public class UpgradeObject
     {
-        public Text PriceText;
-        public Button UpgradeButton;
+        UpgradeItem visual;
 
         [SerializeField]
         Func<bool> UpgradeFunc;
         Func<int> Pricefunc;
 
-        public void init(Func<bool> UpgradeFunc, Func<int> Pricefunc)
+        public UpgradeObject(Func<bool> UpgradeFunc, Func<int> Pricefunc, UpgradeItem visual)
         {
-            PriceText.text = Pricefunc().ToString();
+            this.visual = visual;
 
             this.UpgradeFunc = UpgradeFunc;
             this.Pricefunc = Pricefunc;
 
-            UpgradeButton.onClick.AddListener(delegate { Upgrade(); });
+            this.visual.Price.text = Pricefunc().ToString();
+            this.visual.Buy.onClick.AddListener(delegate { Upgrade(); });
+
+            UpdateColour();
         }
 
         public void Upgrade()
         {
-            ColorBlock cb = UpgradeButton.colors;
+            UpdateColour();
+            visual.Price.text = Pricefunc().ToString();
+        }
+
+        void UpdateColour()
+        {
+            ColorBlock cb = visual.Buy.colors;
 
             if (UpgradeFunc())
                 cb.pressedColor = Color.green;
             else
                 cb.pressedColor = Color.red;
-
-            UpgradeButton.colors = cb;
-            PriceText.text = Pricefunc().ToString();
+            visual.Buy.colors = cb;
         }
     }
 }

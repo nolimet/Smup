@@ -16,7 +16,7 @@ public class UpgradeData {
     //Shotgun
     public bool UnlockedShotgun = false;
     public int ShotGunBulletsPerShot = 4;
-    public int ShotGunDamagePerPalet = 1;
+    public int ShotGunDamagePerFragment = 1;
     public bool unlockedShotgunTweaker = false;
     public int ShotgunSpreadRangeTweaker = 1;
     public int ShotgunBulletSpeedTweakerRange = 1;
