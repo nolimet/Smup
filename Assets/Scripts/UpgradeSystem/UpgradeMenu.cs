@@ -13,7 +13,7 @@ public class UpgradeMenu : MonoBehaviour
 
     public UpgradeObject hull, unlockShotgun, unlockMachineGun;
     #region private Functions
-    void Start()
+    void Awake()
     {
         Serialization.Load("upgrade", Serialization.fileTypes.binary, ref upgrades);
 

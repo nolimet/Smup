@@ -10,7 +10,7 @@ public class GameManager : MonoBehaviour {
     public static MoveBoxScaler screen;
     public static PlayerStats playerStats;
     public static PlayerWeaponControler playerWeaponControler;
-
+    public static UpgradeData upgrades;
     public void Awake()
     {
 
@@ -31,5 +31,16 @@ public class GameManager : MonoBehaviour {
             playerWeaponControler = _playerWeaponControler;
         else
             Debug.LogError("PlayerWeapon Controler not assigned in inspector");
+
+        Serialization.Load("upgrade", Serialization.fileTypes.binary, ref upgrades);
+    }
+
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Debug.Log("OPEN A MEN WHEN THIS BUTTON IS PRESSED!!");
+            Application.LoadLevel(0);
+        }
     }
 }
