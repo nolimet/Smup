@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 [RequireComponent(typeof(PolygonCollider2D))]
-public class EnemyStats : MonoBehaviour {
+public class EnemyStats : MonoBehaviour
+{
 
     public enum Type
     {
@@ -15,10 +16,18 @@ public class EnemyStats : MonoBehaviour {
     float health = 10, maxHealth = 10;
     public Type type;
     bool markedForRemove = false;
+
+
     public virtual void hit(float dmg)
     {
         health -= dmg;
         if (health <= 0 && !markedForRemove)
+            StartCoroutine(Remove(0f));
+    }
+
+    public void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.tag == "backbullet Remover")
             StartCoroutine(Remove(0f));
     }
 

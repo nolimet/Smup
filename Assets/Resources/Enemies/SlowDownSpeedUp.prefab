@@ -79,7 +79,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MovePatern:
-  - {x: -10, y: 0}
+  - {x: -5, y: 0}
   - {x: -2, y: 0}
   - {x: -7, y: 0}
   duration:
@@ -145,6 +145,10 @@ Prefab:
     - target: {fileID: 0}
       propertyPath: type
       value: 91
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: MovePatern.Array.data[0].x
+      value: -5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}

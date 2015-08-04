@@ -14,7 +14,8 @@ public static class Serialization
         wave,
         save,
         settings,
-        indexFile
+        indexFile,
+        binary
     }
     
     public static string saveFolderName = "GameData";
@@ -23,14 +24,16 @@ public static class Serialization
             { fileTypes.save,       ".sav"  },
             { fileTypes.settings,   ".set"  },
             { fileTypes.wave,       ".wva"  },
-            { fileTypes.indexFile,  "idex"  }
+            { fileTypes.indexFile,  ".idex" },
+            { fileTypes.binary,     ".bin"  }
         },
 
         FileLocations = new Dictionary<fileTypes, string>
         {
             { fileTypes.save,       "Save"      },
             { fileTypes.settings,   "Settings"  },
-            { fileTypes.wave,       "Waves"     }
+            { fileTypes.wave,       "Waves"     },
+            { fileTypes.binary,     "Data"      }
         };
     #endregion
 

@@ -29,9 +29,9 @@ public class WaveControler : MonoBehaviour {
     {
         Debug.Log("creating wave");
         Vector2 s = GameManager.screen.screenSize;
-        for (int i = 0; i < 5; i++)
+        for (int i = 0; i < 20; i++)
         {
-            addEnemy(new Vector3(s.x, (((s.y / 6f * i) + (s.y / 6f / 2f)) - (s.y / 2f))), EnemyStats.Type.SlowDownSpeedUp);
+            addEnemy(new Vector3(s.x, (((s.y / 21f * i) + (s.y / 21f / 2f)) - (s.y / 2f))), EnemyStats.Type.SlowDownSpeedUp);
         }
     }
 
