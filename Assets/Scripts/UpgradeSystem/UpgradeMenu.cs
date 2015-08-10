@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using util;
 using System.Collections;
 using System.Collections.Generic;
 using System;
@@ -36,17 +37,17 @@ public class UpgradeMenu : MonoBehaviour
     {
         Serialization.Save("upgrade", Serialization.fileTypes.binary, upgrades);
     }
-    bool canBuy(float value)
+    bool canBuy(float value, bool substract)
     {
         if (upgrades.UpgradeCurrency >= value)
         {
-            upgrades.UpgradeCurrency -= (int)value;
+            if (substract)
+                upgrades.UpgradeCurrency -= (int)value;
             return true;
         }
         return false;
     }
-
-    void addUpgrade(Func<bool> UpgradeFunc, Func<int> Pricefunc, string name, string discription)
+    void addUpgrade(Func<int, bool, bool> UpgradeFunc, float StartCost, float Mult, int StartLevel, string name, string discription)
     {
         UpgradeItem e = Instantiate(ParentUpgrade, Vector3.zero, Quaternion.identity) as UpgradeItem;
         e.transform.SetParent(ContentParent, false);
@@ -54,96 +55,82 @@ public class UpgradeMenu : MonoBehaviour
         e.Name.text = name;
         e.Discription.text = discription;
 
-        Upgrades.Add(new UpgradeObject(UpgradeFunc, Pricefunc, e));
+        Upgrades.Add(new UpgradeObject(UpgradeFunc, StartCost, Mult, StartLevel, e));
     }
+
     void InitUpgradeFunctions()
     {
-        addUpgrade(UpgradeHullLevel, GetHullUpgradePrice, "Hull Upgrade", "Upgrading the hull allows the ship to take more hits");
-        addUpgrade(UnlockShotGun, UnlockShotGunPrice, "Unlock Shotgun", "Unlock's the shotgun");
-        addUpgrade(ShotgunBulletsPerShot, ShotgunBulletPerShotPrice, "Fragments per shotgun shot", "Increases the number of framents shot out per shot");
-        addUpgrade(ShotgunDamagePerFragment, ShotgunDamagePerFragmentPrice, "Increase Damage per frament", "Increases the damage each frament does");
-        addUpgrade(UnlockMachineGun, UnlockMachineGunPrice, "Unlock Machinegun", "Unlocks the Machinegun");
+        addUpgrade(UpgradeHullLevel, 50, 1.4f, upgrades.hullUpgradeLevel, "Hull Upgrade", "Upgrading the hull allows the ship to take more hits");
+        addUpgrade(UnlockShotGun, 300, 0, upgrades.UnlockedShotgun.toInt(), "Unlock Shotgun", "Unlock's the shotgun");
+        addUpgrade(ShotgunBulletsPerShot, 75, 1.3f, upgrades.ShotGunBulletsPerShot, "Fragments per shotgun shot", "Increases the number of framents shot out per shot");
+        addUpgrade(ShotgunDamagePerFragment, 125, 1.3f, upgrades.ShotGunDamagePerFragment, "Increase Damage per frament", "Increases the damage each frament does");
+        addUpgrade(UnlockMachineGun, 700, 0, upgrades.UnlockedMachineGun.toInt(), "Unlock Machinegun", "Unlocks the Machinegun");
     }
     #endregion
 
     #region public functions
-        #region ship
-        public bool UpgradeHullLevel()
+    #region ship
+    public bool UpgradeHullLevel(int price, bool substract)
+    {
+        if (canBuy(price, substract))
         {
-            if (canBuy(GetHullUpgradePrice()))
-            {
+            if (substract)
                 upgrades.hullUpgradeLevel++;
-                return true;
-            }
-            return false;
+            return true;
         }
+        return false;
+    }
 
-        public int GetHullUpgradePrice()
-        {
-            return 50 * (int)Mathf.Pow(1.4f, upgrades.hullUpgradeLevel);
-        }
     #endregion
 
-        #region ShotGun
-    public bool UnlockShotGun()
+    #region ShotGun
+    public bool UnlockShotGun(int price, bool substract)
     {
-        if (canBuy(UnlockShotGunPrice()) && !upgrades.UnlockedShotgun)
+        if (canBuy(price, substract) && !upgrades.UnlockedShotgun)
         {
-            upgrades.UnlockedShotgun = true;
+            if (substract)
+                upgrades.UnlockedShotgun = true;
             return true;
         }
         return false;
     }
-    public int UnlockShotGunPrice()
-    {
-        return 300;
-    }
 
-    public bool ShotgunBulletsPerShot()
+    public bool ShotgunBulletsPerShot(int price, bool substract)
     {
-        if (canBuy(ShotgunBulletPerShotPrice()))
+        if (canBuy(price, substract))
         {
-            upgrades.ShotGunBulletsPerShot++;
+            if (substract)
+                upgrades.ShotGunBulletsPerShot++;
             return true;
         }
         return false;
     }
-    public int ShotgunBulletPerShotPrice()
-    {
-        return (int)(75 * Mathf.Pow(1.3f, 1 + upgrades.ShotGunBulletsPerShot));
-    }
 
-    public bool ShotgunDamagePerFragment()
+    public bool ShotgunDamagePerFragment(int price, bool substract)
     {
-        if (canBuy(ShotgunDamagePerFragmentPrice()))
+        if (canBuy(price, substract))
         {
-            upgrades.ShotGunDamagePerFragment++;
+            if (substract)
+                upgrades.ShotGunDamagePerFragment++;
             return true;
         }
         return false;
     }
-    public int ShotgunDamagePerFragmentPrice()
-    {
-        return (int)(125 * Mathf.Pow(1.3f, 1 + upgrades.ShotGunDamagePerFragment));
-    }
-        #endregion
+    #endregion
 
-        #region MachineGun
-        public bool UnlockMachineGun()
+    #region MachineGun
+    public bool UnlockMachineGun(int price, bool substract)
+    {
+        if (canBuy(price, substract) && !upgrades.UnlockedMachineGun)
         {
-            if (canBuy(UnlockMachineGunPrice()) && !upgrades.UnlockedMachineGun)
-            {
+            if (substract)
                 upgrades.UnlockedMachineGun = true;
-                return true;
-            }
-            return false;
+            return true;
         }
+        return false;
+    }
 
-        public int UnlockMachineGunPrice()
-        {
-            return 700;
-        }
-        #endregion
+    #endregion
     #endregion
 
     [System.Serializable]
@@ -151,38 +138,69 @@ public class UpgradeMenu : MonoBehaviour
     {
         UpgradeItem visual;
 
-        [SerializeField]
-        Func<bool> UpgradeFunc;
-        Func<int> Pricefunc;
+        Func<int, bool,bool> UpgradeFunc;
 
-        public UpgradeObject(Func<bool> UpgradeFunc, Func<int> Pricefunc, UpgradeItem visual)
+        float StartCost, Mult;
+        int Level = 0;
+
+        public UpgradeObject(Func<int, bool,bool> UpgradeFunc, float StartCost, float Mult, int StartLevel, UpgradeItem visual)
         {
             this.visual = visual;
 
             this.UpgradeFunc = UpgradeFunc;
-            this.Pricefunc = Pricefunc;
+            this.StartCost = StartCost;
+            this.Mult = Mult;
+            Level = StartLevel;
 
-            this.visual.Price.text = Pricefunc().ToString();
+            this.visual.Price.text = GetPrice().ToString();
             this.visual.Buy.onClick.AddListener(delegate { Upgrade(); });
 
-            UpdateColour();
+            UpdateColour(false);
+            UpdateLevel();
         }
 
         public void Upgrade()
         {
-            UpdateColour();
-            visual.Price.text = Pricefunc().ToString();
+            UpdateColour(true);
+            visual.Price.text = GetPrice().ToString();
+            UpdateLevel();
         }
 
-        void UpdateColour()
+        private int GetPrice()
+        {
+            if (Mult > 0)
+                return (int)(StartCost * Mathf.Pow(Mult, Level + 1));
+            else
+                return (int)StartCost;
+        }
+
+        void UpdateColour(bool pay)
         {
             ColorBlock cb = visual.Buy.colors;
 
-            if (UpgradeFunc())
+            if (UpgradeFunc(GetPrice(), pay))
+            {
                 cb.pressedColor = Color.green;
+                if (pay)
+                    Level++;
+            }
             else
                 cb.pressedColor = Color.red;
             visual.Buy.colors = cb;
+        }
+
+        void UpdateLevel()
+        {
+            if (Mult > 0)
+                visual.CurrentLevel.text = "Level \n" + Level.ToString();
+            else
+            {
+                visual.CurrentLevel.text = "Unlocked \n";
+                if (Level == 0)
+                    visual.CurrentLevel.text += "NO";
+                else
+                    visual.CurrentLevel.text += "YES";
+            }
         }
     }
 }

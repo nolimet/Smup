@@ -10,22 +10,22 @@ public class UpgradeData {
     public bool UnlockedShieldTweaker = false;
 
     //Hull
-    public int hullUpgradeLevel = 1;
-    public int armorUpgradeLevel = 1;
+    public int hullUpgradeLevel = 0;
+    public int armorUpgradeLevel = 0;
 
     //Shotgun
     public bool UnlockedShotgun = false;
-    public int ShotGunBulletsPerShot = 4;
-    public int ShotGunDamagePerFragment = 1;
+    public int ShotGunBulletsPerShot = 0;
+    public int ShotGunDamagePerFragment = 0;
     public bool unlockedShotgunTweaker = false;
-    public int ShotgunSpreadRangeTweaker = 1;
-    public int ShotgunBulletSpeedTweakerRange = 1;
+    public int ShotgunSpreadRangeTweaker = 0;
+    public int ShotgunBulletSpeedTweakerRange = 0;
 
     //MachineGun
     public bool UnlockedMachineGun = false;
-    public int MachineGunBulletsPerSecond = 3;
-    public int MachineGunDamagePerBullet = 3;
+    public int MachineGunBulletsPerSecond = 0;
+    public int MachineGunDamagePerBullet = 0;
     public bool UnlockedMachineGunTweaker = false;
-    public int MachineGunSpreadRangeTweaker = 1;
-    public int MachineGunBulletSpeedTweakerRange = 1;
+    public int MachineGunSpreadRangeTweaker = 0;
+    public int MachineGunBulletSpeedTweakerRange = 0;
 }
