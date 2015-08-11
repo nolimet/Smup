@@ -47,6 +47,16 @@ public class UpgradeMenu : MonoBehaviour
         }
         return false;
     }
+
+    /// <summary>
+    /// Addes a new upgrade
+    /// </summary>
+    /// <param name="UpgradeFunc">The function that does the actual upgrading</param>
+    /// <param name="StartCost">The starting cost of the upgrade</param>
+    /// <param name="Mult">set to zero if only buy one. How steep the increase curve is</param>
+    /// <param name="StartLevel">The level the upgrade has when the scene is loaded</param>
+    /// <param name="name"> The name that will be displayed on screen for the upgrade</param>
+    /// <param name="discription">The discription that the upgrade will be given on screen</param>
     void addUpgrade(Func<int, bool, bool> UpgradeFunc, float StartCost, float Mult, int StartLevel, string name, string discription)
     {
         UpgradeItem e = Instantiate(ParentUpgrade, Vector3.zero, Quaternion.identity) as UpgradeItem;
@@ -58,6 +68,9 @@ public class UpgradeMenu : MonoBehaviour
         Upgrades.Add(new UpgradeObject(UpgradeFunc, StartCost, Mult, StartLevel, e));
     }
 
+    /// <summary>
+    /// A init function for all upgrades
+    /// </summary>
     void InitUpgradeFunctions()
     {
         addUpgrade(UpgradeHullLevel, 50, 1.4f, upgrades.hullUpgradeLevel, "Hull Upgrade", "Upgrading the hull allows the ship to take more hits");
@@ -67,9 +80,16 @@ public class UpgradeMenu : MonoBehaviour
         addUpgrade(UnlockMachineGun, 700, 0, upgrades.UnlockedMachineGun.toInt(), "Unlock Machinegun", "Unlocks the Machinegun");
     }
     #endregion
-
+    
+    
     #region public functions
     #region ship
+    /// <summary>
+    /// Upgrade for hull/health
+    /// </summary>
+    /// <param name="price">The price of the upgrade</param>
+    /// <param name="substract">will the upgrade be bought or only used to check if it can be bought?</param>
+    /// <returns></returns>
     public bool UpgradeHullLevel(int price, bool substract)
     {
         if (canBuy(price, substract))
@@ -143,6 +163,14 @@ public class UpgradeMenu : MonoBehaviour
         float StartCost, Mult;
         int Level = 0;
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="UpgradeFunc">The function that will be called when upgrade button is clicked</param>
+        /// <param name="StartCost">STarting cost</param>
+        /// <param name="Mult">multipier. when zero it will only upgrade once</param>
+        /// <param name="StartLevel">The starting level</param>
+        /// <param name="visual">visual object. Used to assign stuff </param>
         public UpgradeObject(Func<int, bool,bool> UpgradeFunc, float StartCost, float Mult, int StartLevel, UpgradeItem visual)
         {
             this.visual = visual;
@@ -159,6 +187,7 @@ public class UpgradeMenu : MonoBehaviour
             UpdateLevel();
         }
 
+        //function called when upgrading. called by buy button
         public void Upgrade()
         {
             UpdateColour(true);
@@ -166,6 +195,7 @@ public class UpgradeMenu : MonoBehaviour
             UpdateLevel();
         }
 
+        //calculates the price
         private int GetPrice()
         {
             if (Mult > 0)
@@ -174,6 +204,7 @@ public class UpgradeMenu : MonoBehaviour
                 return (int)StartCost;
         }
 
+        //updates colour
         void UpdateColour(bool pay)
         {
             ColorBlock cb = visual.Buy.colors;
@@ -189,6 +220,7 @@ public class UpgradeMenu : MonoBehaviour
             visual.Buy.colors = cb;
         }
 
+        //update value show for level
         void UpdateLevel()
         {
             if (Mult > 0)
