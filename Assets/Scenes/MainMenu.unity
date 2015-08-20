@@ -1119,7 +1119,7 @@ MonoBehaviour:
     UnlockedShotgun: 0
     ShotGunBulletsPerShot: 0
     ShotGunDamagePerFragment: 0
-    unlockedShotgunTweaker: 0
+    UnlockedShotgunTweaker: 0
     ShotgunSpreadRangeTweaker: 0
     ShotgunBulletSpeedTweakerRange: 0
     UnlockedMachineGun: 0
@@ -1885,7 +1885,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1758867078
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2087,8 +2087,8 @@ RectTransform:
   m_RootOrder: 1
   m_AnchorMin: {x: .5, y: 1}
   m_AnchorMax: {x: .5, y: 1}
-  m_AnchoredPosition: {x: 0, y: -3.70000005}
-  m_SizeDelta: {x: 250.5, y: 20.3999996}
+  m_AnchoredPosition: {x: 0, y: -3.29999995}
+  m_SizeDelta: {x: 250.5, y: 17.3999996}
   m_Pivot: {x: .5, y: 1}
 --- !u!114 &1902223090
 MonoBehaviour:
@@ -2221,8 +2221,8 @@ RectTransform:
   m_RootOrder: 2
   m_AnchorMin: {x: .5, y: 1}
   m_AnchorMax: {x: .5, y: 1}
-  m_AnchoredPosition: {x: 0, y: -24.0999756}
-  m_SizeDelta: {x: 250.5, y: 20.3999996}
+  m_AnchoredPosition: {x: 0, y: -22.3999996}
+  m_SizeDelta: {x: 250.5, y: 27.6000004}
   m_Pivot: {x: .5, y: 1}
 --- !u!114 &1914799070
 MonoBehaviour:
@@ -2249,9 +2249,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'Discription
-
-'
+  m_Text: I AM EMPTY DISCRIPTION!!
 --- !u!222 &1914799071
 CanvasRenderer:
   m_ObjectHideFlags: 0
