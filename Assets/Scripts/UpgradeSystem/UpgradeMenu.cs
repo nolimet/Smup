@@ -9,16 +9,21 @@ public class UpgradeMenu : MonoBehaviour
 {
 
     [SerializeField]
-    UpgradeData upgrades;
+    public UpgradeData upgrades;
 
     public Text UpgradeCurrency;
     public UpgradeItem ParentUpgrade;
     public Transform ContentParent;
 
     public List<UpgradeObject> Upgrades;
+
+    private static UpgradeMenu instance;
+    public static UpgradeData upgradeData { get{ return instance.upgrades; } }
     #region private Functions
     void Awake()
     {
+        if (!instance)
+            instance = this;
         Serialization.Load("upgrade", Serialization.fileTypes.binary, ref upgrades);
 
         if (upgrades == null)
@@ -31,6 +36,9 @@ public class UpgradeMenu : MonoBehaviour
     }
     void Update()
     {
+        if (!instance)
+            instance = this;
+
         UpgradeCurrency.text = upgrades.UpgradeCurrency.ToString() + "$";
     }
     void OnDestroy()
@@ -68,6 +76,17 @@ public class UpgradeMenu : MonoBehaviour
         Upgrades.Add(new UpgradeObject(UpgradeFunc, StartCost, Mult, StartLevel, e));
     }
 
+    void addUpgrade(string refrence, float StartCost, float Mult, string name, string discription)
+    {
+        UpgradeItem e = Instantiate(ParentUpgrade, Vector3.zero, Quaternion.identity) as UpgradeItem;
+        e.transform.SetParent(ContentParent, false);
+        e.gameObject.SetActive(true);
+        e.Name.text = name;
+        e.Discription.text = discription;
+
+        Upgrades.Add(new UpgradeObject(refrence, StartCost, Mult, e));
+    }
+
     /// <summary>
     /// A init function for all upgrades
     /// </summary>
@@ -78,6 +97,8 @@ public class UpgradeMenu : MonoBehaviour
         addUpgrade(ShotgunBulletsPerShot, 75, 1.3f, upgrades.ShotGunBulletsPerShot, "Fragments per shotgun shot", "Increases the number of framents shot out per shot");
         addUpgrade(ShotgunDamagePerFragment, 125, 1.3f, upgrades.ShotGunDamagePerFragment, "Increase Damage per frament", "Increases the damage each frament does");
         addUpgrade(UnlockMachineGun, 700, 0, upgrades.UnlockedMachineGun.toInt(), "Unlock Machinegun", "Unlocks the Machinegun");
+
+        addUpgrade("unlockedShotgunTweaker", 100, 0, "A test", "TESTING");
     }
     #endregion
     
@@ -161,8 +182,9 @@ public class UpgradeMenu : MonoBehaviour
         Func<int, bool,bool> UpgradeFunc;
 
         float StartCost, Mult;
-        int Level = 0;
 
+        int Level = 0;
+        string refrence;
         /// <summary>
         /// 
         /// </summary>
@@ -179,6 +201,33 @@ public class UpgradeMenu : MonoBehaviour
             this.StartCost = StartCost;
             this.Mult = Mult;
             Level = StartLevel;
+
+            this.visual.Price.text = GetPrice().ToString();
+            this.visual.Buy.onClick.AddListener(delegate { Upgrade(); });
+
+            UpdateColour(false);
+            UpdateLevel();
+        }
+
+        public UpgradeObject (string refrence, float StartCost, float Mult, UpgradeItem visual)
+        {
+
+            var temp = upgradeData.GetType().GetField(refrence).GetValue(upgradeData);
+            Debug.Log(refrence);
+            if (Mult > 0)
+            {
+                Level = (int)temp;
+            }
+            else
+            {
+                bool b = (bool)temp;
+                Level = b.toInt();
+            }
+            
+            this.StartCost = StartCost;
+            this.Mult = Mult;
+            this.refrence = refrence;
+            this.visual = visual;
 
             this.visual.Price.text = GetPrice().ToString();
             this.visual.Buy.onClick.AddListener(delegate { Upgrade(); });
@@ -209,7 +258,7 @@ public class UpgradeMenu : MonoBehaviour
         {
             ColorBlock cb = visual.Buy.colors;
 
-            if (UpgradeFunc(GetPrice(), pay))
+            if ((UpgradeFunc != null && UpgradeFunc(GetPrice(), pay)) || canBuy(pay))
             {
                 cb.pressedColor = Color.green;
                 if (pay)
@@ -233,6 +282,40 @@ public class UpgradeMenu : MonoBehaviour
                 else
                     visual.CurrentLevel.text += "YES";
             }
+        }
+
+        
+
+        bool canBuy(bool substract)
+        {
+            if (upgradeData.UpgradeCurrency >= GetPrice())
+            {
+                if (substract)
+                {
+                    upgradeData.UpgradeCurrency -= GetPrice();
+                    var dat = upgradeData.GetType().GetField(refrence).GetValue(upgradeData);
+                    if (Mult > 0)
+                    {
+                        int f;
+                        f = (int)dat;
+                        f = Level+1;
+                        Level++;
+                        upgradeData.GetType().GetField(refrence).SetValue(upgradeData, f);
+
+                    }
+                    else
+                    {
+                        bool f;
+                        f = (bool)dat;
+                        f = true;
+                        upgradeData.GetType().GetField(refrence).SetValue(upgradeData,f);
+
+                    }
+                    
+                }
+                return true;
+            }
+            return false;
         }
     }
 }
