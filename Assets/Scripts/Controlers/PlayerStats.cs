@@ -13,9 +13,12 @@ public class PlayerStats : MonoBehaviour {
     public float currentHealth = 0;
     public float maxHealth = 100;
 
+    public float currentShield = 0;
+    public float maxShield = 0;
+
     void Start()
     {
-        maxHealth = GameManager.upgrades.hullUpgradeLevel * 100;
+        maxHealth = (GameManager.upgrades.hullUpgradeLevel + 1) * 100;
 
         Energy.init(maxEnergy, 2f);
         Health.init(maxHealth, 100);

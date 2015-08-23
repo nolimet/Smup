@@ -231,7 +231,6 @@ public class UpgradeMenu : MonoBehaviour
         {
 
             var temp = upgradeData.GetType().GetField(refrence).GetValue(upgradeData);
-            Debug.Log(refrence);
             if (Mult > 0)
             {
                 Level = (int)temp;

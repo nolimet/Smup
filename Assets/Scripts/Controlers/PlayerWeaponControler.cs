@@ -56,6 +56,7 @@ public class PlayerWeaponControler : MonoBehaviour
 
         WeaponBase W;
         float angle;
+        Debug.Log(currentWeapon.ToString() + ": " + WeaponTable.BulletsPerShot[currentWeapon].ToString());
         for (int i = 0; i < WeaponTable.BulletsPerShot[currentWeapon]; i++)
         {
             //B = Instantiate(Resources.Load("Weapons/" + currentWeapon.ToString()), transform.position + (Vector3)weaponOffset, Quaternion.identity) as GameObject;

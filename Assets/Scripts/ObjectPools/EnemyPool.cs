@@ -38,8 +38,6 @@ public class EnemyPool : MonoBehaviour
                 instance.InActivePool.Add(e);
             e.gameObject.SetActive(false);
         }
-
-        Debug.Log(e);
     }
 
     public static EnemyStats GetEnemy(EnemyStats.Type Type)

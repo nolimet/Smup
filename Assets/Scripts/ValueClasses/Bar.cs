@@ -69,6 +69,7 @@ public class Bar
         int index = Mathf.FloorToInt(value / maxBarValue);
         if (index == barColours.Length)
             index--;
+
         float calc = (frac * value);
 
         if (index > 0)
@@ -96,10 +97,11 @@ public class Bar
             bar1.sizeDelta = new Vector2(StartSize.x * calc, StartSize.y);
             bar2.sizeDelta = new Vector2(0.01f, StartSize.y);
         }
-        else if (value <= maxValue * overloadFactor)
+        else if (value-maxValue <= maxValue * overloadFactor)
         {
             bar1.sizeDelta = StartSize;
             bar2.sizeDelta = new Vector2(StartSize.x * ((calc - 1f) / overloadFactor), StartSize.y);
+            Debug.Log(value);
         }
     }
 

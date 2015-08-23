@@ -45,7 +45,6 @@ public static class Serialization
         {
             Directory.CreateDirectory(saveLocation);
         }
-        Debug.Log(saveLocation);
         return saveLocation;
     }
 
