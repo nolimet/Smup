@@ -7,11 +7,13 @@ public class GameManager : MonoBehaviour {
     public PlayerStats _playerStats;
     public PlayerWeaponControler _playerWeaponControler;
     public UpgradeData _upgrades;
+    public PickupManager _pickupManager;
 
     public static MoveBoxScaler screen;
     public static PlayerStats playerStats;
     public static PlayerWeaponControler playerWeaponControler;
     public static UpgradeData upgrades;
+    public static PickupManager pickupManager;
     public void Awake()
     {
 
@@ -32,6 +34,11 @@ public class GameManager : MonoBehaviour {
             playerWeaponControler = _playerWeaponControler;
         else
             Debug.LogError("PlayerWeapon Controler not assigned in inspector");
+
+        if (_pickupManager != null)
+            pickupManager = _pickupManager;
+        else
+            Debug.LogError("Pickupmanager was not assigned in inspector");
 
         Serialization.Load("upgrade", Serialization.fileTypes.binary, ref upgrades);
 
