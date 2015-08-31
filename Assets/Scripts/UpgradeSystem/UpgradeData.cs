@@ -3,6 +3,11 @@ public class UpgradeData {
 
     public long UpgradeCurrency = 0;
 
+    //ScrapGetting
+    public int ScrapCollectionRange = 0;
+    public int ScrapCollectionSpeed = 0;
+    public int ScrapConversionRate = 0;
+
     //Shield
     public bool UnlockedShield = false;
     public int shieldGeneratorLevel = 0;

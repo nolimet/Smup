@@ -227,6 +227,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b3f7d631f858f3d409038aa82eb6c739, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  enemiesLeftInWave: 0
   currentEnemies: []
 --- !u!114 &100903090
 MonoBehaviour:
@@ -260,6 +261,8 @@ MonoBehaviour:
   maxEnergy: 200
   currentHealth: 0
   maxHealth: 100
+  currentShield: 0
+  maxShield: 0
 --- !u!114 &100903091
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -274,6 +277,27 @@ MonoBehaviour:
   _screen: {fileID: 1622111430}
   _playerStats: {fileID: 100903090}
   _playerWeaponControler: {fileID: 2064760418}
+  _upgrades:
+    UpgradeCurrency: 0
+    UnlockedShield: 0
+    shieldGeneratorLevel: 0
+    shieldCapacitorLevel: 0
+    UnlockedShieldTweaker: 0
+    hullUpgradeLevel: 0
+    armorUpgradeLevel: 0
+    UnlockedShotgun: 0
+    ShotGunBulletsPerShot: 0
+    ShotGunDamagePerFragment: 0
+    UnlockedShotgunTweaker: 0
+    ShotgunSpreadRangeTweaker: 0
+    ShotgunBulletSpeedTweakerRange: 0
+    UnlockedMachineGun: 0
+    MachineGunBulletsPerSecond: 0
+    MachineGunDamagePerBullet: 0
+    UnlockedMachineGunTweaker: 0
+    MachineGunSpreadRangeTweaker: 0
+    MachineGunBulletSpeedTweakerRange: 0
+  _pickupManager: {fileID: 2064760420}
 --- !u!4 &100903092
 Transform:
   m_ObjectHideFlags: 0
@@ -301,6 +325,7 @@ GameObject:
   - 4: {fileID: 104478884}
   - 114: {fileID: 104478883}
   - 114: {fileID: 104478882}
+  - 114: {fileID: 104478885}
   m_Layer: 0
   m_Name: pool
   m_TagString: Untagged
@@ -344,6 +369,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 100903092}
   m_RootOrder: 0
+--- !u!114 &104478885
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 104478881}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4cb6ea3e8a03e9445b95bc2cc1afd18f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  collectPickupsAuto: 1
 --- !u!1 &106158185
 GameObject:
   m_ObjectHideFlags: 0
@@ -10170,6 +10207,8 @@ GameObject:
   - 60: {fileID: 2064760419}
   - 114: {fileID: 2064760414}
   - 114: {fileID: 2064760418}
+  - 114: {fileID: 2064760420}
+  - 58: {fileID: 2064760421}
   m_Layer: 8
   m_Name: Player
   m_TagString: Untagged
@@ -10290,6 +10329,31 @@ PolygonCollider2D:
       - {x: .300000012, y: -.25}
       - {x: .409999996, y: -.170000002}
       - {x: .939999998, y: -.170000002}
+--- !u!114 &2064760420
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2064760413}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 46a82337803a6844bbc31121a7c3d73b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pickedUpScrap: 0
+--- !u!58 &2064760421
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2064760413}
+  m_Enabled: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 7
 --- !u!1 &2104549210
 GameObject:
   m_ObjectHideFlags: 0

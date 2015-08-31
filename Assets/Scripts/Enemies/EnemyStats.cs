@@ -22,13 +22,13 @@ public class EnemyStats : MonoBehaviour
     {
         health -= dmg;
         if (health <= 0 && !markedForRemove)
-            StartCoroutine(Remove(0f));
+            StartCoroutine(Remove(0f, true));
     }
 
     public void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.tag == "backbullet Remover")
-            StartCoroutine(Remove(0f));
+            StartCoroutine(Remove(0f, false));
     }
 
     protected virtual void OnEnable()
@@ -39,7 +39,7 @@ public class EnemyStats : MonoBehaviour
         health = maxHealth;
     }
 
-    IEnumerator Remove(float delay)
+    IEnumerator Remove(float delay, bool createPickups)
     {
         if (!markedForRemove)
         {
@@ -63,6 +63,9 @@ public class EnemyStats : MonoBehaviour
 
             GetComponent<Rigidbody2D>().isKinematic = true;
             this.SendMessage("GotRemoved");
+            //ToDo add make scrap and count value dynamic and based on difficlutly of the enemy
+            if (createPickups)
+                PickupPool.CreateScrapCloud(transform.position, new Vector2(7, 7), 5, 20);
             EnemyPool.RemoveEnemy(this);
         }
     }

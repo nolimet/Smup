@@ -12,6 +12,9 @@ public class PickupPool : MonoBehaviour {
 
     List<Pickup> ActivePool, InActivePool;
 
+    [SerializeField]
+    bool collectPickupsAuto = true;
+
     void Awake()
     {
         if (instance == null)
@@ -21,6 +24,23 @@ public class PickupPool : MonoBehaviour {
 
         ActivePool = new List<Pickup>();
         InActivePool = new List<Pickup>();
+    }
+
+    void Start()
+    {
+        if (collectPickupsAuto)
+        {
+            Pickup[] pl = FindObjectsOfType<Pickup>();
+            foreach (Pickup p in pl)
+            {
+                if (p.gameObject.activeSelf)
+                    ActivePool.Add(p);
+                else
+                    InActivePool.Add(p);
+
+                p.transform.SetParent(transform);
+            }
+        }
     }
 
     void Update()
@@ -66,5 +86,24 @@ public class PickupPool : MonoBehaviour {
         return null;
     }
 
+    /// <summary>
+    /// Create a collection of scrap
+    /// </summary>
+    /// <param name="pos">Where the cloud should be created on screen</param>
+    /// <param name="Size">How large are the bounds of the cloud</param>
+    /// <param name="count">How many bits of scrap are there in the cloud</param>
+    /// <param name="Value">What is the combined value of the cloud</param>
+    public static void CreateScrapCloud(Vector2 pos, Vector2 Size, int count, float Value)
+    {
+        Pickup p;
+        Vector2 v2;
+        for (int i = 0; i < count; i++)
+        {
+            p = Getpickup();
+            v2 = new Vector2(Random.Range(Size.x / -2f, Size.x / 2f), Random.Range(Size.y / -2f, Size.y / 2f));
+            p.transform.position = pos + v2;
+            p.init(120, Value / count);
+        }
+    }
 
 }

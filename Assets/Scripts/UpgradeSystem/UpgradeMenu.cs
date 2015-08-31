@@ -102,94 +102,28 @@ public class UpgradeMenu : MonoBehaviour
     /// </summary>
     void InitUpgradeFunctions()
     {
-       /* addUpgrade(UpgradeHullLevel, 50, 1.4f, upgrades.hullUpgradeLevel, "Hull Upgrade", "Upgrading the hull allows the ship to take more hits");
-        addUpgrade(UnlockShotGun, 300, 0, upgrades.UnlockedShotgun.toInt(), "Unlock Shotgun", "Unlock's the shotgun");
-        addUpgrade(ShotgunBulletsPerShot, 75, 1.3f, upgrades.ShotGunBulletsPerShot, "Fragments per shotgun shot", "Increases the number of framents shot out per shot");
-        addUpgrade(ShotgunDamagePerFragment, 125, 1.3f, upgrades.ShotGunDamagePerFragment, "Increase Damage per frament", "Increases the damage each frament does");
-        addUpgrade(UnlockMachineGun, 700, 0, upgrades.UnlockedMachineGun.toInt(), "Unlock Machinegun", "Unlocks the Machinegun");*/
 
-        //addUpgrade("UnlockedShotgunTweaker", 100, 0, "A test", "TESTING");
+        //scrapCollection
+        addUpgrade("ScrapConversionRate", 30, 1.3f, "Scrap sell rate", "Improves for how much you sell each piece of scrap");
+        addUpgrade("ScrapCollectionRange", 145, 1.3f, "Scrap Collection Range", "Makes the collection range bigger");
+        addUpgrade("ScrapCollectionSpeed", 145, 1.5f, "Scrap Collection Speed", "Improves how fast the scrap moves towards you");
+
+        //Hull
         addUpgrade("hullUpgradeLevel", 50, 1.4f, "Hull Upgrade", "Upgrading the hull allows the ship to take more hits");
+
+        //shotgun
         addUpgrade("UnlockedShotgun", 300, 0, "Fragments per shotgun shot", "Increases the number of framents shot out per shot");
         addUpgrade("ShotGunBulletsPerShot", 75,1.3f, "Fragments per shotgun shot", "Increases the number of framents shot out per shot",6);
         addUpgrade("ShotGunDamagePerFragment",125,1.3f, "Damage per frament", "Increases the damage each frament does");
+
+        //machineGun
         addUpgrade("UnlockedMachineGun",700,0, "Unlock Machinegun", "Unlocks the Machinegun");
         addUpgrade("MachineGunBulletsPerSecond", 250, 1.2f, "Firerate MachineGun", "Increases number of bullets shot out by the machine gun every second",20);
         addUpgrade("MachineGunDamagePerBullet", 400, 1.1f, "Damage per bullet MachineGun", "Increases the damage each bullet of the machine gun does");
+        
+        
 
     }
-    #endregion
-    
-    
-    #region public functions
-    #region ship
-    /// <summary>
-    /// Upgrade for hull/health
-    /// </summary>
-    /// <param name="price">The price of the upgrade</param>
-    /// <param name="substract">will the upgrade be bought or only used to check if it can be bought?</param>
-    /// <returns></returns>
-    public bool UpgradeHullLevel(int price, bool substract)
-    {
-        if (canBuy(price, substract))
-        {
-            if (substract)
-                upgrades.hullUpgradeLevel++;
-            return true;
-        }
-        return false;
-    }
-
-    #endregion
-
-    #region ShotGun
-    public bool UnlockShotGun(int price, bool substract)
-    {
-        if (canBuy(price, substract) && !upgrades.UnlockedShotgun)
-        {
-            if (substract)
-                upgrades.UnlockedShotgun = true;
-            return true;
-        }
-        return false;
-    }
-
-    public bool ShotgunBulletsPerShot(int price, bool substract)
-    {
-        if (canBuy(price, substract))
-        {
-            if (substract)
-                upgrades.ShotGunBulletsPerShot++;
-            return true;
-        }
-        return false;
-    }
-
-    public bool ShotgunDamagePerFragment(int price, bool substract)
-    {
-        if (canBuy(price, substract))
-        {
-            if (substract)
-                upgrades.ShotGunDamagePerFragment++;
-            return true;
-        }
-        return false;
-    }
-    #endregion
-
-    #region MachineGun
-    public bool UnlockMachineGun(int price, bool substract)
-    {
-        if (canBuy(price, substract) && !upgrades.UnlockedMachineGun)
-        {
-            if (substract)
-                upgrades.UnlockedMachineGun = true;
-            return true;
-        }
-        return false;
-    }
-
-    #endregion
     #endregion
 
     [System.Serializable]
@@ -348,5 +282,15 @@ public class UpgradeMenu : MonoBehaviour
             }
             return false;
         }
+    }
+}
+
+public class UpgradeCatagory : MonoBehaviour
+{
+    Text Name;
+
+    public void SetText(string Name)
+    {
+        this.Name.text = Name;
     }
 }

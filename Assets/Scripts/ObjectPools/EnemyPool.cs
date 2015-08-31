@@ -11,6 +11,7 @@ public class EnemyPool : MonoBehaviour
 
     List<EnemyStats> ActivePool, InActivePool;
 
+    bool autoCollectEnemiesOnStart = true;
     void Awake()
     {
         if (instance == null)
@@ -20,6 +21,23 @@ public class EnemyPool : MonoBehaviour
 
         ActivePool = new List<EnemyStats>();
         InActivePool = new List<EnemyStats>();
+    }
+
+    void Start()
+    {
+        if (autoCollectEnemiesOnStart)
+        {
+            EnemyStats[] pl = FindObjectsOfType<EnemyStats>();
+            foreach (EnemyStats p in pl)
+            {
+                if (p.gameObject.activeSelf)
+                    ActivePool.Add(p);
+                else
+                    InActivePool.Add(p);
+
+                p.transform.SetParent(transform);
+            }
+        }
     }
 
     void Update()
@@ -37,6 +55,8 @@ public class EnemyPool : MonoBehaviour
             if (!instance.InActivePool.Contains(e))
                 instance.InActivePool.Add(e);
             e.gameObject.SetActive(false);
+
+            instance.onRemove(e);
         }
     }
 

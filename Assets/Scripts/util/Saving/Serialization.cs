@@ -60,9 +60,10 @@ public static class Serialization
 
         IFormatter formatter = new BinaryFormatter();
         Stream stream = new FileStream(saveFile, FileMode.Create, FileAccess.Write, FileShare.ReadWrite);
-
         formatter.Serialize(stream, token);
         stream.Close();
+
+        Debug.Log("Saved file: " + saveFile);
 
     }
 

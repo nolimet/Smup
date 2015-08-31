@@ -101,7 +101,6 @@ public class Bar
         {
             bar1.sizeDelta = StartSize;
             bar2.sizeDelta = new Vector2(StartSize.x * ((calc - 1f) / overloadFactor), StartSize.y);
-            Debug.Log(value);
         }
     }
 

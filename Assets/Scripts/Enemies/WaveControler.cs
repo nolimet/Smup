@@ -4,14 +4,20 @@ using System.Collections.Generic;
 
 public class WaveControler : MonoBehaviour {
 
+    public delegate void WaveComplete();
+    public event WaveComplete onWaveComplete;
+
+    [SerializeField]
     int enemiesLeftInWave;
     public List<EnemyStats> currentEnemies;
 
     void Start()
     {
         EnemyPool.instance.onRemove += EnemyPool_onRemove;
-        createWave();
         currentEnemies = new List<EnemyStats>();
+
+
+        createWave();
     }
 
     void Destroy()
