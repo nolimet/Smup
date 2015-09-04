@@ -279,6 +279,9 @@ MonoBehaviour:
   _playerWeaponControler: {fileID: 2064760418}
   _upgrades:
     UpgradeCurrency: 0
+    ScrapCollectionRange: 0
+    ScrapCollectionSpeed: 0
+    ScrapConversionRate: 0
     UnlockedShield: 0
     shieldGeneratorLevel: 0
     shieldCapacitorLevel: 0
@@ -3626,6 +3629,7 @@ Camera:
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
+  m_TargetEye: 3
   m_HDR: 0
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
