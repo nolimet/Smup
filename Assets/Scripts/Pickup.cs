@@ -7,7 +7,12 @@ public class Pickup : MonoBehaviour
     //ToDo this is a temp value only for testing and for seeing if it works correct
     public float scrapValue;
     SpriteRenderer spr;
-    float flo = 0f, lifeTime = 10f, A = 0;
+    /// <summary>
+    /// flo is used for animations
+    /// lifetime does what it says is the time it has left to live
+    /// A is alpha of the object
+    /// </summary>
+    float flo = 0f, lifeTime = 120f, A = 0;
     bool b;
 
     void Start()

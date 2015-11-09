@@ -122,13 +122,13 @@ public class UpgradeMenu : MonoBehaviour
 
         //scrapCollection
         addCatagory("Scrap Collection", "Enchance your scrap collection ability");
-        addUpgrade("ScrapConversionRate", 30, 1.3f, "Scrap sell rate", "Improves for how much you sell each piece of scrap");
-        addUpgrade("ScrapCollectionRange", 145, 1.3f, "Scrap Collection Range", "Makes the collection range bigger");
-        addUpgrade("ScrapCollectionSpeed", 145, 1.5f, "Scrap Collection Speed", "Improves how fast the scrap moves towards you");
+        addUpgrade("ScrapConversionRate", 900, 1.3f, "Scrap sell rate", "Improves for how much you sell each piece of scrap");
+        addUpgrade("ScrapCollectionRange", 650, 1.3f, "Scrap Collection Range", "Makes the collection range bigger", 10);
+        addUpgrade("ScrapCollectionSpeed", 650, 1.5f, "Scrap Collection Speed", "Improves how fast the scrap moves towards you", 10);
 
         //Hull
         addCatagory("Ship Upgrades", "Upgrades that make your ship strong, faster and generaly better");
-        addUpgrade("hullUpgradeLevel", 50, 1.4f, "Hull Upgrade", "Upgrading the hull allows the ship to take more hits");
+        addUpgrade("hullUpgradeLevel", 50, 1.8f, "Hull Upgrade", "Upgrading the hull allows the ship to take more hits");
         addUpgrade("armorUpgradeLevel", 100, 1.4f, "Armor Upgrade", "Upgrades the ammount of armor the ship has");
         //Shield
         addUpgrade("UnlockedShield", 1200, 0, "Unlock Shield", "Unlocks the shield");
@@ -137,18 +137,15 @@ public class UpgradeMenu : MonoBehaviour
 
         //shotgun
         addCatagory("ShotGun Upgrades", " Upgrades for your shotgun");
-        addUpgrade("UnlockedShotgun", 300, 0, "Fragments per shotgun shot", "Increases the number of framents shot out per shot");
-        addUpgrade("ShotGunBulletsPerShot", 75,1.3f, "Fragments per shotgun shot", "Increases the number of framents shot out per shot",6);
-        addUpgrade("ShotGunDamagePerFragment",125,1.3f, "Damage per frament", "Increases the damage each frament does");
+        addUpgrade("UnlockedShotgun", 750, 0, "Fragments per shotgun shot", "Increases the number of framents shot out per shot");
+        addUpgrade("ShotGunBulletsPerShot", 750, 1.3f, "Fragments per shotgun shot", "Increases the number of framents shot out per shot", 6);
+        addUpgrade("ShotGunDamagePerFragment", 1250, 1.3f, "Damage per frament", "Increases the damage each frament does");
 
         //machineGun
         addCatagory("Machinegun Upgrades", "Upgrades for your machinegun");
-        addUpgrade("UnlockedMachineGun",700,0, "Unlock Machinegun", "Unlocks the Machinegun");
-        addUpgrade("MachineGunBulletsPerSecond", 250, 1.2f, "Firerate MachineGun", "Increases number of bullets shot out by the machine gun every second",20);
-        addUpgrade("MachineGunDamagePerBullet", 400, 1.1f, "Damage per bullet MachineGun", "Increases the damage each bullet of the machine gun does");
-        
-        
-
+        addUpgrade("UnlockedMachineGun", 700, 0, "Unlock Machinegun", "Unlocks the Machinegun");
+        addUpgrade("MachineGunBulletsPerSecond", 2500, 1.2f, "Firerate MachineGun", "Increases number of bullets shot out by the machine gun every second", 20);
+        addUpgrade("MachineGunDamagePerBullet", 4000, 1.1f, "Damage per bullet MachineGun", "Increases the damage each bullet of the machine gun does");
     }
     #endregion
 

@@ -2,6 +2,7 @@
 using util;
 using System.Collections;
 
+[RequireComponent(typeof(CircleCollider2D))]
 public class PickupManager : MonoBehaviour
 {
     [SerializeField]
@@ -9,13 +10,7 @@ public class PickupManager : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
+        GetComponent<CircleCollider2D>().radius = 7 * Mathf.Pow(1.2f, GameManager.upgrades.ScrapCollectionRange);
     }
 
     void OnDestroy()
@@ -40,7 +35,7 @@ public class PickupManager : MonoBehaviour
             {
                 Vector2 v2 = transform.position - col.transform.position;
                 v2.Normalize();
-                t.AddForce(v2 * 5f);
+                t.AddForce(v2 * (5f * Mathf.Pow(1.5f, GameManager.upgrades.ScrapCollectionSpeed)));
             }
         }
     }
