@@ -12,6 +12,7 @@ public class PlayerWeaponControler : MonoBehaviour
     bool canMainShoot = true;
     public Vector2 weaponOffset;
     public WeaponTable.Weapons currentWeapon;
+    public WeaponInterfaces.Iweapon currentWeapon2;
      
 
     Rigidbody2D rigi;
@@ -56,7 +57,7 @@ public class PlayerWeaponControler : MonoBehaviour
 
         WeaponBase W;
         float angle;
-        Debug.Log(currentWeapon.ToString() + ": " + WeaponTable.BulletsPerShot[currentWeapon].ToString());
+        //z2Debug.Log(currentWeapon.ToString() + ": " + WeaponTable.BulletsPerShot[currentWeapon].ToString());
         for (int i = 0; i < WeaponTable.BulletsPerShot[currentWeapon]; i++)
         {
             //B = Instantiate(Resources.Load("Weapons/" + currentWeapon.ToString()), transform.position + (Vector3)weaponOffset, Quaternion.identity) as GameObject;
