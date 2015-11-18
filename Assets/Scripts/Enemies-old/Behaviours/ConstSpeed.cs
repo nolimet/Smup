@@ -9,8 +9,13 @@ namespace Enemies
         Vector2 speed;
         protected override IEnumerator EnemyMoveBehaviour()
         {
-            while (appFocus)
+            while (isAlive)
             {
+                if (!appFocus)
+                    while (!appFocus)
+                        yield return new WaitForSeconds(TickTimeFrag);
+
+
                 r.velocity = speed;
                 yield return new WaitForSeconds(TickTimeFrag);
             }

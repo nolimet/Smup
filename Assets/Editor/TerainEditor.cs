@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEditor;
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -10,7 +11,7 @@ public class TerainEditor : EditorWindow
     public static void ShowWindow()
     {
         //Show existing window instance. If one doesn't exist, make one.
-        TerainEditor thisWindow = EditorWindow.GetWindow(typeof(TerainEditor)) as TerainEditor;
+        TerainEditor thisWindow = GetWindow(typeof(TerainEditor)) as TerainEditor;
         thisWindow.Show();
         thisWindow.minSize = new Vector2(1280, 720);
         thisWindow.Init();
@@ -242,9 +243,10 @@ public class TerainEditor : EditorWindow
             if (v.z > hz)
                 hz = (int)v.z;
         }
+        Debug.Log(hz);
         hz++;
 
-        WaveClass SaveData = new WaveClass(currentLevel, new Vector3(sizeX, sizeY, hz));
+        WaveClass SaveData = new WaveClass(currentLevel, new Vector3(sizeX, sizeY, (int)currentLevel.Max(x => x.Key.z) + 1));
 
         Serialization.Save("Wave1", Serialization.fileTypes.wave, SaveData);
     }
@@ -252,9 +254,13 @@ public class TerainEditor : EditorWindow
     void Load()
     {
         WaveClass loadedData = new WaveClass();
-        ;
+        
         if (!Serialization.Load("Wave1", Serialization.fileTypes.wave, ref loadedData))
+        {
+            currentLevel = new Dictionary<Vector3, char>();
+            UpdateBackgroundTexture();
             return;
+        }
 
         Debug.Log("Wave points: " + loadedData.waves.Length);
         currentLevel = loadedData.Convert();

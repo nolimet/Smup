@@ -14,17 +14,8 @@ public class WaveClass
 
     public WaveClass(Dictionary<Vector3,char> points, Vector3 arraySize)
     {
-        waves = new char[(int)arraySize.z, (int)arraySize.y, (int)arraySize.x];
-       /* for (int z = 0; z < waves.GetLength(0); z++)
-        {
-            for (int y = 0; y < waves.GetLength(1); y++)
-            {
-                for (int x = 0; x < waves.GetLength(2); x++)
-                {
-                    waves[z, y, x] = 'x';
-                }
-            }
-        }*/
+        waves = new char[(int)arraySize.z, (int)arraySize.y + 1, (int)arraySize.x + 1];
+       
         foreach(Vector3 v in points.Keys)
         {
             waves[(int)v.z, (int)v.y, (int)v.x] = points[v];

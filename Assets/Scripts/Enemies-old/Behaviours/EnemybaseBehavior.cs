@@ -31,11 +31,12 @@ namespace Enemies
         void OnApplicationFocus(bool focus)
         {
             
-            appFocus = focus;
-            if(!appFocus)
-            {
-                AttackBehaviourRunning = MoveBehaviourRunning = false;
-            }
+            //appFocus = focus;
+            //if(!appFocus)
+            //{
+            //    AttackBehaviourRunning = MoveBehaviourRunning = false;
+            //}
+            //startBehaviours();
             // startCoroutines();
         }
 

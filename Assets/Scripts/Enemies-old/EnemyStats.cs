@@ -17,7 +17,6 @@ public class EnemyStats : MonoBehaviour
     public Type type;
     bool markedForRemove = false;
 
-
     public virtual void hit(float dmg)
     {
         health -= dmg;
@@ -35,6 +34,7 @@ public class EnemyStats : MonoBehaviour
     {
         GetComponent<Rigidbody2D>().isKinematic = false;
         GetComponent<PolygonCollider2D>().enabled = true;
+        GetComponent<SpriteRenderer>().color = Color.white;
         markedForRemove = false;
         health = maxHealth;
     }

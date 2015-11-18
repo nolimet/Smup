@@ -137,8 +137,8 @@ public class UpgradeMenu : MonoBehaviour
 
         //shotgun
         addCatagory("ShotGun Upgrades", " Upgrades for your shotgun");
-        addUpgrade("UnlockedShotgun", 750, 0, "Fragments per shotgun shot", "Increases the number of framents shot out per shot");
-        addUpgrade("ShotGunBulletsPerShot", 750, 1.3f, "Fragments per shotgun shot", "Increases the number of framents shot out per shot", 6);
+        addUpgrade("UnlockedShotgun", 750, 0, "Unlocks Shotgun", "Unlocks the Shotgun");
+        addUpgrade("ShotGunBulletsPerShot", 750, 1.3f, "Fragments per Shotgun shot", "Increases the number of framents shot out per shot", 6);
         addUpgrade("ShotGunDamagePerFragment", 1250, 1.3f, "Damage per frament", "Increases the damage each frament does");
 
         //machineGun
