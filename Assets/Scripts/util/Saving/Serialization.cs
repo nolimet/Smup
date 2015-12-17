@@ -39,8 +39,11 @@ public static class Serialization
 
     public static string SaveLocation(fileTypes fileType)
     {
-        
-        string saveLocation = Application.dataPath + "/" + saveFolderName + "/" + FileLocations[fileType] + "/";
+
+        string saveLocation = Application.dataPath;
+        if (!Application.isEditor)
+            saveLocation += "/..";
+        saveLocation += "/" + saveFolderName + "/" + FileLocations[fileType] + "/";
         if (!Directory.Exists(saveLocation))
         {
             Directory.CreateDirectory(saveLocation);
