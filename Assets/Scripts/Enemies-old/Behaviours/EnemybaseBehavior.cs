@@ -13,7 +13,7 @@ namespace Enemies
 
         int health;
 
-        virtual protected void Start(){}
+        virtual protected void Start() { }
 
         protected virtual IEnumerator EnemyMoveBehaviour()
         {
@@ -30,7 +30,7 @@ namespace Enemies
 
         void OnApplicationFocus(bool focus)
         {
-            
+
             //appFocus = focus;
             //if(!appFocus)
             //{
@@ -44,6 +44,12 @@ namespace Enemies
         {
             isAlive = true;
             startBehaviours();
+        }
+
+        protected void OnDisable()
+        {
+            AttackBehaviourRunning = false;
+            MoveBehaviourRunning = false;
         }
 
         protected void startBehaviours()
