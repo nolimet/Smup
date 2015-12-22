@@ -3,7 +3,7 @@ using System.Collections;
 
 public class GridLayoutHeightSetter : MonoBehaviour
 {
-
+    public bool onlyUseActive;
     float o;
     // Use this for initialization
     void Start()
