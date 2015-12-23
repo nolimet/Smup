@@ -311,21 +311,26 @@ public class UpgradeMenu : MonoBehaviour
             }
             return false;
         }
+
+        public void Move(Vector2 newpos)
+        {
+            ((RectTransform)visual.transform).anchoredPosition = newpos;
+        }
     }
 
     [System.Serializable]
     public class CatagoryObject
     {
-        UpgradeCatagory o;
+        UpgradeCatagory visual;
         List<UpgradeObject> subObjs = new List<UpgradeObject>();
         bool active = true;
 
-        public CatagoryObject (UpgradeCatagory o, string name, string discription)
+        public CatagoryObject (UpgradeCatagory visual, string name, string discription)
         {
-            this.o = o;
-            o.SetText(name, discription);
+            this.visual = visual;
+            visual.SetText(name, discription);
 
-            o.ButtonObj.onClick.AddListener(delegate
+            visual.ButtonObj.onClick.AddListener(delegate
             {
                 ToggleAll();
             });
@@ -340,8 +345,12 @@ public class UpgradeMenu : MonoBehaviour
         public void ToggleAll()
         {
             active = !active;
+            Vector3 newpos = ((RectTransform)visual.transform).anchoredPosition;
             foreach (UpgradeObject o in subObjs)
+            {
                 o.enabled = active;
+                o.Move(newpos);
+            }
         }
     }
 }

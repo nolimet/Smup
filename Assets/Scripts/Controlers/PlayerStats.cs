@@ -6,6 +6,8 @@ public class PlayerStats : MonoBehaviour {
 
     [SerializeField]
     Bar Energy, Health;
+    [SerializeField]
+    Text CollectedScrapDisplay;
 
     public float currentEnergy = 0;
     public float maxEnergy = 200;
@@ -43,6 +45,7 @@ public class PlayerStats : MonoBehaviour {
         
         Energy.UpdateSize(currentEnergy);
         Health.UpdateSize(currentHealth);
+        CollectedScrapDisplay.text = "Scrap Collected: " + GameManager.pickupManager.pickedUpScrap;
     }
 
     public bool canFire(float energyNeeded)

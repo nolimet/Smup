@@ -11,7 +11,7 @@ public class EnemyStats : MonoBehaviour
         SlowDownSpeedUp = 91
         //ToDo add More types
     }
-
+    protected readonly Bounds maxLimits = new Bounds(Vector3.zero, new Vector3(100, 100, 1));
     [SerializeField]
     float health = 10, maxHealth = 10;
     public Type type;
@@ -28,6 +28,15 @@ public class EnemyStats : MonoBehaviour
     {
         if (collision.tag == "backbullet Remover")
             StartCoroutine(Remove(0f, false));
+    }
+
+    protected virtual void Update()
+    {
+        if (!markedForRemove)
+        {
+            if (!maxLimits.Contains(transform.position))
+                Remove(0, false);
+        }
     }
 
     protected virtual void OnEnable()

@@ -5,12 +5,13 @@ using System.Collections;
 [RequireComponent(typeof(CircleCollider2D))]
 public class PickupManager : MonoBehaviour
 {
-    [SerializeField]
-    float pickedUpScrap = 0;
+    public float pickedUpScrap { get { return _pickedUpScrap; } }
+    float _pickedUpScrap = 0;
     // Use this for initialization
     void Start()
     {
-        GetComponent<CircleCollider2D>().radius = 7 * Mathf.Pow(1.2f, GameManager.upgrades.ScrapCollectionRange);
+        if (GameManager.upgrades != null)
+            GetComponent<CircleCollider2D>().radius = 7 * Mathf.Pow(1.2f, GameManager.upgrades.ScrapCollectionRange);
     }
 
     void OnDestroy()
@@ -18,7 +19,7 @@ public class PickupManager : MonoBehaviour
         UpgradeData dat = new UpgradeData();
         Serialization.Load("upgrade", Serialization.fileTypes.binary, ref dat);
 
-        dat.UpgradeCurrency += Mathf.FloorToInt(pickedUpScrap * ((dat.ScrapConversionRate + 1) * 1.1f));
+        dat.UpgradeCurrency += Mathf.FloorToInt(_pickedUpScrap * ((dat.ScrapConversionRate + 1) * 1.1f));
 
         Serialization.Save("upgrade", Serialization.fileTypes.binary, dat);
     }
@@ -38,7 +39,10 @@ public class PickupManager : MonoBehaviour
             {
                 Vector2 v2 = transform.position - col.transform.position;
                 v2.Normalize();
-                t.AddForce(v2 * (5f * Mathf.Pow(1.5f, GameManager.upgrades.ScrapCollectionSpeed)));
+                if (GameManager.upgrades != null)
+                    t.AddForce(v2 * (5f * Mathf.Pow(1.5f, GameManager.upgrades.ScrapCollectionSpeed)));
+                else
+                    t.AddForce(v2 * (5f * Mathf.Pow(1.5f, 3f)));
             }
         }
     }
@@ -64,7 +68,7 @@ public class PickupManager : MonoBehaviour
         if (col.gameObject.layer == 14)
         {
             PickupPool.removePickup(col.gameObject.GetComponent<Pickup>());
-            pickedUpScrap += col.gameObject.GetComponent<Pickup>().scrapValue;
+            _pickedUpScrap += col.gameObject.GetComponent<Pickup>().scrapValue;
         }
     }
 }

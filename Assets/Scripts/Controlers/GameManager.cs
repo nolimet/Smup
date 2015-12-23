@@ -51,7 +51,6 @@ public class GameManager : MonoBehaviour {
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            Debug.Log("OPEN A MEN WHEN THIS BUTTON IS PRESSED!!");
             Application.LoadLevel(0);
         }
         upgrades = _upgrades;
