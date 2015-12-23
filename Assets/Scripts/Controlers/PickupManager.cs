@@ -22,12 +22,15 @@ public class PickupManager : MonoBehaviour
 
         Serialization.Save("upgrade", Serialization.fileTypes.binary, dat);
     }
-
+    Rigidbody2D t;
     public void OnTriggerStay2D(Collider2D col)
     {
         if (col.gameObject.layer == 14)
         {
-            Rigidbody2D t = col.GetComponent<Rigidbody2D>();
+            t = col.GetComponent<Rigidbody2D>();
+            if (!t)
+                return;
+
             float v = t.velocity.v();
             if (v < 0) v *= -1;
 

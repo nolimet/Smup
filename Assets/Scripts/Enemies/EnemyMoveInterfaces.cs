@@ -2,23 +2,23 @@
 using System.Collections;
 using System;
 
-namespace enemy.Move
+namespace interfaces.Move
 {
 
     public interface IMovement
     {
-        void Move(GameObject enity);
+        void Move(GameObject enity, float Speed = 1f);
     }
 
     public class LinearMovement : IMovement
     {
         Rigidbody2D ri;
-        public void Move(GameObject enity)
+        public void Move(GameObject enity, float speed =1f)
         {
             ri = enity.GetComponent<Rigidbody2D>();
 
             if (ri.velocity.x < -10f)
-                ri.AddForce(new Vector2(-5 * ri.mass, 0));
+                ri.AddForce(new Vector2(-5 * ri.mass * speed, 0), ForceMode2D.Force);
         }
     }
 

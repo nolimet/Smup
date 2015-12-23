@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-namespace enemy.Attack
+namespace interfaces.Attack
 {
     public interface IAttack
     {
