@@ -105,6 +105,7 @@ public class UpgradeMenu : MonoBehaviour
     void addCatagory(string name, string discription)
     {
        UpgradeCatagory u = Instantiate(parentCatagory);
+        u.gameObject.SetActive(true);
         u.transform.SetParent(ContentParent,false);
 
         CatagoryObject o = new CatagoryObject(u, name, discription);
@@ -239,9 +240,13 @@ public class UpgradeMenu : MonoBehaviour
             if ((UpgradeFunc != null && UpgradeFunc(GetPrice(), pay)) || canBuy(pay))
             {
                 cb.pressedColor = Color.green;
+                cb.highlightedColor = Color.green + Color.gray;
             }
             else
+            {
                 cb.pressedColor = Color.red;
+                cb.highlightedColor = Color.red + Color.gray;
+            }
             visual.Buy.colors = cb;
         }
 

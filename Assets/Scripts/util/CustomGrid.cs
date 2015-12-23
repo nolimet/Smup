@@ -12,6 +12,7 @@ public class CustomGrid: MonoBehaviour
     public Vector2 ObjSize;
     public Vector2 padding;
     public Vector2 maxSpacing;
+    public Vector2 CurrentSpacing;
     public Vector2 AnchorPoint = Vector2.zero;
     [Range(1,50)] //can ve changed to anynumber above 0
     public int maxRows = 2;
@@ -140,6 +141,8 @@ public class CustomGrid: MonoBehaviour
         if (spacingX > maxSpacing.x)
             spacingX = maxSpacing.x;
 
+
+        CurrentSpacing = new Vector2(spacingX, spacingY);
         spacingX += padding.x;
         spacingY += padding.y;
 

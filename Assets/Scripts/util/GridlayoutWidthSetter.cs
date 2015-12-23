@@ -7,8 +7,9 @@ public class GridlayoutWidthSetter : MonoBehaviour {
     CustomGrid c;
     public int ChildrenNeededToScroll = 8;
     public bool onlySetContainerHeight = true;
+    public bool onlyUseActiveChildren = true;
     int childrenLast;
-    int chilCount;
+    int ChildrenCount;
     int AcLast = 0;
     Vector2 spacing, cellSize;
 
@@ -37,34 +38,30 @@ public class GridlayoutWidthSetter : MonoBehaviour {
 
     public void ForceUpdate()
     {
-        if (rt.childCount > ChildrenNeededToScroll)
+        ChildrenCount = activeChildCount();
+        if (ChildrenCount > ChildrenNeededToScroll)
         {
-            rt.sizeDelta = new Vector2(rt.sizeDelta.x, (cellSize.y + spacing.y) * rt.childCount);
+            if (!c)
+                rt.sizeDelta = new Vector2(rt.sizeDelta.x, (cellSize.y + spacing.y) * ChildrenCount);
+            else
+                rt.sizeDelta = new Vector2(rt.sizeDelta.x, (c.ObjSize.y + (c.padding.y + c.CurrentSpacing.y)) * Mathf.CeilToInt(ChildrenCount / (float)c.maxRows));
         }
         else
         {
-            rt.sizeDelta = new Vector2(rt.sizeDelta.x, (cellSize.y + spacing.y) * ChildrenNeededToScroll);
+            if (!c)
+                rt.sizeDelta = new Vector2(rt.sizeDelta.x, (cellSize.y + spacing.y) * ChildrenNeededToScroll);
+            else
+                rt.sizeDelta = new Vector2(rt.sizeDelta.x, (c.ObjSize.y + (c.padding.y + c.CurrentSpacing.y)) * (ChildrenNeededToScroll / c.maxRows));
         }
     }
    
     void Update()
     {
-        if (childrenLast != rt.childCount || activeChildCount() != AcLast)
+        ChildrenCount = activeChildCount();
+        if (childrenLast != ChildrenCount)
         {
-            if (rt.childCount > ChildrenNeededToScroll || activeChildCount() > ChildrenNeededToScroll)
-            {
-                if (!c)
-                    rt.sizeDelta = new Vector2(rt.sizeDelta.x, (cellSize.y + spacing.y) * rt.childCount);
-                else
-                    rt.sizeDelta = new Vector2(rt.sizeDelta.x, (cellSize.y + spacing.y) * Mathf.FloorToInt(rt.childCount / c.maxRows));
-            }
-            else
-            {
-                if (!c)
-                    rt.sizeDelta = new Vector2(rt.sizeDelta.x, (cellSize.y + spacing.y) * ChildrenNeededToScroll);
-                else
-                    rt.sizeDelta = new Vector2(rt.sizeDelta.x, (cellSize.y + spacing.y) * (ChildrenNeededToScroll / c.maxRows));
-            }
+
+            ForceUpdate();
 
             AcLast = activeChildCount();
         }
