@@ -4,9 +4,12 @@ using System.Collections;
 public class GridlayoutWidthSetter : MonoBehaviour {
     RectTransform rt;
     UnityEngine.UI.GridLayoutGroup g;
+    CustomGrid c;
     public int ChildrenNeededToScroll = 8;
+    public bool onlySetContainerHeight = true;
     int childrenLast;
-
+    int chilCount;
+    int AcLast = 0;
     Vector2 spacing, cellSize;
 
     void Awake()
@@ -23,8 +26,9 @@ public class GridlayoutWidthSetter : MonoBehaviour {
 
         if (GetComponent<CustomGrid>())
         {
-            CustomGrid c = GetComponent<CustomGrid>();
-            c.ObjSize = new Vector2(rt.rect.width, c.ObjSize.y);
+            c = GetComponent<CustomGrid>();
+            if (!onlySetContainerHeight)
+                c.ObjSize = new Vector2(rt.rect.width, c.ObjSize.y);
             cellSize = c.ObjSize;
             spacing = c.maxSpacing;
             
@@ -42,19 +46,36 @@ public class GridlayoutWidthSetter : MonoBehaviour {
             rt.sizeDelta = new Vector2(rt.sizeDelta.x, (cellSize.y + spacing.y) * ChildrenNeededToScroll);
         }
     }
-
+   
     void Update()
     {
-        if (childrenLast != rt.childCount)
+        if (childrenLast != rt.childCount || activeChildCount() != AcLast)
         {
-            if (rt.childCount > ChildrenNeededToScroll)
+            if (rt.childCount > ChildrenNeededToScroll || activeChildCount() > ChildrenNeededToScroll)
             {
-                rt.sizeDelta = new Vector2(rt.sizeDelta.x, (cellSize.y + spacing.y) * rt.childCount);
+                if (!c)
+                    rt.sizeDelta = new Vector2(rt.sizeDelta.x, (cellSize.y + spacing.y) * rt.childCount);
+                else
+                    rt.sizeDelta = new Vector2(rt.sizeDelta.x, (cellSize.y + spacing.y) * Mathf.FloorToInt(rt.childCount / c.maxRows));
             }
             else
             {
-                rt.sizeDelta = new Vector2(rt.sizeDelta.x, (cellSize.y + spacing.y) * ChildrenNeededToScroll);
+                if (!c)
+                    rt.sizeDelta = new Vector2(rt.sizeDelta.x, (cellSize.y + spacing.y) * ChildrenNeededToScroll);
+                else
+                    rt.sizeDelta = new Vector2(rt.sizeDelta.x, (cellSize.y + spacing.y) * (ChildrenNeededToScroll / c.maxRows));
             }
+
+            AcLast = activeChildCount();
         }
+    }
+
+    int activeChildCount()
+    {
+        int r = 0;
+        foreach (Transform t in transform)
+            if (t.gameObject.activeSelf)
+                r++;
+        return r;
     }
 }

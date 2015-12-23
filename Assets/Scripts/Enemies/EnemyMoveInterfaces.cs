@@ -13,7 +13,7 @@ namespace interfaces.Move
     public class LinearMovement : IMovement
     {
         Rigidbody2D ri;
-        public void Move(GameObject enity, float speed =1f)
+        public void Move(GameObject enity, float speed = 1f)
         {
             ri = enity.GetComponent<Rigidbody2D>();
 
@@ -30,7 +30,7 @@ namespace interfaces.Move
         Rigidbody2D ri;
         float yMovement;
 
-        public void Move(GameObject enity)
+        public void Move(GameObject enity, float speed = 1f)
         {
             ri = enity.AddComponent<Rigidbody2D>();
 

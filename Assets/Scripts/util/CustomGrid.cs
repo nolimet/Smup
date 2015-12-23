@@ -27,7 +27,9 @@ public class CustomGrid: MonoBehaviour
     
     bool atNewPos = false;
     float StartTime;
+    [SerializeField]
     List<Vector2> newPos = new List<Vector2>(), startPos = new List<Vector2>();
+    [SerializeField]
     List<RectTransform> ActiveChildren = new List<RectTransform>();
     RectTransform t;
     
@@ -150,14 +152,6 @@ public class CustomGrid: MonoBehaviour
         int rowSize = 0;
         Vector2 pos = Vector2.zero;
 
-        for (int i = 0; i < t.childCount; i++)
-        {
-            if (!onlyUseActiveObjects || onlyUseActiveObjects && t.GetChild(i).gameObject.activeSelf)
-                ActiveChildren.Add((RectTransform)t.GetChild(i));
-        }
-
-
-
         for (int i = 0; i < noOfChilds; i++)
         {
             Child = ActiveChildren[i];
@@ -233,9 +227,9 @@ public class CustomGrid: MonoBehaviour
     void MoveObjectsToPos()
     {
         RectTransform child;
-        for (int i = 0; i < transform.childCount; i++)
+        for (int i = 0; i < ActiveChildren.Count; i++)
         {
-            child = (RectTransform)t.GetChild(i);
+            child = ActiveChildren[i];
             child.anchoredPosition = Vector2.Lerp(startPos[i], newPos[i], (Time.time - StartTime) * 4f);
 			RoundPos(child);
         }
@@ -249,16 +243,23 @@ public class CustomGrid: MonoBehaviour
     void SnapToPos()
     {
         RectTransform child;
-        for (int i = 0; i < transform.childCount; i++)
+        for (int i = 0; i < ActiveChildren.Count; i++)
         {
-            child = (RectTransform)t.GetChild(i);
+            child = ActiveChildren[i];
             child.anchoredPosition =  newPos[i];
         }
     }
 
     int getChildCount()
     {
-        if(onlyUseActiveObjects)
+        ActiveChildren.Clear();
+        for (int i = 0; i < t.childCount; i++)
+        {
+            if (!onlyUseActiveObjects || onlyUseActiveObjects && t.GetChild(i).gameObject.activeSelf)
+                ActiveChildren.Add((RectTransform)t.GetChild(i));
+        }
+
+        if (onlyUseActiveObjects)
         {
             int r = 0;
             for (int i = 0; i < t.childCount; i++)
