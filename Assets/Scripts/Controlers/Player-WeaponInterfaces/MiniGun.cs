@@ -1,10 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
-using System;
 
 namespace player.Weapon
 {
-    public class MiniGun : BaseWeapon
+    public class MiniGun : IBaseWeapon
     {
         public MiniGun()
         {
@@ -40,15 +39,20 @@ namespace player.Weapon
         float BulletDamage;
 
         WeaponBase W;
-        public void Shoot(GameObject Entiy, Vector3 weaponOffSet)
+        public void Shoot(GameObject Entiy, Vector3 weaponOffSet, Vector2 inherentVelocity)
         {
             if((System.DateTime.Now-lastShot).TotalMilliseconds>= fireDelay)
             {
                 lastShot = System.DateTime.Now;
-
+                float angle;
                 for (int i = 0; i < bulletsPerShot; i++)
                 {
-                    W = BulletPool.GetBullet(WeaponTable.Weapons);
+                    W = BulletPool.GetBullet(WeaponTable.Weapons.Machine_Gun);
+
+                    angle = (Random.Range(-0.5f, 0.5f) * Accuracy);
+
+                    W.transform.rotation = Quaternion.Euler(0, 0, angle);
+                    W.Init(inherentVelocity, util.MathHelper.AngleToVector(angle), BulletSpeed, BulletDamage);
                 }
             }
         }

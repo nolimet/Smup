@@ -36,6 +36,7 @@ public class PlayerThrusterEffect : MonoBehaviour {
             for (int i = 0; i < Down.Length; i++)
 			{
 			    Down[i].emissionRate = 10f;
+
 			}
         }
         else
