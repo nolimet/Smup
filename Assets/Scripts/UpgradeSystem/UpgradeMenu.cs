@@ -81,22 +81,24 @@ public class UpgradeMenu : MonoBehaviour
         addUpgrade("", "shieldCapacitorLevel", 1800, 1.2f, "Shield capacity upgrade", "Increases the capacity of the shield");
 
         //shotgun
-        addCatagory("ShotGun Upgrades", " Upgrades for your shotgun");
-        addUpgrade("", "UnlockedShotgun", 750, 0, "Unlocks Shotgun", "Unlocks the Shotgun");
-        addUpgrade("", "ShotGunBulletsPerShot", 750, 1.3f, "Fragments per Shotgun shot", "Increases the number of framents shot out per shot", 6);
-        addUpgrade("", "ShotGunDamagePerFragment", 1250, 1.3f, "Damage per frament", "Increases the damage each frament does");
+        addCatagory("Shotgun Upgrades", " Upgrades for your shotgun");
+        addUpgrade("Shotgun", "Unlocked", 750, 0, "Unlocks Shotgun", "Unlocks the Shotgun");
+        addUpgrade("Shotgun", "Accuracy", 1425, 1.8f, "Increase Accuracy", "Decreases the spread of the shotgun");
+        addUpgrade("Shotgun", "Damage", 1250, 1.3f, "Damage per frament", "Increases the damage each fragment does");
+        addUpgrade("Shotgun", "FireRate", 750, 1.3f, "Fragments per Shotgun shot", "Increases the number of fragments shot out per shot", 6);
 
         //machineGun
         addCatagory("Machinegun Upgrades", "Upgrades for your machinegun");
         addUpgrade("MiniGun", "Unlocked", 700, 0, "Unlock Machinegun", "Unlocks the Machinegun");
-        addUpgrade("MiniGun", "FireRate", 2500, 1.2f, "Firerate MachineGun", "Increases number of bullets shot out by the machine gun every second", 20);
-        addUpgrade("MiniGun", "Damage", 4000, 1.1f, "Damage per bullet MachineGun", "Increases the damage each bullet of the machine gun does");
+        addUpgrade("MiniGun", "Accuracy", 3000, 1.3f, "Increase Accuracy", "Increases Accuracy of the Machinegun");
+        addUpgrade("MiniGun", "Damage", 4000, 1.1f, "Increase Damage", "Increases the damage each bullet of the machine gun does");
+        addUpgrade("MiniGun", "FireRate", 2500, 1.2f, "Increase Firerate", "Increases number of bullets shot out by the machine gun every second", 20);
 
         //Cannon
         addCatagory("Cannon Upgrades", "Upgrades for your main Cannon");
         addUpgrade("Cannon", "Accuracy", 200, 1.2f, "Cannon Accuracy", "Increases the accuracy of the cannon", 5);
         addUpgrade("Cannon", "Damage", 350, 1.4f, "Cannon Damage", "Increases the ammount of damage dealth with each shot");
-        addUpgrade("Cannon", "FireRate", 475, 1.3f, "Cannon FireRate", "Increases the ammount of bullets shot by the Cannon");
+        addUpgrade("Cannon", "FireRate", 475, 1.7f, "Cannon Firerate", "Increases the ammount of bullets shot by the Cannon" , 10);
     }
 
 
