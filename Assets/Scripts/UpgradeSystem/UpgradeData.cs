@@ -30,6 +30,8 @@ public class UpgradeData {
     public bool UnlockedMachineGun = false;
     public int MachineGunBulletsPerSecond = 0;
     public int MachineGunDamagePerBullet = 0;
+    public int MachineGunSpread = 0;
+
     public bool UnlockedMachineGunTweaker = false;
     public int MachineGunSpreadRangeTweaker = 0;
     public int MachineGunBulletSpeedTweakerRange = 0;
