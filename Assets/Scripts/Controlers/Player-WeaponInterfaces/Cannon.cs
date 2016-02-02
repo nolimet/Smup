@@ -3,14 +3,14 @@ using System.Collections;
 
 namespace player.Weapon
 {
-    public class MiniGun : IBaseWeapon
+    public class Cannon : IBaseWeapon
     {
-        public MiniGun()
+        public Cannon()
         {
-            fireRate = Mathf.FloorToInt((3 * Mathf.Pow(1.2f, GameManager.upgrades.MachineGunBulletsPerSecond)) * 600);
-            BulletDamage = 0.5f * Mathf.Pow(1.3f, GameManager.upgrades.MachineGunDamagePerBullet);
-            Accuracy = 13 * Mathf.Pow(0.9f, GameManager.upgrades.MachineGunSpread);
-            BulletSpeed = 4f * Mathf.Pow(1.1f, 1);
+            fireRate = 40;
+            BulletDamage = 0.5f * Mathf.Pow(1.3f, GameManager.upgrades.Cannon.Damage);
+            Accuracy = 45 * Mathf.Pow(0.9f, GameManager.upgrades.Cannon.Accuracy);
+            BulletSpeed = 7f * Mathf.Pow(1.1f, 1);
 
             fireDelay = 60000f / fireRate;
 
@@ -26,6 +26,8 @@ namespace player.Weapon
             }
             else
                 bulletsPerShot = 1;
+
+           // bulletsPerShot *= Mathf.RoundToInt(5*Mathf.Pow(1.2f, GameManager.upgrades.ShotGunBulletsPerShot));
         }
 
         System.DateTime lastShot;
@@ -41,13 +43,13 @@ namespace player.Weapon
         WeaponBase W;
         public bool Shoot(GameObject Entiy, Vector3 weaponOffSet, Vector2 inherentVelocity)
         {
-            if((System.DateTime.Now-lastShot).TotalMilliseconds>= fireDelay)
+            if ((System.DateTime.Now - lastShot).TotalMilliseconds >= fireDelay)
             {
                 lastShot = System.DateTime.Now;
                 float angle;
                 for (int i = 0; i < bulletsPerShot; i++)
                 {
-                    W = BulletPool.GetBullet(WeaponTable.Weapons.Machine_Gun);
+                    W = BulletPool.GetBullet(WeaponTable.Weapons.Cannon);
 
                     angle = (Random.Range(-0.5f, 0.5f) * Accuracy);
 

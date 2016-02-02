@@ -3,9 +3,9 @@ using System.Collections;
 
 namespace player.Weapon
 {
-    public class Shotgun : IBaseWeapon
+    public class ShotGun : IBaseWeapon
     {
-        public Shotgun()
+        public ShotGun()
         {
             fireRate = 24;
             BulletDamage = 0.5f * Mathf.Pow(1.3f, GameManager.upgrades.ShotGunDamagePerFragment);
@@ -41,7 +41,7 @@ namespace player.Weapon
         float BulletDamage;
 
         WeaponBase W;
-        public void Shoot(GameObject Entiy, Vector3 weaponOffSet, Vector2 inherentVelocity)
+        public bool Shoot(GameObject Entiy, Vector3 weaponOffSet, Vector2 inherentVelocity)
         {
             if ((System.DateTime.Now - lastShot).TotalMilliseconds >= fireDelay)
             {
@@ -49,7 +49,7 @@ namespace player.Weapon
                 float angle;
                 for (int i = 0; i < bulletsPerShot; i++)
                 {
-                    W = BulletPool.GetBullet(WeaponTable.Weapons.Machine_Gun);
+                    W = BulletPool.GetBullet(WeaponTable.Weapons.Shotgun);
 
                     angle = (Random.Range(-0.5f, 0.5f) * Accuracy);
 
@@ -57,7 +57,10 @@ namespace player.Weapon
                     W.transform.position = Entiy.transform.position + weaponOffSet;
                     W.Init(inherentVelocity, util.MathHelper.AngleToVector(angle), BulletSpeed, BulletDamage);
                 }
+                return true;
             }
+
+            return false;
         }
     }
 }

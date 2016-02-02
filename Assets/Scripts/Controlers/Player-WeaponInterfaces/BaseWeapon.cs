@@ -10,6 +10,6 @@ namespace player.Weapon
         /// <param name="Entiy">Object that is shooting</param>
         /// <param name="weaponOffSet">of set of the weapons position</param>
         /// <param name="inherentVelocity">the velocity the bullet inherents from the shooting object</param>
-        void Shoot(GameObject Entiy, Vector3 weaponOffSet, Vector2 inherentVelocity);
+        bool Shoot(GameObject Entiy, Vector3 weaponOffSet, Vector2 inherentVelocity);
     }
 }

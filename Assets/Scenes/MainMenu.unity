@@ -1422,6 +1422,7 @@ MonoBehaviour:
     UnlockedMachineGun: 0
     MachineGunBulletsPerSecond: 0
     MachineGunDamagePerBullet: 0
+    MachineGunSpread: 0
     UnlockedMachineGunTweaker: 0
     MachineGunSpreadRangeTweaker: 0
     MachineGunBulletSpeedTweakerRange: 0

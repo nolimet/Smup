@@ -10,7 +10,7 @@ public class Test : MonoBehaviour {
 	void Start () {
         //Move = new interfaces.Move.LinearMovement();
         Debug.Log(Move);
-        gun = new player.Weapon.Shotgun();
+        gun = new player.Weapon.Cannon();
 	}
 	
 	// Update is called once per frame
