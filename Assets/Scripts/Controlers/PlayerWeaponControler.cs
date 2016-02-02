@@ -1,18 +1,50 @@
 ﻿using UnityEngine;
 using util;
+using player.Weapon;
 using System.Collections;
 
 public class PlayerWeaponControler : MonoBehaviour
 {
-    public delegate void DelegateFireWeaon(WeaponTable.Weapons weaponFired);
+    public delegate void DelegateFireWeaon(WeaponTypes);
     public event DelegateFireWeaon onFireWeapon;
 
     public static bool Firing = false;
 
     bool canMainShoot = true;
     public Vector2 weaponOffset;
-    public WeaponTable.Weapons currentWeapon;
-    public WeaponInterfaces.Iweapon currentWeapon2;
+
+
+    WeaponType _CurrentWeapon;
+    public WeaponType CurrentWeapon
+    {
+        set
+        {
+            if(value != _CurrentWeapon)
+            {
+                switch (value)
+                {
+                    case WeaponType.Cannon:
+                        MainWeapon = new Cannon();
+                        break;
+                    case WeaponType.Minigun:
+                        MainWeapon = new MiniGun();
+                        break;
+
+                    case WeaponType.Shotgun:
+                        MainWeapon = new ShotGun();
+                        break;
+                }
+            }
+
+            _CurrentWeapon = value;
+        }
+
+        get
+        {
+            return _CurrentWeapon;
+        }
+    }
+    public IBaseWeapon MainWeapon;
      
 
     Rigidbody2D rigi;
@@ -21,6 +53,7 @@ public class PlayerWeaponControler : MonoBehaviour
     void Start()
     {
         rigi = GetComponent<Rigidbody2D>();
+        MainWeapon = new Cannon();
     }
 
     // Update is called once per frame
@@ -37,11 +70,11 @@ public class PlayerWeaponControler : MonoBehaviour
     void SwitchWeapon()
     {
         if (Input.GetKeyDown(KeyCode.Alpha1))
-            currentWeapon = WeaponTable.Weapons.Cannon;
+            CurrentWeapon = WeaponType.Cannon;
         else if (Input.GetKeyDown(KeyCode.Alpha2))
-            currentWeapon = WeaponTable.Weapons.Machine_Gun;
+            CurrentWeapon = WeaponType.Minigun;
         else if (Input.GetKeyDown(KeyCode.Alpha3))
-            currentWeapon = WeaponTable.Weapons.Shotgun;
+            CurrentWeapon = WeaponType.Shotgun;
     }
 
     void FireMain()
@@ -70,7 +103,7 @@ public class PlayerWeaponControler : MonoBehaviour
         }
 
         if (onFireWeapon != null)
-            onFireWeapon(currentWeapon);
+            onFireWeapon(_CurrentWeapon);
     }
 
     Vector2 getAddedVelocity()

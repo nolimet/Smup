@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class GameManager : MonoBehaviour {
+public class GameManager : MonoBehaviour
+{
 
     public MoveBoxScaler _screen;
     public PlayerStats _playerStats;
@@ -12,8 +13,9 @@ public class GameManager : MonoBehaviour {
     public static MoveBoxScaler screen;
     public static PlayerStats playerStats;
     public static PlayerWeaponControler playerWeaponControler;
-    public static UpgradeData upgrades;
+    public static UpgradeData upgrades { get { return instance._upgrades; } }
     public static PickupManager pickupManager;
+    static GameManager instance;
     public void Awake()
     {
 
@@ -40,11 +42,16 @@ public class GameManager : MonoBehaviour {
         else
             Debug.LogError("Pickupmanager was not assigned in inspector");
 
-        Serialization.Load("upgrade", Serialization.fileTypes.binary, ref upgrades);
+        Serialization.Load("upgrade", Serialization.fileTypes.binary, ref _upgrades);
+    }
 
-        _upgrades = upgrades;
-
-        WeaponInit();
+    public void OnDestroy()
+    {
+        screen = null;
+        playerStats = null;
+        playerWeaponControler = null;
+        pickupManager = null;
+        instance = null;
     }
 
     void Update()
@@ -53,17 +60,5 @@ public class GameManager : MonoBehaviour {
         {
             Application.LoadLevel(0);
         }
-        upgrades = _upgrades;
-    }
-
-    void WeaponInit()
-    {
-        //machinegun
-        WeaponTable.FireRate[WeaponTable.Weapons.Machine_Gun] += upgrades.MachineGunBulletsPerSecond;
-        WeaponTable.DamagePerBullet[WeaponTable.Weapons.Machine_Gun] = WeaponTable.DamagePerBullet[WeaponTable.Weapons.Machine_Gun] * Mathf.Pow(1.2f, upgrades.MachineGunDamagePerBullet);
-
-        //shotgun
-        WeaponTable.BulletsPerShot[WeaponTable.Weapons.Shotgun] += upgrades.ShotGunBulletsPerShot;
-        WeaponTable.DamagePerBullet[WeaponTable.Weapons.Shotgun] = WeaponTable.DamagePerBullet[WeaponTable.Weapons.Shotgun] * Mathf.Pow(1.2f, upgrades.ShotGunDamagePerFragment);
     }
 }

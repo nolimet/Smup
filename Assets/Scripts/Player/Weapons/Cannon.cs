@@ -1,15 +1,16 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
 
 namespace player.Weapon
 {
-    public class ShotGun : IBaseWeapon
+    public class Cannon : IBaseWeapon
     {
-        public ShotGun()
+        public Cannon()
         {
-            fireRate = 24;
-            BulletDamage = 0.5f * Mathf.Pow(1.3f, GameManager.upgrades.ShotGunDamagePerFragment);
-            Accuracy = 45 * Mathf.Pow(0.9f, GameManager.upgrades.MachineGunSpread);
+            fireRate = Mathf.RoundToInt(40 * Mathf.Pow(1.3f, GameManager.upgrades.Cannon.FireRate));
+            BulletDamage = 0.5f * Mathf.Pow(1.3f, GameManager.upgrades.Cannon.Damage);
+            Accuracy = 45 * Mathf.Pow(0.9f, GameManager.upgrades.Cannon.Accuracy);
             BulletSpeed = 7f * Mathf.Pow(1.1f, 1);
 
             fireDelay = 60000f / fireRate;
@@ -27,7 +28,9 @@ namespace player.Weapon
             else
                 bulletsPerShot = 1;
 
-            bulletsPerShot *= Mathf.RoundToInt(5*Mathf.Pow(1.2f, GameManager.upgrades.ShotGunBulletsPerShot));
+            _energyCost = 20 / fireRate;
+
+           // bulletsPerShot *= Mathf.RoundToInt(5*Mathf.Pow(1.2f, GameManager.upgrades.ShotGunBulletsPerShot));
         }
 
         System.DateTime lastShot;
@@ -41,6 +44,15 @@ namespace player.Weapon
         float BulletDamage;
 
         WeaponBase W;
+        int _energyCost ;
+        public float energyCost
+        {
+            get
+            {
+                return _energyCost;
+            }
+        }
+
         public bool Shoot(GameObject Entiy, Vector3 weaponOffSet, Vector2 inherentVelocity)
         {
             if ((System.DateTime.Now - lastShot).TotalMilliseconds >= fireDelay)
@@ -49,7 +61,7 @@ namespace player.Weapon
                 float angle;
                 for (int i = 0; i < bulletsPerShot; i++)
                 {
-                    W = BulletPool.GetBullet(WeaponTable.Weapons.Shotgun);
+                    W = BulletPool.GetBullet(WeaponTable.Weapons.Cannon);
 
                     angle = (Random.Range(-0.5f, 0.5f) * Accuracy);
 
