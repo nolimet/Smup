@@ -1,9 +1,10 @@
-﻿using UnityEngine;
-using System.Collections;
-
-public enum WeaponType
+﻿
+namespace player.Weapon
 {
-    Cannon,
-    Minigun,
-    Shotgun
+    public enum WeaponType
+    {
+        Cannon,
+        Minigun,
+        Shotgun
+    }
 }

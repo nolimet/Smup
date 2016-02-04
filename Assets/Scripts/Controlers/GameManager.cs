@@ -13,12 +13,36 @@ public class GameManager : MonoBehaviour
     public static MoveBoxScaler screen;
     public static PlayerStats playerStats;
     public static PlayerWeaponControler playerWeaponControler;
-    public static UpgradeData upgrades { get { return instance._upgrades; } }
+    public static UpgradeData upgrades
+    {
+        get
+        {
+            if (instance._upgrades == null)
+            {
+                Serialization.Load("upgrade", Serialization.fileTypes.binary, ref instance._upgrades);
+            }
+
+            return instance._upgrades;
+        }
+    }
     public static PickupManager pickupManager;
-    static GameManager instance;
+    public static GameManager instance
+    {
+        get
+        {
+            if (_instance == null || !_instance)
+                FindObjectOfType<GameManager>();
+
+            if (_instance == null || !_instance)
+                Debug.Log("INSTANCE NOT FOUND");
+
+                return _instance;
+        }
+    }
+    static GameManager _instance;
     public void Awake()
     {
-
+        _instance = this;
         //assigning screen size
         if (_screen != null)
             screen = _screen;
@@ -51,7 +75,7 @@ public class GameManager : MonoBehaviour
         playerStats = null;
         playerWeaponControler = null;
         pickupManager = null;
-        instance = null;
+        _instance = null;
     }
 
     void Update()

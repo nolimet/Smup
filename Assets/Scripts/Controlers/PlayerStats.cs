@@ -21,20 +21,12 @@ public class PlayerStats : MonoBehaviour {
     void Start()
     {
         maxHealth = (GameManager.upgrades.hullUpgradeLevel + 1) * 100;
-
+        maxShield = (GameManager.upgrades.shieldCapacitorLevel) * 100;
         Energy.init(maxEnergy, 2f);
         Health.init(maxHealth, 100);
 
         currentHealth = maxHealth;
         Health.UpdateSize(maxHealth);
-
-        GameManager.playerWeaponControler.onFireWeapon += PlayerWeapon_onFireWeapon;
-    }
-
-    void PlayerWeapon_onFireWeapon(WeaponTable.Weapons weaponFired)
-    {
-        if (currentEnergy > 0)
-            currentEnergy -= WeaponTable.EnergyUse[weaponFired] / WeaponTable.FireRate[weaponFired];
     }
 	
 	// Update is called once per frame
@@ -58,5 +50,12 @@ public class PlayerStats : MonoBehaviour {
     public void hit(float value)
     {
         currentHealth -= value;
+    }
+
+    public void RemoveEnergy(float ammount)
+    {
+        currentEnergy -= ammount;
+        if (currentEnergy < 0)
+            currentEnergy = 0;
     }
 }

@@ -5,7 +5,7 @@ using System.Collections;
 
 public class PlayerWeaponControler : MonoBehaviour
 {
-    public delegate void DelegateFireWeaon(WeaponTypes);
+    public delegate void DelegateFireWeaon(player.Weapon.WeaponType currentGun);
     public event DelegateFireWeaon onFireWeapon;
 
     public static bool Firing = false;
@@ -79,28 +79,10 @@ public class PlayerWeaponControler : MonoBehaviour
 
     void FireMain()
     {
-        Firing = true;
-        if (!canMainShoot) 
-            return;
-        if (!GameManager.playerStats.canFire(WeaponTable.EnergyUse[currentWeapon] / WeaponTable.FireRate[currentWeapon]))
+        if (!GameManager.playerStats.canFire(MainWeapon.energyCost))
             return;
 
-        StartCoroutine(fireDelay(WeaponTable.FireRate[currentWeapon]));
-
-
-        WeaponBase W;
-        float angle;
-        //Debug.Log(currentWeapon.ToString() + ": " + WeaponTable.BulletsPerShot[currentWeapon].ToString());
-        for (int i = 0; i < WeaponTable.BulletsPerShot[currentWeapon]; i++)
-        {
-            //B = Instantiate(Resources.Load("Weapons/" + currentWeapon.ToString()), transform.position + (Vector3)weaponOffset, Quaternion.identity) as GameObject;
-            W = BulletPool.GetBullet(currentWeapon);
-            W.transform.position = transform.position + (Vector3)weaponOffset;
-            angle = (Random.Range(-0.5f, 0.5f) * WeaponTable.Accuracy[currentWeapon]);
-
-            W.transform.rotation = Quaternion.Euler(0, 0, angle);
-            W.Init(getAddedVelocity(), MathHelper.AngleToVector(angle), WeaponTable.bulletSpeed[currentWeapon], WeaponTable.DamagePerBullet[currentWeapon]);
-        }
+        MainWeapon.Shoot(gameObject, weaponOffset, getAddedVelocity());
 
         if (onFireWeapon != null)
             onFireWeapon(_CurrentWeapon);
