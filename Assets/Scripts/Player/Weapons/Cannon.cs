@@ -7,10 +7,12 @@ namespace player.Weapon
     {
         public Cannon()
         {
-            fireRate = Mathf.RoundToInt(40 * Mathf.Pow(1.3f, GameManager.upgrades.Cannon.FireRate));
-            BulletDamage = 0.5f * Mathf.Pow(1.3f, GameManager.upgrades.Cannon.Damage);
-            Accuracy = 45 * Mathf.Pow(0.9f, GameManager.upgrades.Cannon.Accuracy);
-            BulletSpeed = 7f * Mathf.Pow(1.1f, 1);
+            //rounds per minute
+            fireRate = Mathf.RoundToInt(55 * Mathf.Pow(1.3f, GameManager.upgrades.Cannon.FireRate));
+            //damage per bullet
+            BulletDamage = 2f * Mathf.Pow(1.3f, GameManager.upgrades.Cannon.Damage);
+            Accuracy = 4 * Mathf.Pow(0.9f, GameManager.upgrades.Cannon.Accuracy);
+            BulletSpeed = 9f * Mathf.Pow(1.1f, 1);
 
             fireDelay = 60000f / fireRate;
 

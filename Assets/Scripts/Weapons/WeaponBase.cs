@@ -63,7 +63,7 @@ public class WeaponBase : MonoBehaviour {
     {
         if (!markedForRemove)
         {
-            GetComponent<PolygonCollider2D>().enabled = false;
+         
 
             const float frag = 1f / 30;
             SpriteRenderer r = GetComponent<SpriteRenderer>();
@@ -74,6 +74,7 @@ public class WeaponBase : MonoBehaviour {
             markedForRemove = true;
 
             yield return new WaitForSeconds(delay);
+            GetComponent<PolygonCollider2D>().enabled = false;
 
             for (int i = 0; i < 30; i++)
             {

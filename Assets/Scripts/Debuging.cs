@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using util;
 using System.Collections;
 
 public class Debuging : MonoBehaviour {

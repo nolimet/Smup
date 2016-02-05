@@ -73,7 +73,7 @@ public class UpgradeMenu : MonoBehaviour
 
         //Hull
         addCatagory("Ship Upgrades", "Upgrades that make your ship strong, faster and generaly better");
-        addUpgrade("", "hullUpgradeLevel", 50, 1.8f, "Hull Upgrade", "Upgrading the hull allows the ship to take more hits");
+        addUpgrade("", "hullUpgradeLevel", 50, 2f, "Hull Upgrade", "Upgrading the hull allows the ship to take more hits", 10);
         addUpgrade("", "armorUpgradeLevel", 100, 1.4f, "Armor Upgrade", "Upgrades the ammount of armor the ship has");
         //Shield
         addUpgrade("", "UnlockedShield", 1200, 0, "Unlock Shield", "Unlocks the shield");
@@ -262,7 +262,7 @@ public class UpgradeMenu : MonoBehaviour
         private int GetPrice()
         {
             if (Mult > 0)
-                return (int)(StartCost * Mathf.Pow(Mult, Level + 1));
+                return (int)(StartCost * Mathf.Pow(Mult, Level));
             else
                 return (int)StartCost;
         }

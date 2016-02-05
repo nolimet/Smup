@@ -8,9 +8,9 @@ namespace player.Weapon
         public MiniGun()
         {
             fireRate = Mathf.FloorToInt((3 * Mathf.Pow(1.2f, GameManager.upgrades.MiniGun.FireRate)) * 600);
-            BulletDamage = 0.5f * Mathf.Pow(1.3f, GameManager.upgrades.MiniGun.Damage);
+            BulletDamage = 1f * Mathf.Pow(1.3f, GameManager.upgrades.MiniGun.Damage);
             Accuracy = 13 * Mathf.Pow(0.9f, GameManager.upgrades.MiniGun.Accuracy);
-            BulletSpeed = 4f * Mathf.Pow(1.1f, 1);
+            BulletSpeed = 9f * Mathf.Pow(1.1f, 1);
 
             fireDelay = 60000f / fireRate;
 
