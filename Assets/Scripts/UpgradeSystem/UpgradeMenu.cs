@@ -83,14 +83,14 @@ public class UpgradeMenu : MonoBehaviour
         //shotgun
         addCatagory("Shotgun Upgrades", " Upgrades for your shotgun");
         addUpgrade("Shotgun", "Unlocked", 750, 0, "Unlocks Shotgun", "Unlocks the Shotgun");
-        addUpgrade("Shotgun", "Accuracy", 1425, 1.8f, "Increase Accuracy", "Decreases the spread of the shotgun");
+        addUpgrade("Shotgun", "Accuracy", 1425, 1.8f, "Increase Accuracy", "Decreases the spread of the shotgun", 10);
         addUpgrade("Shotgun", "Damage", 1250, 1.3f, "Damage per frament", "Increases the damage each fragment does");
         addUpgrade("Shotgun", "FireRate", 750, 1.3f, "Fragments per Shotgun shot", "Increases the number of fragments shot out per shot", 6);
 
         //machineGun
         addCatagory("Machinegun Upgrades", "Upgrades for your machinegun");
         addUpgrade("MiniGun", "Unlocked", 700, 0, "Unlock Machinegun", "Unlocks the Machinegun");
-        addUpgrade("MiniGun", "Accuracy", 3000, 1.3f, "Increase Accuracy", "Increases Accuracy of the Machinegun");
+        addUpgrade("MiniGun", "Accuracy", 3000, 1.3f, "Increase Accuracy", "Increases Accuracy of the Machinegun",10);
         addUpgrade("MiniGun", "Damage", 4000, 1.1f, "Increase Damage", "Increases the damage each bullet of the machine gun does");
         addUpgrade("MiniGun", "FireRate", 2500, 1.2f, "Increase Firerate", "Increases number of bullets shot out by the machine gun every second", 20);
 

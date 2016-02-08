@@ -31,6 +31,8 @@ public class Pickup : MonoBehaviour
     {
         lifeTime = l;
         scrapValue = Value;
+
+        transform.localScale = Vector3.one * (Mathf.Pow(1.1f, Value / 10f) - 0.6f);
     }
 
     void Update()
