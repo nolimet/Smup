@@ -26,6 +26,8 @@ namespace player.Weapon
             }
             else
                 bulletsPerShot = 1;
+
+            _energyCost = 0.7f*bulletsPerShot;
         }
 
         System.DateTime lastShot;
@@ -39,7 +41,7 @@ namespace player.Weapon
         float BulletDamage;
 
 
-        int _energyCost;
+        float _energyCost;
         public float energyCost
         {
             get

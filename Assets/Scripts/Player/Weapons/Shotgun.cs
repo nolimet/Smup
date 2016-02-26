@@ -27,7 +27,7 @@ namespace player.Weapon
             else
                 bulletsPerShot = 1;
 
-            _energyCost = 340 / fireRate;
+            _energyCost = 30;
             bulletsPerShot *= Mathf.RoundToInt(5*Mathf.Pow(1.2f, GameManager.upgrades.Shotgun.FireRate));
         }
 

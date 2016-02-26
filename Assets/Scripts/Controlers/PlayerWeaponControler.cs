@@ -70,11 +70,19 @@ public class PlayerWeaponControler : MonoBehaviour
     void SwitchWeapon()
     {
         if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
             CurrentWeapon = WeaponType.Cannon;
+        }
         else if (Input.GetKeyDown(KeyCode.Alpha2))
-            CurrentWeapon = WeaponType.Minigun;
+        {
+            if (GameManager.upgrades.MiniGun.Unlocked)
+                CurrentWeapon = WeaponType.Minigun;
+        }
         else if (Input.GetKeyDown(KeyCode.Alpha3))
-            CurrentWeapon = WeaponType.Shotgun;
+        {
+            if (GameManager.upgrades.Shotgun.Unlocked)
+                CurrentWeapon = WeaponType.Shotgun;
+        }
     }
 
     void FireMain()
@@ -82,10 +90,14 @@ public class PlayerWeaponControler : MonoBehaviour
         if (!GameManager.playerStats.canFire(MainWeapon.energyCost))
             return;
 
-        MainWeapon.Shoot(gameObject, weaponOffset, getAddedVelocity());
+        if(MainWeapon.Shoot(gameObject, weaponOffset, getAddedVelocity()))
+        {
+            GameManager.playerStats.RemoveEnergy(MainWeapon.energyCost);
+            if (onFireWeapon != null)
+                onFireWeapon(_CurrentWeapon);
+        }
 
-        if (onFireWeapon != null)
-            onFireWeapon(_CurrentWeapon);
+        
     }
 
     Vector2 getAddedVelocity()

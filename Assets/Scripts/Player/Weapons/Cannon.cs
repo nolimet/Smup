@@ -10,7 +10,7 @@ namespace player.Weapon
             //rounds per minute
             fireRate = Mathf.RoundToInt(55 * Mathf.Pow(1.3f, GameManager.upgrades.Cannon.FireRate));
             //damage per bullet
-            BulletDamage = 2f * Mathf.Pow(1.3f, GameManager.upgrades.Cannon.Damage);
+            BulletDamage = 7f * Mathf.Pow(1.3f, GameManager.upgrades.Cannon.Damage);
             Accuracy = 4 * Mathf.Pow(0.9f, GameManager.upgrades.Cannon.Accuracy);
             BulletSpeed = 9f * Mathf.Pow(1.1f, 1);
 
@@ -29,7 +29,7 @@ namespace player.Weapon
             else
                 bulletsPerShot = 1;
 
-            _energyCost = 50 / fireRate;
+            _energyCost = 20;
 
            // bulletsPerShot *= Mathf.RoundToInt(5*Mathf.Pow(1.2f, GameManager.upgrades.ShotGunBulletsPerShot));
         }

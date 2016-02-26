@@ -26,6 +26,7 @@ public class PlayerStats : MonoBehaviour {
         Health.init(maxHealth, 100);
 
         currentHealth = maxHealth;
+        currentEnergy = maxEnergy;
         Health.UpdateSize(maxHealth);
     }
 	
