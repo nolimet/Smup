@@ -2,7 +2,7 @@
 using System.Collections;
 using System;
 
-namespace interfaces.Move
+namespace Enemy.Interfaces.Move
 {
 
     public interface IMovement

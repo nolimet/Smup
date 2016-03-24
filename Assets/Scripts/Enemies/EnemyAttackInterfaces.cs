@@ -1,11 +1,13 @@
 ﻿using UnityEngine;
 using System.Collections;
+using WeaponInterfaces;
 
-namespace interfaces.Attack
+namespace Enemy.Interfaces.Attack
 {
     public interface IAttack
     {
         void Attack(GameObject Enity);
+        WeaponInterfaces.Iweapon Weapon { get; set; }
     }
 
     public class ShootFixedIntervalAttack: IAttack
@@ -13,6 +15,19 @@ namespace interfaces.Attack
         float counter;
         int fireRepeator;
         WeaponInterfaces.Iweapon weapon;
+
+        public Iweapon Weapon
+        {
+            get
+            {
+                return weapon;
+            }
+
+            set
+            {
+                weapon = value;
+            }
+        }
 
         public void Attack(GameObject Enity)
         {

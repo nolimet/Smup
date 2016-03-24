@@ -6,14 +6,14 @@ using System.Linq;
 public class BulletPool : MonoBehaviour {
 
     public static BulletPool instance;
-    public delegate void RemoveObject(WeaponBase item);
+    public delegate void RemoveObject(PlayerProjectileGeneric item);
     public event RemoveObject onRemove;
 
-    public List<WeaponBase> ActivePool, InActivePool;
+    public List<PlayerProjectileGeneric> ActivePool, InActivePool;
 
     
 
-    public static void RemoveBullet(WeaponBase item)
+    public static void RemoveBullet(PlayerProjectileGeneric item)
     {
         if (instance && instance.ActivePool.Contains(item))
         {
@@ -24,11 +24,11 @@ public class BulletPool : MonoBehaviour {
         }    
     }
 
-    public static WeaponBase GetBullet(WeaponTable.Weapons Type)
+    public static PlayerProjectileGeneric GetBullet(WeaponTable.Weapons Type)
     {
         if (instance)
         {
-            WeaponBase w;
+            PlayerProjectileGeneric w;
             if (instance.InActivePool.Any(e => e.WeaponType == Type))
             {
                  w = instance.InActivePool.First(e => e.WeaponType == Type);
@@ -41,7 +41,7 @@ public class BulletPool : MonoBehaviour {
             else
             {
                 GameObject g = Instantiate(Resources.Load("Weapons/" + Type.ToString()), Vector3.zero, Quaternion.identity) as GameObject;
-                w = g.GetComponent<WeaponBase>();
+                w = g.GetComponent<PlayerProjectileGeneric>();
 
                 instance.ActivePool.Add(w);
                 w.transform.SetParent(instance.transform);

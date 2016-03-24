@@ -19,7 +19,8 @@ public class PlayerWeaponControler : MonoBehaviour
     {
         set
         {
-            if(value != _CurrentWeapon)
+            Debug.Log("TEST");
+            if (value != _CurrentWeapon)
             {
                 switch (value)
                 {
@@ -45,7 +46,7 @@ public class PlayerWeaponControler : MonoBehaviour
         }
     }
     public IBaseWeapon MainWeapon;
-     
+
 
     Rigidbody2D rigi;
     // Use this for initialization
@@ -63,8 +64,8 @@ public class PlayerWeaponControler : MonoBehaviour
             FireMain();
         else
             Firing = false;
-        if (Input.anyKeyDown)
-            SwitchWeapon();
+
+        SwitchWeapon();
     }
 
     void SwitchWeapon()
@@ -73,12 +74,12 @@ public class PlayerWeaponControler : MonoBehaviour
         {
             CurrentWeapon = WeaponType.Cannon;
         }
-        else if (Input.GetKeyDown(KeyCode.Alpha2))
+        if (Input.GetKeyDown(KeyCode.Alpha2))
         {
             if (GameManager.upgrades.MiniGun.Unlocked)
                 CurrentWeapon = WeaponType.Minigun;
         }
-        else if (Input.GetKeyDown(KeyCode.Alpha3))
+        if (Input.GetKeyDown(KeyCode.Alpha3))
         {
             if (GameManager.upgrades.Shotgun.Unlocked)
                 CurrentWeapon = WeaponType.Shotgun;

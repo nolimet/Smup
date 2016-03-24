@@ -44,7 +44,7 @@ namespace player.Weapon
         float BulletSpeed;
         float BulletDamage;
 
-        WeaponBase W;
+        PlayerProjectileGeneric W;
         int _energyCost ;
         public float energyCost
         {

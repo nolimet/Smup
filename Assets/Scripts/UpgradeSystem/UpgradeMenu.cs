@@ -75,6 +75,7 @@ public class UpgradeMenu : MonoBehaviour
         addCatagory("Ship Upgrades", "Upgrades that make your ship strong, faster and generaly better");
         addUpgrade("", "hullUpgradeLevel", 50, 2f, "Hull Upgrade", "Upgrading the hull allows the ship to take more hits", 10);
         addUpgrade("", "armorUpgradeLevel", 100, 1.4f, "Armor Upgrade", "Upgrades the ammount of armor the ship has");
+
         //Shield
         addUpgrade("", "UnlockedShield", 1200, 0, "Unlock Shield", "Unlocks the shield");
         addUpgrade("", "shieldGeneratorLevel", 1300, 1.2f, "Shield Regeneration Speed", "Increases the regeneration speed of the shield");

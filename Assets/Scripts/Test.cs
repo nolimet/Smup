@@ -3,13 +3,10 @@ using System.Collections;
 
 public class Test : MonoBehaviour {
 
-
-    public interfaces.Move.IMovement Move;
     public player.Weapon.IBaseWeapon gun;
 	// Use this for initialization
 	void Start () {
         //Move = new interfaces.Move.LinearMovement();
-        Debug.Log(Move);
         gun = new player.Weapon.Cannon();
 	}
 	

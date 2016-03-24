@@ -50,7 +50,7 @@ namespace player.Weapon
             }
         }
 
-        WeaponBase W;
+        PlayerProjectileGeneric W;
         public bool Shoot(GameObject Entiy, Vector3 weaponOffSet, Vector2 inherentVelocity)
         {
             if ((System.DateTime.Now - lastShot).TotalMilliseconds >= fireDelay)

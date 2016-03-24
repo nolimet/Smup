@@ -2,11 +2,6 @@
 using System.Collections;
 using System;
 
-public class BulletGeneric : MonoBehaviour
-{
-   
-}
-
 namespace WeaponInterfaces
 {
     public interface Iweapon

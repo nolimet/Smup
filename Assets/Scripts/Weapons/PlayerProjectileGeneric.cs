@@ -3,7 +3,7 @@ using System.Collections;
 
 [RequireComponent(typeof(PolygonCollider2D))]
 [RequireComponent(typeof(Rigidbody2D))]
-public class WeaponBase : MonoBehaviour {
+public class PlayerProjectileGeneric : MonoBehaviour {
 
     public WeaponTable.Weapons WeaponType;
     protected Vector2 moveDir;
@@ -63,8 +63,6 @@ public class WeaponBase : MonoBehaviour {
     {
         if (!markedForRemove)
         {
-         
-
             const float frag = 1f / 30;
             SpriteRenderer r = GetComponent<SpriteRenderer>();
             Color StartColor = r.color;
