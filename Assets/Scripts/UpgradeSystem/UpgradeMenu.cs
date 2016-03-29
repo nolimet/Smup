@@ -21,7 +21,7 @@ public class UpgradeMenu : MonoBehaviour
     CatagoryObject currentCatagory;
 
     private static UpgradeMenu instance;
-    public static UpgradeData upgradeData { get{ return instance.upgrades; } }
+    public static UpgradeData upgradeData { get { return instance.upgrades; } }
     #region private Functions
     void Awake()
     {
@@ -49,6 +49,12 @@ public class UpgradeMenu : MonoBehaviour
     {
         Serialization.Save("upgrade", Serialization.fileTypes.binary, upgrades);
     }
+
+    public void OnDisable()
+    {
+        Serialization.Save("upgrade", Serialization.fileTypes.binary, upgrades);
+    }
+
     bool canBuy(float value, bool substract)
     {
         if (upgrades.UpgradeCurrency >= value)
@@ -67,7 +73,7 @@ public class UpgradeMenu : MonoBehaviour
 
         //scrapCollection
         addCatagory("Scrap Collection", "Enchance your scrap collection ability");
-        addUpgrade("","ScrapConversionRate", 900, 1.3f, "Scrap sell rate", "Improves for how much you sell each piece of scrap");
+        addUpgrade("", "ScrapConversionRate", 900, 1.3f, "Scrap sell rate", "Improves for how much you sell each piece of scrap");
         addUpgrade("", "ScrapCollectionRange", 650, 1.3f, "Scrap Collection Range", "Makes the collection range bigger", 10);
         addUpgrade("", "ScrapCollectionSpeed", 650, 1.5f, "Scrap Collection Speed", "Improves how fast the scrap moves towards you", 10);
 
@@ -91,7 +97,7 @@ public class UpgradeMenu : MonoBehaviour
         //machineGun
         addCatagory("Machinegun Upgrades", "Upgrades for your machinegun");
         addUpgrade("MiniGun", "Unlocked", 700, 0, "Unlock Machinegun", "Unlocks the Machinegun");
-        addUpgrade("MiniGun", "Accuracy", 3000, 1.3f, "Increase Accuracy", "Increases Accuracy of the Machinegun",10);
+        addUpgrade("MiniGun", "Accuracy", 3000, 1.3f, "Increase Accuracy", "Increases Accuracy of the Machinegun", 10);
         addUpgrade("MiniGun", "Damage", 4000, 1.1f, "Increase Damage", "Increases the damage each bullet of the machine gun does");
         addUpgrade("MiniGun", "FireRate", 2500, 1.2f, "Increase Firerate", "Increases number of bullets shot out by the machine gun every second", 20);
 
@@ -99,7 +105,7 @@ public class UpgradeMenu : MonoBehaviour
         addCatagory("Cannon Upgrades", "Upgrades for your main Cannon");
         addUpgrade("Cannon", "Accuracy", 200, 1.2f, "Cannon Accuracy", "Increases the accuracy of the cannon", 5);
         addUpgrade("Cannon", "Damage", 350, 1.4f, "Cannon Damage", "Increases the ammount of damage dealth with each shot");
-        addUpgrade("Cannon", "FireRate", 475, 1.7f, "Cannon Firerate", "Increases the ammount of bullets shot by the Cannon" , 10);
+        addUpgrade("Cannon", "FireRate", 475, 1.7f, "Cannon Firerate", "Increases the ammount of bullets shot by the Cannon", 10);
     }
 
 
@@ -166,11 +172,11 @@ public class UpgradeMenu : MonoBehaviour
     {
         UpgradeItem visual;
 
-        Func<int, bool,bool> UpgradeFunc;
+        Func<int, bool, bool> UpgradeFunc;
 
         float StartCost, Mult;
 
-        int Level = 0, MaxLevel =-1;
+        int Level = 0, MaxLevel = -1;
         string refrence;
         string system;
 
@@ -184,14 +190,14 @@ public class UpgradeMenu : MonoBehaviour
         /// <param name="Mult">multipier. when zero it will only upgrade once</param>
         /// <param name="StartLevel">The starting level</param>
         /// <param name="visual">visual object. Used to assign stuff </param>
-        public UpgradeObject(Func<int, bool,bool> UpgradeFunc, float StartCost, float Mult, int StartLevel, UpgradeItem visual)
+        public UpgradeObject(Func<int, bool, bool> UpgradeFunc, float StartCost, float Mult, int StartLevel, UpgradeItem visual)
         {
             this.visual = visual;
 
             this.UpgradeFunc = UpgradeFunc;
             this.StartCost = StartCost;
             this.Mult = Mult;
-            
+
             Level = StartLevel;
 
             this.visual.Price.text = GetPrice().ToString();
@@ -201,7 +207,7 @@ public class UpgradeMenu : MonoBehaviour
             UpdateLevel();
         }
 
-        public UpgradeObject (string system, string refrence, float StartCost,int MaxLevel ,float Mult, UpgradeItem visual)
+        public UpgradeObject(string system, string refrence, float StartCost, int MaxLevel, float Mult, UpgradeItem visual)
         {
             if (system == "")
             {
@@ -235,8 +241,8 @@ public class UpgradeMenu : MonoBehaviour
                     Level = b.toInt();
                 }
             }
-            
-            
+
+
             this.StartCost = StartCost;
             this.Mult = Mult;
             this.refrence = refrence;
@@ -312,7 +318,7 @@ public class UpgradeMenu : MonoBehaviour
         /// <returns></returns>
         bool canBuyCheck(bool substract)
         {
-            if (upgradeData.UpgradeCurrency >= GetPrice() && (MaxLevel<0 || MaxLevel>0 && Level < MaxLevel) && (Mult>0 || Mult<=0 && Level<=0))
+            if (upgradeData.UpgradeCurrency >= GetPrice() && (MaxLevel < 0 || MaxLevel > 0 && Level < MaxLevel) && (Mult > 0 || Mult <= 0 && Level <= 0))
             {
                 if (substract)
                 {
@@ -347,7 +353,7 @@ public class UpgradeMenu : MonoBehaviour
                         upgradeData.GetType().GetField(refrence).SetValue(upgradeData, f);
 
                     }
-                    
+
                 }
                 return true;
             }
@@ -380,7 +386,7 @@ public class UpgradeMenu : MonoBehaviour
                         Level++;
                         f = Level;
 
-                        sys.GetType().GetField(refrence).SetValue(upgradeData, f);
+                        sys.GetType().GetField(refrence).SetValue(sys, f);
                         upgradeData.GetType().GetField(system).SetValue(upgradeData, sys);
                     }
                     else
@@ -395,7 +401,7 @@ public class UpgradeMenu : MonoBehaviour
                         f = true;
                         Level = 1;
 
-                        sys.GetType().GetField(refrence).SetValue(upgradeData, f);
+                        sys.GetType().GetField(refrence).SetValue(sys, f);
                         upgradeData.GetType().GetField(system).SetValue(upgradeData, sys);
                     }
 
@@ -426,7 +432,7 @@ public class UpgradeMenu : MonoBehaviour
         List<UpgradeObject> subObjs = new List<UpgradeObject>();
         bool active = true;
 
-        public CatagoryObject (UpgradeCatagory visual, string name, string discription)
+        public CatagoryObject(UpgradeCatagory visual, string name, string discription)
         {
             this.visual = visual;
             visual.SetText(name, discription);

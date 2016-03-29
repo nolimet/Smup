@@ -44,7 +44,7 @@ namespace player.Weapon
         float BulletSpeed;
         float BulletDamage;
 
-        PlayerProjectileGeneric W;
+        BulletGeneric W;
         int _energyCost ;
         public float energyCost
         {
@@ -62,13 +62,12 @@ namespace player.Weapon
                 float angle;
                 for (int i = 0; i < bulletsPerShot; i++)
                 {
-                    W = BulletPool.GetBullet(WeaponTable.Weapons.Cannon);
+                    W = BulletPool.GetBullet(BulletGeneric.Type.Bullet);
 
                     angle = (Random.Range(-0.5f, 0.5f) * Accuracy);
 
-                    W.transform.rotation = Quaternion.Euler(0, 0, angle);
                     W.transform.position = Entiy.transform.position + weaponOffSet;
-                    W.Init(inherentVelocity, util.MathHelper.AngleToVector(angle), BulletSpeed, BulletDamage);
+                    W.Init(BulletDamage, angle, BulletSpeed);
                 }
                 return true;
             }

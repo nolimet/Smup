@@ -19,7 +19,7 @@ public class PlayerWeaponControler : MonoBehaviour
     {
         set
         {
-            Debug.Log("TEST");
+            Debug.Log(value);
             if (value != _CurrentWeapon)
             {
                 switch (value)

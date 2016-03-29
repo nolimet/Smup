@@ -80,7 +80,7 @@ public class PlayerProjectileGeneric : MonoBehaviour {
                 yield return new WaitForEndOfFrame();
             }
 
-            BulletPool.RemoveBullet(this);
+           // BulletPool.RemoveBullet(this);
             
         }
     }

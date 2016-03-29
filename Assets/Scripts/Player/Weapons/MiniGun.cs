@@ -50,7 +50,7 @@ namespace player.Weapon
             }
         }
 
-        PlayerProjectileGeneric W;
+        BulletGeneric W;
         public bool Shoot(GameObject Entiy, Vector3 weaponOffSet, Vector2 inherentVelocity)
         {
             if((System.DateTime.Now-lastShot).TotalMilliseconds>= fireDelay)
@@ -59,13 +59,12 @@ namespace player.Weapon
                 float angle;
                 for (int i = 0; i < bulletsPerShot; i++)
                 {
-                    W = BulletPool.GetBullet(WeaponTable.Weapons.Machine_Gun);
+                    W = BulletPool.GetBullet(BulletGeneric.Type.Bullet);
 
                     angle = (Random.Range(-0.5f, 0.5f) * Accuracy);
 
-                    W.transform.rotation = Quaternion.Euler(0, 0, angle);
                     W.transform.position = Entiy.transform.position + weaponOffSet;
-                    W.Init(inherentVelocity, util.MathHelper.AngleToVector(angle), BulletSpeed, BulletDamage);
+                    W.Init(BulletDamage, angle, BulletSpeed);
                 }
                 return true;
             }

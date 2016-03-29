@@ -15,7 +15,7 @@ namespace Enemy
         {
             attackPattern = new ShootFixedIntervalAttack();
             movementPattern = new Enemy.Interfaces.Move.LinearMovement();
-            attackPattern.Weapon = new WeaponInterfaces.MiniGun();
+            //attackPattern.Weapon = new WeaponInterfaces.MiniGun();
            
         }
 
