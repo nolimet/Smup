@@ -22,7 +22,7 @@ namespace util
             return 0;
         }
 
-        public static float v(this Vector2 v2)
+        public static float VectorLength(this Vector2 v2)
         {
             return Mathf.Sqrt(Mathf.Pow(v2.x,2) + Mathf.Pow(v2.y,2));
         }

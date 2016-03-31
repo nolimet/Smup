@@ -28,7 +28,7 @@ public class TerainEditor : EditorWindow
 
     //editor defined varibles
     float sideBarWidth = 250f;
-    int sizeX = 60, sizeY = 50, zIndex = 0;
+    int sizeX = 30, sizeY = 20, zIndex = 0;
     int zoomSize = 15 ;
     string WaveName;
     // Update is called once per frame
@@ -247,7 +247,12 @@ public class TerainEditor : EditorWindow
         Debug.Log(hz);
         hz++;
 
-        WaveClass SaveData = new WaveClass(currentLevel, new Vector3(sizeX, sizeY, (int)currentLevel.Max(x => x.Key.z) + 1));
+        float h = -1;
+        foreach (KeyValuePair<Vector3, char> k in currentLevel)
+            if (k.Key.z > h)
+                h = k.Key.z;
+
+        WaveClass SaveData = new WaveClass(currentLevel, new Vector3(sizeX, sizeY, (int)h + 1));
 
         Serialization.Save("Wave1", Serialization.fileTypes.wave, SaveData);
     }

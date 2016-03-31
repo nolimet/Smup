@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Pickup : MonoBehaviour
+public class ScrapPickup : MonoBehaviour
 {
 
     //ToDo this is a temp value only for testing and for seeing if it works correct
@@ -37,6 +37,7 @@ public class Pickup : MonoBehaviour
 
     void Update()
     {
+
         Color r;
         if (b)
             r = Color.Lerp(Color.white, Color.gray, flo);

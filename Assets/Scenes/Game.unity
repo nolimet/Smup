@@ -292,18 +292,30 @@ MonoBehaviour:
     UnlockedShieldTweaker: 0
     hullUpgradeLevel: 0
     armorUpgradeLevel: 0
-    UnlockedShotgun: 0
-    ShotGunBulletsPerShot: 0
-    ShotGunDamagePerFragment: 0
-    UnlockedShotgunTweaker: 0
-    ShotgunSpreadRangeTweaker: 0
-    ShotgunBulletSpeedTweakerRange: 0
-    UnlockedMachineGun: 0
-    MachineGunBulletsPerSecond: 0
-    MachineGunDamagePerBullet: 0
-    UnlockedMachineGunTweaker: 0
-    MachineGunSpreadRangeTweaker: 0
-    MachineGunBulletSpeedTweakerRange: 0
+    Cannon:
+      Unlocked: 0
+      Damage: 0
+      Accuracy: 0
+      FireRate: 0
+      UnlockedTweaker: 0
+      AccuracyAdjustment: 0
+      SpeedAdjustment: 0
+    MiniGun:
+      Unlocked: 0
+      Damage: 0
+      Accuracy: 0
+      FireRate: 0
+      UnlockedTweaker: 0
+      AccuracyAdjustment: 0
+      SpeedAdjustment: 0
+    Shotgun:
+      Unlocked: 0
+      Damage: 0
+      Accuracy: 0
+      FireRate: 0
+      UnlockedTweaker: 0
+      AccuracyAdjustment: 0
+      SpeedAdjustment: 0
   _pickupManager: {fileID: 2064760420}
 --- !u!4 &100903092
 Transform:
@@ -364,6 +376,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ActivePool: []
   InActivePool: []
+  noOfObjects: 0
 --- !u!4 &104478884
 Transform:
   m_ObjectHideFlags: 0
@@ -387,7 +400,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4cb6ea3e8a03e9445b95bc2cc1afd18f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  collectPickupsAuto: 1
+  collectPickupsAuto: 0
 --- !u!1 &106158185
 GameObject:
   m_ObjectHideFlags: 0
@@ -398,7 +411,7 @@ GameObject:
   - 4: {fileID: 106158186}
   - 212: {fileID: 106158188}
   - 61: {fileID: 106158187}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: BulletRemover 3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4666,7 +4679,7 @@ Camera:
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 4294963199
+    m_Bits: 4294962175
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -6325,7 +6338,7 @@ GameObject:
   - 4: {fileID: 1506727949}
   - 212: {fileID: 1506727951}
   - 61: {fileID: 1506727950}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: BulletRemover 1
   m_TagString: backbullet Remover
   m_Icon: {fileID: 0}
@@ -6480,6 +6493,7 @@ Canvas:
   m_ReceivesEvents: 1
   m_OverrideSorting: 0
   m_OverridePixelPerfect: 0
+  m_SortingBucketNormalizedSize: 0
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
@@ -8153,7 +8167,7 @@ GameObject:
   - 4: {fileID: 1634396678}
   - 212: {fileID: 1634396680}
   - 61: {fileID: 1634396679}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: BulletRemover 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -13564,7 +13578,7 @@ GameObject:
   - 4: {fileID: 2046936196}
   - 212: {fileID: 2046936198}
   - 61: {fileID: 2046936197}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: BulletRemover
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -13732,7 +13746,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   weaponOffset: {x: 0.65, y: -0.05}
-  currentWeapon: 0
 --- !u!60 &2064760419
 PolygonCollider2D:
   m_ObjectHideFlags: 0

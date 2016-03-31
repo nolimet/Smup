@@ -75,7 +75,7 @@ public class UpgradeMenu : MonoBehaviour
         addCatagory("Scrap Collection", "Enchance your scrap collection ability");
         addUpgrade("", "ScrapConversionRate", 900, 1.3f, "Scrap sell rate", "Improves for how much you sell each piece of scrap");
         addUpgrade("", "ScrapCollectionRange", 650, 1.3f, "Scrap Collection Range", "Makes the collection range bigger", 10);
-        addUpgrade("", "ScrapCollectionSpeed", 650, 1.5f, "Scrap Collection Speed", "Improves how fast the scrap moves towards you", 10);
+        addUpgrade("", "ScrapCollectionSpeed", 650, 1.5f, "Scrap Collection Speed", "Improves how fast the scrap moves towards you", 5);
 
         //Hull
         addCatagory("Ship Upgrades", "Upgrades that make your ship strong, faster and generaly better");

@@ -10,7 +10,7 @@ public class WaveControler : MonoBehaviour {
     public event WaveComplete onWaveComplete;
 
     [SerializeField]
-    int enemiesLeftInWave;
+    int enemiesLeftInWave = 0;
 
     [SerializeField]
     Vector2 waveStartOffset = Vector2.zero;
@@ -38,7 +38,7 @@ public class WaveControler : MonoBehaviour {
             paterns[(int)v.z].Add(v, tempDictonary[v]);
         }
 
-        Debug.Log(paterns[0].Count());
+        Debug.Log(paterns.Length);
 
         createWave();
     }

@@ -32,7 +32,7 @@ public class PickupManager : MonoBehaviour
             if (!t)
                 return;
 
-            float v = t.velocity.v();
+            float v = t.velocity.VectorLength();
             if (v < 0) v *= -1;
 
             if (v < 20)
@@ -40,9 +40,9 @@ public class PickupManager : MonoBehaviour
                 Vector2 v2 = transform.position - col.transform.position;
                 v2.Normalize();
                 if (GameManager.upgrades != null)
-                    t.AddForce(v2 * (5f * Mathf.Pow(1.5f, GameManager.upgrades.ScrapCollectionSpeed)));
+                    t.AddForce(v2 * (20f * Mathf.Pow(1.5f, GameManager.upgrades.ScrapCollectionSpeed)) * Time.deltaTime);
                 else
-                    t.AddForce(v2 * (5f * Mathf.Pow(1.5f, 3f)));
+                    t.AddForce(v2 * (20f * Mathf.Pow(1.5f, 3f)) * Time.deltaTime);
             }
         }
     }
@@ -67,8 +67,8 @@ public class PickupManager : MonoBehaviour
     {
         if (col.gameObject.layer == 14)
         {
-            PickupPool.removePickup(col.gameObject.GetComponent<Pickup>());
-            _pickedUpScrap += col.gameObject.GetComponent<Pickup>().scrapValue;
+            PickupPool.removePickup(col.gameObject.GetComponent<ScrapPickup>());
+            _pickedUpScrap += col.gameObject.GetComponent<ScrapPickup>().scrapValue;
         }
     }
 }

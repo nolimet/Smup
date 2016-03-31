@@ -7,10 +7,10 @@ using System.Collections.Generic;
 public class PickupPool : MonoBehaviour {
 
     public static PickupPool instance;
-    public delegate void PickupActivty(Pickup obj);
+    public delegate void PickupActivty(ScrapPickup obj);
     public event PickupActivty onRemove;
 
-    List<Pickup> ActivePool, InActivePool;
+    List<ScrapPickup> ActivePool, InActivePool;
 
     [SerializeField]
     bool collectPickupsAuto = true;
@@ -22,16 +22,16 @@ public class PickupPool : MonoBehaviour {
         else
             Destroy(this);
 
-        ActivePool = new List<Pickup>();
-        InActivePool = new List<Pickup>();
+        ActivePool = new List<ScrapPickup>();
+        InActivePool = new List<ScrapPickup>();
     }
 
     void Start()
     {
         if (collectPickupsAuto)
         {
-            Pickup[] pl = FindObjectsOfType<Pickup>();
-            foreach (Pickup p in pl)
+            ScrapPickup[] pl = FindObjectsOfType<ScrapPickup>();
+            foreach (ScrapPickup p in pl)
             {
                 if (p.gameObject.activeSelf)
                     ActivePool.Add(p);
@@ -49,7 +49,7 @@ public class PickupPool : MonoBehaviour {
             instance = this;
     }
 
-    public static void removePickup(Pickup p)
+    public static void removePickup(ScrapPickup p)
     {
         if (instance)
         {
@@ -61,11 +61,11 @@ public class PickupPool : MonoBehaviour {
         }
     }
 
-    public static Pickup Getpickup()
+    public static ScrapPickup Getpickup()
     {
         if(instance)
         {
-            Pickup p;
+            ScrapPickup p;
             if(instance.InActivePool.Count>0)
             {
                 p = instance.InActivePool[0];
@@ -76,7 +76,7 @@ public class PickupPool : MonoBehaviour {
             else
             {
                 GameObject g = Instantiate(Resources.Load("Pickups/Scrap"), Vector3.zero, Quaternion.identity) as GameObject;
-                p = g.GetComponent<Pickup>();
+                p = g.GetComponent<ScrapPickup>();
 
                 instance.ActivePool.Add(p);
                 p.transform.SetParent(instance.transform, false);
@@ -95,7 +95,7 @@ public class PickupPool : MonoBehaviour {
     /// <param name="Value">What is the combined value of the cloud</param>
     public static void CreateScrapCloud(Vector2 pos, Vector2 Size, int count, float Value)
     {
-        Pickup p;
+        ScrapPickup p;
         Vector2 v2;
         for (int i = 0; i < count; i++)
         {

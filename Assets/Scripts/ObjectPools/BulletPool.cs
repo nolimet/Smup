@@ -11,7 +11,8 @@ public class BulletPool : MonoBehaviour {
 
     public List<BulletGeneric> ActivePool, InActivePool;
 
-    
+    [SerializeField]
+    private int noOfObjects = 0;
 
     public static void RemoveBullet(BulletGeneric item)
     {
@@ -45,6 +46,8 @@ public class BulletPool : MonoBehaviour {
 
                 instance.ActivePool.Add(w);
                 w.transform.SetParent(instance.transform);
+
+                instance.noOfObjects++;
             }
 
             return w;
@@ -66,6 +69,8 @@ public class BulletPool : MonoBehaviour {
     {
         if (instance == null)
             instance = this;
+
+        
     }
     
 }
