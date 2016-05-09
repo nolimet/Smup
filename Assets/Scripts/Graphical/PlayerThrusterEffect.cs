@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using util;
 using System.Collections;
 
 public class PlayerThrusterEffect : MonoBehaviour {
@@ -13,29 +14,31 @@ public class PlayerThrusterEffect : MonoBehaviour {
 
     void UpdateThursters(Vector2 dir)
     {
+        //ToDo figure out how the new way works or changing emissionRates
         #region dir.y
         if (dir.y < -0.05)
         {
             for (int i = 0; i < Up.Length; i++)
             {
-                Up[i].emissionRate = 10f;
+                Up[i].SetEmissionRate(10f);
+                Up[i].SetEmissionRate(10f);
             }
             for (int i = 0; i < Down.Length; i++)
 			{
-                Down[i].emissionRate = 0;
+                Down[i].SetEmissionRate(0);
             }
         }
         else if(dir.y > 0.05)
         {
             for (int i = 0; i < Up.Length; i++)
             {
-                Up[i].emissionRate = 0;
+                Up[i].SetEmissionRate(0);
                 
             }
 
             for (int i = 0; i < Down.Length; i++)
 			{
-			    Down[i].emissionRate = 10f;
+			    Down[i].SetEmissionRate(10f);
 
 			}
         }
@@ -43,13 +46,13 @@ public class PlayerThrusterEffect : MonoBehaviour {
         {
             for (int i = 0; i < Up.Length; i++)
             {
-                Up[i].emissionRate = 0;
+                Up[i].SetEmissionRate(0);
 
             }
 
             for (int i = 0; i < Down.Length; i++)
             {
-                Down[i].emissionRate = 0;
+                Down[i].SetEmissionRate(0);
             }
         }
         #endregion
@@ -58,37 +61,37 @@ public class PlayerThrusterEffect : MonoBehaviour {
         {
             for (int i = 0; i < Left.Length; i++)
             {
-                Left[i].emissionRate = 10f * -dir.x;
+                Left[i].SetEmissionRate(10f * -dir.x);
             }
             for (int i = 0; i < Right.Length; i++)
             {
-                Right[i].emissionRate = 0;
+                Right[i].SetEmissionRate(0);
             }
         }
         else if (dir.x > 0.05)
         {
             for (int i = 0; i < Left.Length; i++)
             {
-                Left[i].emissionRate = 0;
+                Left[i].SetEmissionRate(0);
 
             }
 
             for (int i = 0; i < Right.Length; i++)
             {
-                Right[i].emissionRate = 10f * dir.x;
+                Right[i].SetEmissionRate(10f * dir.x);
             }
         }
         else
         {
             for (int i = 0; i < Left.Length; i++)
             {
-                Left[i].emissionRate = 0;
+                Left[i].SetEmissionRate(0);
 
             }
 
             for (int i = 0; i < Right.Length; i++)
             {
-                Right[i].emissionRate = 0;
+                Right[i].SetEmissionRate(0);
             }
         }
         #endregion

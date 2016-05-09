@@ -10,15 +10,13 @@ public class WaveClass
     public WaveClass()
     {
         waves = new char[0, 0, 0];
-
-        nullCheck();
     }
 
     public WaveClass(Dictionary<Vector3,char> points, Vector3 arraySize)
     {
-        nullCheck();
         waves = new char[(int)arraySize.z, (int)arraySize.y + 1, (int)arraySize.x + 1];
-       
+        setToNull();
+
         foreach(Vector3 v in points.Keys)
         {
             waves[(int)v.z, (int)v.y, (int)v.x] = points[v];
@@ -29,8 +27,6 @@ public class WaveClass
 
     public Dictionary<Vector3,char> Convert()
     {
-        nullCheck();
-
       Dictionary<Vector3, char> output = new Dictionary<Vector3, char>();
         for (int z = 0; z < waves.GetLength(0); z++)
         {
@@ -47,18 +43,11 @@ public class WaveClass
         return output;
     }
 
-    void nullCheck()
+    void setToNull()
     {
         for (int z = 0; z < waves.GetLength(0); z++)
-        {
             for (int y = 0; y < waves.GetLength(1); y++)
-            {
                 for (int x = 0; x < waves.GetLength(2); x++)
-                {
-                    if (waves[z, y, x] == '\0' || waves[z, y, x] == null)
-                        waves[z, y, x] = '\0';
-                }
-            }
-        }
+                    waves[z, y, x] = '\0';
     }
 }

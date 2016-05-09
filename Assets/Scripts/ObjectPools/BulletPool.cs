@@ -50,8 +50,6 @@ public class BulletPool : MonoBehaviour {
         return null;
     }
 
-    
-
     public void Awake()
     {
         if (instance == null)
@@ -66,6 +64,5 @@ public class BulletPool : MonoBehaviour {
             instance = this;
 
         
-    }
-    
+    } 
 }

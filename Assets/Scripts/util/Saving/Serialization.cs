@@ -41,10 +41,18 @@ namespace util
 
         public static string SaveLocation(fileTypes fileType)
         {
+            string saveLocation = "";
+            if (Application.platform == RuntimePlatform.WindowsPlayer || Application.platform == RuntimePlatform.OSXPlayer || Application.isEditor)
+            {
+                saveLocation = Application.dataPath;
+                if (!Application.isEditor)
+                    saveLocation += "/..";
+            }
+            else if (Application.platform == RuntimePlatform.Android || Application.platform == RuntimePlatform.IPhonePlayer || Application.platform == RuntimePlatform.WebGLPlayer || Application.platform == RuntimePlatform.WindowsWebPlayer || Application.platform == RuntimePlatform.OSXWebPlayer)
+            {
+                saveLocation = Application.persistentDataPath;
+            }
 
-            string saveLocation = Application.dataPath;
-            if (!Application.isEditor)
-                saveLocation += "/..";
             saveLocation += "/" + saveFolderName + "/" + FileLocations[fileType] + "/";
             if (!Directory.Exists(saveLocation))
             {
@@ -69,7 +77,6 @@ namespace util
             stream.Close();
 
             Debug.Log("Saved file: " + saveFile);
-
         }
 
         public static bool Load<T>(string fileName, fileTypes fileType, ref T outputData)
