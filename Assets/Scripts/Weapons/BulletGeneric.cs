@@ -60,7 +60,7 @@ public class BulletGeneric : MonoBehaviour
 
         transform.rotation = Quaternion.Euler(0, 0, direction);
 
-        rigidbody.velocity = util.MathHelper.AngleToVector(direction) * speed;
+        rigidbody.velocity = Util.Common.AngleToVector(direction) * speed;
 
         fragmentsExplosion = 0;
     }

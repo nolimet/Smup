@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEditor;
-using util;
+using Util;
+using Util.Serial;
 using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
@@ -21,7 +22,7 @@ public class TerainEditor : EditorWindow
     #region local
     Texture2D backgroundTexture = null;
     Vector2 viewPosition = Vector2.zero;
-    Color seeThrough = new Color(0, 0, 0, 0);
+//    Color seeThrough = new Color(0, 0, 0, 0);
     Dictionary<Vector3,char> currentLevel;
     EnemyStats.Type selectedType = EnemyStats.Type.shooter;
     float viewAspect { get { return 1f / zoomSize; } }

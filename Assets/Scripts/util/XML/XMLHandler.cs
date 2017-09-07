@@ -1,20 +1,22 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.IO;
-public class XMLHandler : MonoBehaviour
+
+namespace Util.XML
 {
-
-
-    public DataContainer data;
-    public string fileName;
-    public string path;
-    public void Save()
+    public class XMLHandler : MonoBehaviour
     {
-        data.Save(Application.dataPath + path, fileName);
-    }
+        public DataContainer data;
+        public string fileName;
+        public string path;
+        public void Save()
+        {
+            data.Save(Application.dataPath + path, fileName);
+        }
 
-    public void Load()
-    {
-        data = DataContainer.Load(path, fileName);
+        public void Load()
+        {
+            data = DataContainer.Load(path, fileName);
+        }
     }
 }

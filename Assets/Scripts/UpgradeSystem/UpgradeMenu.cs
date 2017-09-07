@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using util;
+using Util;
+using Util.Serial;
 using System.Collections;
 using System.Collections.Generic;
 using System;

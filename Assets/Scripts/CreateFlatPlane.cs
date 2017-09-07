@@ -73,6 +73,6 @@ public class CreateFlatPlane : MonoBehaviour {
         mesh.triangles = triangles;
 
         mesh.RecalculateBounds();
-        mesh.Optimize();
+        ;
     }
 }

@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using util;
+using Util.Serial;
 using System.Collections;
 using System.Linq;
 using System.Collections.Generic;
@@ -23,9 +23,8 @@ public class WaveControler : MonoBehaviour {
         EnemyPool.instance.onRemove += EnemyPool_onRemove;
         currentEnemies = new List<EnemyStats>();
 
-        WaveClass w = new WaveClass();
+        WaveClass w = Serialization.Load<WaveClass>("Wave1", Serialization.fileTypes.wave, false);
 
-        Serialization.Load("Wave1", Serialization.fileTypes.wave, ref w);
 
         Dictionary<Vector3, char> tempDictonary = w.Convert();
 
@@ -37,9 +36,6 @@ public class WaveControler : MonoBehaviour {
                 paterns[(int)v.z] = new Dictionary<Vector2, char>();
             paterns[(int)v.z].Add(v, tempDictonary[v]);
         }
-
-        Debug.Log(paterns.Length);
-
         createWave();
     }
 
@@ -57,19 +53,28 @@ public class WaveControler : MonoBehaviour {
     void Update()
     {
         if (enemiesLeftInWave <= 0)
+        {
+            onWaveComplete?.Invoke();
+
             createWave();
+        }
     }
 
-    Vector2 s = GameManager.screen.screenSize;
+    //Vector2 s = Vector2.zero;
     public void createWave()
     {
         enemiesLeftInWave = 0;
-        s = GameManager.screen.screenSize;
+        //s = GameManager.screen.screenSize;
         ////for (int i = 0; i < 20; i++)
         ////{
         ////    addEnemy(new Vector3(s.x, (((s.y / 21f * i) + (s.y / 21f / 2f)) - (s.y / 2f))), EnemyStats.Type.SlowDownSpeedUp);
         ////}
+        if (paterns == null)
+        {
+            Debug.LogError("NO PATERNS LOADED!");
 
+            return; 
+        }
         int w = Random.Range(0, paterns.Length);
 
         foreach (Vector2 v in paterns[w].Keys)

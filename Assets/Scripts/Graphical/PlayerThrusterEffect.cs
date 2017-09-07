@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using util;
+using Util;
 using System.Collections;
 
 public class PlayerThrusterEffect : MonoBehaviour {
