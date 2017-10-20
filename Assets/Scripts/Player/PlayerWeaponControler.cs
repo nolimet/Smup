@@ -32,6 +32,10 @@ public class PlayerWeaponControler : MonoBehaviour
                     case WeaponType.Shotgun:
                         MainWeapon = new ShotGun();
                         break;
+
+                    case WeaponType.Granade:
+                        MainWeapon = new Granade();
+                        break;
                 }
             }
 
@@ -82,6 +86,11 @@ public class PlayerWeaponControler : MonoBehaviour
             if (GameManager.upgrades.Shotgun.Unlocked)
                 CurrentWeapon = WeaponType.Shotgun;
         }
+        if (Input.GetKeyDown(KeyCode.Alpha4))
+        {
+            if (GameManager.upgrades.Granade.Unlocked)
+                CurrentWeapon = WeaponType.Granade;
+        }
     }
 
     void FireMain()
@@ -92,8 +101,7 @@ public class PlayerWeaponControler : MonoBehaviour
         if(MainWeapon.Shoot(gameObject, weaponOffset, getAddedVelocity()))
         {
             GameManager.playerStats.RemoveEnergy(MainWeapon.energyCost);
-            if (onFireWeapon != null)
-                onFireWeapon(_CurrentWeapon);
+            onFireWeapon?.Invoke(_CurrentWeapon);
         }
 
         

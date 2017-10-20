@@ -5,6 +5,7 @@ namespace player.Weapon
     {
         Cannon,
         Minigun,
-        Shotgun
+        Shotgun,
+        Granade
     }
 }

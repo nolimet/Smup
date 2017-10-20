@@ -8,11 +8,13 @@ namespace player.Weapon
         public Granade()
         {
             //rounds per minute
-            fireRate = Mathf.RoundToInt(10 * Mathf.Pow(1.3f, GameManager.upgrades.Cannon.FireRate));
+            fireRate = Mathf.RoundToInt(10 * Mathf.Pow(1.3f, GameManager.upgrades.Granade.FireRate));
             //damage per bullet
-            BulletDamage = 7f * Mathf.Pow(1.3f, GameManager.upgrades.Cannon.Damage);
-            Accuracy = 4 * Mathf.Pow(0.9f, GameManager.upgrades.Cannon.Accuracy);
+            BulletDamage = 7f * Mathf.Pow(1.3f, GameManager.upgrades.Granade.Damage);
+            Accuracy = 4 * Mathf.Pow(0.9f, GameManager.upgrades.Granade.Accuracy);
             BulletSpeed = 9f * Mathf.Pow(1.1f, 1);
+
+            fragments = GameManager.upgrades.Granade.Fragments + 20;
 
             fireDelay = 60000f / fireRate;
 
@@ -29,7 +31,7 @@ namespace player.Weapon
             else
                 bulletsPerShot = 1;
 
-            _energyCost = 20;
+            _energyCost = 50;
 
             // bulletsPerShot *= Mathf.RoundToInt(5*Mathf.Pow(1.2f, GameManager.upgrades.ShotGunBulletsPerShot));
         }
@@ -43,7 +45,7 @@ namespace player.Weapon
         float Accuracy;
         float BulletSpeed;
         float BulletDamage;
-
+        int fragments;
         BulletGeneric W;
         int _energyCost;
         public float energyCost
@@ -75,7 +77,7 @@ namespace player.Weapon
                     angle = (Random.Range(-0.5f, 0.5f) * Accuracy);
 
                     W.transform.position = Entiy.transform.position + weaponOffSet;
-                    W.Init(BulletDamage, angle, BulletSpeed);
+                    W.Init(BulletDamage, angle, BulletSpeed, fragments, 6f, false);
                 }
                 return true;
             }

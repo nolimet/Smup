@@ -16,8 +16,11 @@ public class BulletGeneric : MonoBehaviour
     new public Rigidbody2D rigidbody;
 
     int fragmentsExplosion;
-
+    float detonationTime;
+    bool canExplode;
     float damage;
+    float speed;
+
     public float Damage
     {
         get { return damage; }
@@ -28,6 +31,20 @@ public class BulletGeneric : MonoBehaviour
     void Awake()
     {
         rigidbody = GetComponent<Rigidbody2D>();
+    }
+
+    private void Update()
+    {
+        if (canExplode)
+        {
+            detonationTime -= Time.deltaTime;
+            if (detonationTime <= 0)
+            {
+                Explode();
+                StartCoroutine(Remove(0f));
+                canExplode = false;
+            }
+        }
     }
 
     public void OnEnable()
@@ -44,6 +61,9 @@ public class BulletGeneric : MonoBehaviour
             //  rigi.AddTorque(Random.Range(-10, 10));
             StartCoroutine(Remove(0.5f));
             coll.gameObject.SendMessage("hit", damage, SendMessageOptions.DontRequireReceiver);
+
+            if (canExplode)
+                Explode();
         }
     }
 
@@ -63,6 +83,8 @@ public class BulletGeneric : MonoBehaviour
         rigidbody.velocity = Util.Common.AngleToVector(direction) * speed;
 
         fragmentsExplosion = 0;
+
+        this.speed = speed;
     }
 
     public void Init(float damage, float direction, float speed, int fragmentsExplosion)
@@ -72,16 +94,39 @@ public class BulletGeneric : MonoBehaviour
         this.fragmentsExplosion = fragmentsExplosion;
     }
 
-    void explode()
+    public void Init(float damage, float direction, float speed, int fragmentsExplosion, float explosionDelayTime , bool isTimeDelayed)
+    {
+        Init(damage, direction, speed, fragmentsExplosion);
+        if (isTimeDelayed)
+        {
+            detonationTime = explosionDelayTime;
+        }
+        else
+        {
+            detonationTime = explosionDelayTime / speed;
+        }
+        canExplode = true;
+    }
+
+    void Explode()
     {
         if (fragmentsExplosion <= 0)
             return;
 
+        BulletGeneric b;
+        float l = fragmentsExplosion;
+        float r = 360f / fragmentsExplosion;
         while (fragmentsExplosion > 0)
         {
             fragmentsExplosion--;
 
-            //TODO: Make them spread out and explode and stuff;
+            //TODO: Make Edicated Explosive bullet
+
+            b = BulletPool.GetBullet(Type.Bullet);
+            b.WeaponType = Type.Fragment;
+            Debug.Log(fragmentsExplosion);
+            b.transform.position = transform.position;
+            b.Init(damage, (r*fragmentsExplosion) + UnityEngine.Random.Range(-r/2f,r/2f), speed);
         }
     }
 
@@ -105,6 +150,8 @@ public class BulletGeneric : MonoBehaviour
                 r.color = Color.Lerp(StartColor, TargetColor, frag * i);
                 yield return new WaitForEndOfFrame();
             }
+
+            WeaponType = Type.Bullet;
 
             BulletPool.RemoveBullet(this);
 
