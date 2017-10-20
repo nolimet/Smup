@@ -355,5 +355,13 @@ namespace Util
         {
             return new Quaternion(0,0,rotation.z,rotation.w) * v;
         }
+
+        public static Vector2 Round(this Vector2 v)
+        {
+            v.x = Mathf.Round(v.x);
+            v.y = Mathf.Round(v.y);
+
+            return v;
+        }
     }
 }

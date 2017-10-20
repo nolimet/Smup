@@ -14,5 +14,5 @@ public class Test : MonoBehaviour {
 	void Update () {
         //Move.Move(gameObject);
         gun.Shoot(gameObject, new Vector3(0.5f, 0), Vector2.zero);
-	}
+    }   
 }

@@ -73,40 +73,40 @@ public class UpgradeMenu : MonoBehaviour
     {
 
         //scrapCollection
-        addCatagory("Scrap Collection", "Enchance your scrap collection ability");
-        addUpgrade("", "ScrapConversionRate", 900, 1.3f, "Scrap sell rate", "Improves for how much you sell each piece of scrap");
-        addUpgrade("", "ScrapCollectionRange", 650, 1.3f, "Scrap Collection Range", "Makes the collection range bigger", 10);
-        addUpgrade("", "ScrapCollectionSpeed", 650, 1.5f, "Scrap Collection Speed", "Improves how fast the scrap moves towards you", 5);
+        AddCatagory("Scrap Collection", "Enchance your scrap collection ability");
+        AddUpgrade("", "ScrapConversionRate", 900, 1.3f, "Scrap sell rate", "Improves for how much you sell each piece of scrap");
+        AddUpgrade("", "ScrapCollectionRange", 650, 1.3f, "Scrap Collection Range", "Makes the collection range bigger", 10);
+        AddUpgrade("", "ScrapCollectionSpeed", 650, 1.5f, "Scrap Collection Speed", "Improves how fast the scrap moves towards you", 5);
 
         //Hull
-        addCatagory("Ship Upgrades", "Upgrades that make your ship strong, faster and generaly better");
-        addUpgrade("", "hullUpgradeLevel", 50, 2f, "Hull Upgrade", "Upgrading the hull allows the ship to take more hits", 10);
-        addUpgrade("", "armorUpgradeLevel", 100, 1.4f, "Armor Upgrade", "Upgrades the ammount of armor the ship has");
+        AddCatagory("Ship Upgrades", "Upgrades that make your ship strong, faster and generaly better");
+        AddUpgrade("", "hullUpgradeLevel", 50, 2f, "Hull Upgrade", "Upgrading the hull allows the ship to take more hits", 10);
+        AddUpgrade("", "armorUpgradeLevel", 100, 1.4f, "Armor Upgrade", "Upgrades the ammount of armor the ship has");
 
         //Shield
-        addUpgrade("", "UnlockedShield", 1200, 0, "Unlock Shield", "Unlocks the shield");
-        addUpgrade("", "shieldGeneratorLevel", 1300, 1.2f, "Shield Regeneration Speed", "Increases the regeneration speed of the shield");
-        addUpgrade("", "shieldCapacitorLevel", 1800, 1.2f, "Shield capacity upgrade", "Increases the capacity of the shield");
+        AddUpgrade("", "UnlockedShield", 1200, 0, "Unlock Shield", "Unlocks the shield");
+        AddUpgrade("", "shieldGeneratorLevel", 1300, 1.2f, "Shield Regeneration Speed", "Increases the regeneration speed of the shield");
+        AddUpgrade("", "shieldCapacitorLevel", 1800, 1.2f, "Shield capacity upgrade", "Increases the capacity of the shield");
 
         //shotgun
-        addCatagory("Shotgun Upgrades", " Upgrades for your shotgun");
-        addUpgrade("Shotgun", "Unlocked", 750, 0, "Unlocks Shotgun", "Unlocks the Shotgun");
-        addUpgrade("Shotgun", "Accuracy", 1425, 1.8f, "Increase Accuracy", "Decreases the spread of the shotgun", 10);
-        addUpgrade("Shotgun", "Damage", 1250, 1.3f, "Damage per frament", "Increases the damage each fragment does");
-        addUpgrade("Shotgun", "FireRate", 750, 1.3f, "Fragments per Shotgun shot", "Increases the number of fragments shot out per shot", 6);
+        AddCatagory("Shotgun Upgrades", " Upgrades for your shotgun");
+        AddUpgrade("Shotgun", "Unlocked", 750, 0, "Unlocks Shotgun", "Unlocks the Shotgun");
+        AddUpgrade("Shotgun", "Accuracy", 1425, 1.8f, "Increase Accuracy", "Decreases the spread of the shotgun", 10);
+        AddUpgrade("Shotgun", "Damage", 1250, 1.3f, "Damage per frament", "Increases the damage each fragment does");
+        AddUpgrade("Shotgun", "FireRate", 750, 1.3f, "Fragments per Shotgun shot", "Increases the number of fragments shot out per shot", 6);
 
         //machineGun
-        addCatagory("Machinegun Upgrades", "Upgrades for your machinegun");
-        addUpgrade("MiniGun", "Unlocked", 700, 0, "Unlock Machinegun", "Unlocks the Machinegun");
-        addUpgrade("MiniGun", "Accuracy", 3000, 1.3f, "Increase Accuracy", "Increases Accuracy of the Machinegun", 10);
-        addUpgrade("MiniGun", "Damage", 4000, 1.1f, "Increase Damage", "Increases the damage each bullet of the machine gun does");
-        addUpgrade("MiniGun", "FireRate", 2500, 1.2f, "Increase Firerate", "Increases number of bullets shot out by the machine gun every second", 20);
+        AddCatagory("Machinegun Upgrades", "Upgrades for your machinegun");
+        AddUpgrade("MiniGun", "Unlocked", 700, 0, "Unlock Machinegun", "Unlocks the Machinegun");
+        AddUpgrade("MiniGun", "Accuracy", 3000, 1.3f, "Increase Accuracy", "Increases Accuracy of the Machinegun", 10);
+        AddUpgrade("MiniGun", "Damage", 4000, 1.1f, "Increase Damage", "Increases the damage each bullet of the machine gun does");
+        AddUpgrade("MiniGun", "FireRate", 2500, 1.2f, "Increase Firerate", "Increases number of bullets shot out by the machine gun every second", 20);
 
         //Cannon
-        addCatagory("Cannon Upgrades", "Upgrades for your main Cannon");
-        addUpgrade("Cannon", "Accuracy", 200, 1.2f, "Cannon Accuracy", "Increases the accuracy of the cannon", 5);
-        addUpgrade("Cannon", "Damage", 350, 1.4f, "Cannon Damage", "Increases the ammount of damage dealth with each shot");
-        addUpgrade("Cannon", "FireRate", 475, 1.7f, "Cannon Firerate", "Increases the ammount of bullets shot by the Cannon", 10);
+        AddCatagory("Cannon Upgrades", "Upgrades for your main Cannon");
+        AddUpgrade("Cannon", "Accuracy", 200, 1.2f, "Cannon Accuracy", "Increases the accuracy of the cannon", 5);
+        AddUpgrade("Cannon", "Damage", 350, 1.4f, "Cannon Damage", "Increases the ammount of damage dealth with each shot");
+        AddUpgrade("Cannon", "FireRate", 475, 1.7f, "Cannon Firerate", "Increases the ammount of bullets shot by the Cannon", 10);
     }
 
 
@@ -141,7 +141,7 @@ public class UpgradeMenu : MonoBehaviour
     /// <param name="name"> The name that will be displayed on screen for the upgrade</param>
     /// <param name="discription">The discription that the upgrade will be given on screen</param>
     /// <param name="MaxLevel">The maxium level of the upgrade. Leave it to default when wanting to disable</param>
-    void addUpgrade(string system, string refrence, float StartCost, float Mult, string name, string discription, int MaxLevel = -1)
+    void AddUpgrade(string system, string refrence, float StartCost, float Mult, string name, string discription, int MaxLevel = -1)
     {
         UpgradeItem e = Instantiate(ParentUpgrade, Vector3.zero, Quaternion.identity) as UpgradeItem;
         e.transform.SetParent(ContentParent, false);
@@ -150,11 +150,11 @@ public class UpgradeMenu : MonoBehaviour
         e.Discription.text = discription;
 
         UpgradeObject u = new UpgradeObject(system, refrence, StartCost, MaxLevel, Mult, e);
-        currentCatagory.addNew(u);
+        currentCatagory.AddNew(u);
         Upgrades.Add(u);
     }
 
-    void addCatagory(string name, string discription)
+    void AddCatagory(string name, string discription)
     {
         UpgradeCatagory u = Instantiate(parentCatagory);
         u.gameObject.SetActive(true);
@@ -181,16 +181,17 @@ public class UpgradeMenu : MonoBehaviour
         string refrence;
         string system;
 
-        public bool enabled { set { visual.gameObject.SetActive(value); } }
+        public bool Enabled { set { visual.gameObject.SetActive(value); } }
 
         /// <summary>
-        /// 
+        /// Old Function Deceperated
         /// </summary>
         /// <param name="UpgradeFunc">The function that will be called when upgrade button is clicked</param>
         /// <param name="StartCost">STarting cost</param>
         /// <param name="Mult">multipier. when zero it will only upgrade once</param>
         /// <param name="StartLevel">The starting level</param>
         /// <param name="visual">visual object. Used to assign stuff </param>
+        [Obsolete("This is the old version use the (string,string,float,int,float,UpgradeItem) one instead", true)]
         public UpgradeObject(Func<int, bool, bool> UpgradeFunc, float StartCost, float Mult, int StartLevel, UpgradeItem visual)
         {
             this.visual = visual;
@@ -208,6 +209,15 @@ public class UpgradeMenu : MonoBehaviour
             UpdateLevel();
         }
 
+        /// <summary>
+        /// Adds a new upgrade object
+        /// </summary>
+        /// <param name="system">Sub location of the variable</param>
+        /// <param name="refrence">name of the upgrade variable</param>
+        /// <param name="StartCost">The starting cost of the Upgrade</param>
+        /// <param name="MaxLevel">The maximum level set to zero for unlimted upgrades</param>
+        /// <param name="Mult"> by how much the upgrade goes up each time</param>
+        /// <param name="visual">The object that will be shown on screen</param>
         public UpgradeObject(string system, string refrence, float StartCost, int MaxLevel, float Mult, UpgradeItem visual)
         {
             if (system == "")
@@ -280,7 +290,7 @@ public class UpgradeMenu : MonoBehaviour
         {
             ColorBlock cb = visual.Buy.colors;
 
-            if ((UpgradeFunc != null && UpgradeFunc(GetPrice(), pay)) || canBuyUpgrade(pay))
+            if ((UpgradeFunc != null && UpgradeFunc(GetPrice(), pay)) || CanBuyUpgrade(pay))
             {
                 cb.pressedColor = Color.green;
                 cb.highlightedColor = Color.green + Color.gray;
@@ -317,7 +327,7 @@ public class UpgradeMenu : MonoBehaviour
         /// </summary>
         /// <param name="substract">just a price check?</param>
         /// <returns></returns>
-        bool canBuyCheck(bool substract)
+        bool CanBuyCheck(bool substract)
         {
             if (upgradeData.UpgradeCurrency >= GetPrice() && (MaxLevel < 0 || MaxLevel > 0 && Level < MaxLevel) && (Mult > 0 || Mult <= 0 && Level <= 0))
             {
@@ -365,7 +375,7 @@ public class UpgradeMenu : MonoBehaviour
         /// </summary>
         /// <param name="substact">just a price check?</param>
         /// <returns></returns>
-        bool canBuyCheck2(bool substract)
+        bool CanBuyCheck2(bool substract)
         {
             if (upgradeData.UpgradeCurrency >= GetPrice() && (MaxLevel < 0 || MaxLevel > 0 && Level < MaxLevel) && (Mult > 0 || Mult <= 0 && Level <= 0))
             {
@@ -412,12 +422,12 @@ public class UpgradeMenu : MonoBehaviour
             return false;
         }
 
-        bool canBuyUpgrade(bool substract)
+        bool CanBuyUpgrade(bool substract)
         {
             if (system == "")
-                return canBuyCheck(substract);
+                return CanBuyCheck(substract);
             else
-                return canBuyCheck2(substract);
+                return CanBuyCheck2(substract);
         }
 
         public void Move(Vector2 newpos)
@@ -444,9 +454,9 @@ public class UpgradeMenu : MonoBehaviour
             });
         }
 
-        public void addNew(UpgradeObject o)
+        public void AddNew(UpgradeObject o)
         {
-            o.enabled = active;
+            o.Enabled = active;
             subObjs.Add(o);
         }
 
@@ -456,7 +466,7 @@ public class UpgradeMenu : MonoBehaviour
             Vector3 newpos = ((RectTransform)visual.transform).anchoredPosition;
             foreach (UpgradeObject o in subObjs)
             {
-                o.enabled = active;
+                o.Enabled = active;
                 o.Move(newpos);
             }
         }

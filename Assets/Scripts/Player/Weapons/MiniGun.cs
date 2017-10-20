@@ -50,6 +50,14 @@ namespace player.Weapon
             }
         }
 
+        public float delayDelta
+        {
+            get
+            {
+                return (float)(System.DateTime.Now - lastShot).TotalMilliseconds / fireDelay;
+            }
+        }
+
         BulletGeneric W;
         public bool Shoot(GameObject Entiy, Vector3 weaponOffSet, Vector2 inherentVelocity)
         {

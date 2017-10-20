@@ -22,7 +22,7 @@ namespace Enemy
         void Update()
         {
             attackPattern.Attack(gameObject);
-            movementPattern.Move(gameObject, 4);
+            movementPattern.Move(gameObject, Speed:1f);
         }
     }
 }

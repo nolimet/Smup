@@ -13,5 +13,6 @@ namespace player.Weapon
         bool Shoot(GameObject Entiy, Vector3 weaponOffSet, Vector2 inherentVelocity);
 
         float energyCost { get; }
+        float delayDelta { get; }
     }
 }

@@ -2,6 +2,7 @@
 public class UpgradeData {
 
     public long UpgradeCurrency = 0;
+
     #region Ship-Upgrades
     //ScrapGetting
     public int ScrapCollectionRange = 0;
@@ -20,15 +21,15 @@ public class UpgradeData {
     #endregion
 
     //weaponUpgrades
-    public CommonWeaponUpgrade Cannon, MiniGun, Shotgun;
+    public CommonWeaponUpgrade Cannon, MiniGun, Shotgun,Granade;
 
     [System.Serializable]
     public struct CommonWeaponUpgrade
     {
         public bool Unlocked;
-        public int Damage, Accuracy, FireRate;
+        public int Damage, Accuracy, FireRate,Fragments;
 
         public bool UnlockedTweaker;
-        public float AccuracyAdjustment, SpeedAdjustment;
+        public float AccuracyAdjustment, SpeedAdjustment, FireRateAdjustment;
     }
 }

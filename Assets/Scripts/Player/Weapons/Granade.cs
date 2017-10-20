@@ -1,14 +1,14 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿using System.Collections;
+using UnityEngine;
 
 namespace player.Weapon
 {
-    public class Cannon : IBaseWeapon
+    public class Granade : IBaseWeapon
     {
-        public Cannon()
+        public Granade()
         {
             //rounds per minute
-            fireRate = Mathf.RoundToInt(55 * Mathf.Pow(1.3f, GameManager.upgrades.Cannon.FireRate));
+            fireRate = Mathf.RoundToInt(10 * Mathf.Pow(1.3f, GameManager.upgrades.Cannon.FireRate));
             //damage per bullet
             BulletDamage = 7f * Mathf.Pow(1.3f, GameManager.upgrades.Cannon.Damage);
             Accuracy = 4 * Mathf.Pow(0.9f, GameManager.upgrades.Cannon.Accuracy);
@@ -31,7 +31,7 @@ namespace player.Weapon
 
             _energyCost = 20;
 
-           // bulletsPerShot *= Mathf.RoundToInt(5*Mathf.Pow(1.2f, GameManager.upgrades.ShotGunBulletsPerShot));
+            // bulletsPerShot *= Mathf.RoundToInt(5*Mathf.Pow(1.2f, GameManager.upgrades.ShotGunBulletsPerShot));
         }
 
         System.DateTime lastShot;
@@ -45,7 +45,7 @@ namespace player.Weapon
         float BulletDamage;
 
         BulletGeneric W;
-        int _energyCost ;
+        int _energyCost;
         public float energyCost
         {
             get

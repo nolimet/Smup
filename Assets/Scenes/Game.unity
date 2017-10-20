@@ -8444,7 +8444,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1442810513}
   - component: {fileID: 1442810512}
-  - component: {fileID: 1442810511}
   - component: {fileID: 1442810510}
   - component: {fileID: 1442810509}
   m_Layer: 12
@@ -8463,13 +8462,6 @@ AudioListener:
   m_Enabled: 1
   m_ExtensionPropertyValues: []
 --- !u!124 &1442810510
-Behaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1442810508}
-  m_Enabled: 1
---- !u!92 &1442810511
 Behaviour:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
@@ -12192,7 +12184,7 @@ Canvas:
   m_OverrideSorting: 0
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
-  m_AdditionalShaderChannelsFlag: 25
+  m_AdditionalShaderChannelsFlag: 1
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
@@ -27109,7 +27101,7 @@ MonoBehaviour:
     speed: 2
     startPoint: 35.64
     killPoint: -35.64
-  - name: ForHills
+  - name: Starfield
     parts:
     - {fileID: 47429308}
     - {fileID: 628187792}

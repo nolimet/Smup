@@ -7,18 +7,18 @@ namespace Enemy.Interfaces.Move
 
     public interface IMovement
     {
-        void Move(GameObject enity, float Speed = 1f);
+        void Move(GameObject enity, Vector2? movelocation = null, float Speed = 1f, float moveDelay = 0f);
     }
 
     public class LinearMovement : IMovement
     {
         Rigidbody2D ri;
-        public void Move(GameObject enity, float speed = 1f)
+        public void Move(GameObject enity, Vector2? movelocation = null, float Speed = 1f, float moveDelay = 0f)
         {
             ri = enity.GetComponent<Rigidbody2D>();
 
             if (ri.velocity.x < -10f)
-                ri.AddForce(new Vector2(-5 * ri.mass * speed, 0), ForceMode2D.Force);
+                ri.AddForce(new Vector2(-5 * ri.mass * Speed, 0), ForceMode2D.Force);
         }
     }
 
@@ -30,7 +30,7 @@ namespace Enemy.Interfaces.Move
         Rigidbody2D ri;
         float yMovement;
 
-        public void Move(GameObject enity, float speed = 1f)
+        public void Move(GameObject enity, Vector2? movelocation = null, float Speed = 1f, float moveDelay = 0f)
         {
             ri = enity.AddComponent<Rigidbody2D>();
 
@@ -38,6 +38,14 @@ namespace Enemy.Interfaces.Move
 
             ri.AddForce(new Vector2(Time.deltaTime * 10f, yMovement) * ri.mass);
             //enity.transform.Translate(Time.deltaTime * 10f, yMovement, 0f);
+        }
+    }
+
+    public class MoveToLocation : IMovement
+    {
+        public void Move(GameObject enity, Vector2? movelocation = null, float Speed = 1f, float moveDelay = 0f)
+        {
+            throw new NotImplementedException();
         }
     }
 }

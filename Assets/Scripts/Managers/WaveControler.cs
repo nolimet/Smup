@@ -16,7 +16,7 @@ public class WaveControler : MonoBehaviour {
     Vector2 waveStartOffset = Vector2.zero;
     public List<EnemyStats> currentEnemies;
 
-    Dictionary<Vector2, char>[] paterns;
+    Dictionary<Vector2, char>[] patterns;
 
     void Start()
     {
@@ -28,13 +28,13 @@ public class WaveControler : MonoBehaviour {
 
         Dictionary<Vector3, char> tempDictonary = w.Convert();
 
-        paterns = new Dictionary<Vector2, char>[(int)tempDictonary.Max(x => x.Key.z) + 1];
+        patterns = new Dictionary<Vector2, char>[(int)tempDictonary.Max(x => x.Key.z) + 1];
 
         foreach(Vector3 v in tempDictonary.Keys)
         {
-            if (paterns[(int)v.z] == null)
-                paterns[(int)v.z] = new Dictionary<Vector2, char>();
-            paterns[(int)v.z].Add(v, tempDictonary[v]);
+            if (patterns[(int)v.z] == null)
+                patterns[(int)v.z] = new Dictionary<Vector2, char>();
+            patterns[(int)v.z].Add(v, tempDictonary[v]);
         }
         createWave();
     }
@@ -69,16 +69,16 @@ public class WaveControler : MonoBehaviour {
         ////{
         ////    addEnemy(new Vector3(s.x, (((s.y / 21f * i) + (s.y / 21f / 2f)) - (s.y / 2f))), EnemyStats.Type.SlowDownSpeedUp);
         ////}
-        if (paterns == null)
+        if (patterns == null)
         {
-            Debug.LogError("NO PATERNS LOADED!");
+            Debug.LogError("NO PATTERNS LOADED!");
 
             return; 
         }
-        int w = Random.Range(0, paterns.Length);
+        int w = Random.Range(0, patterns.Length);
 
-        foreach (Vector2 v in paterns[w].Keys)
-            addEnemy(v + waveStartOffset, (EnemyStats.Type)paterns[w][v]);
+        foreach (Vector2 v in patterns[w].Keys)
+            addEnemy(v + waveStartOffset, (EnemyStats.Type)patterns[w][v]);
     }
 
     public void addEnemy(Vector3 pos, EnemyStats.Type Type)
