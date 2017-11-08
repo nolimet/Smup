@@ -125,7 +125,7 @@ namespace Util.Serial
             if (Application.platform == RuntimePlatform.WebGLPlayer)
                 SyncFiles();
 
-            //Debug.Log(System.DateTime.Now + " Saved file: " + saveFile);
+            Debug.Log(System.DateTime.Now + " Saved file: " + saveFile);
 
         }
 

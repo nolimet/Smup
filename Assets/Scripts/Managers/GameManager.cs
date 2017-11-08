@@ -69,6 +69,8 @@ public class GameManager : MonoBehaviour
             Debug.LogError("Pickupmanager was not assigned in inspector");
 
         Serialization.Load("upgrade", Serialization.fileTypes.binary, ref _upgrades);
+
+        Util.Debugger.Debugger.DebugEnabled = true;
     }
 
     public void OnDestroy()

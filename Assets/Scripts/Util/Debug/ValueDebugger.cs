@@ -95,6 +95,7 @@ namespace Util.Debugger
             }
         }
 
+        
         void Awake()
         {
             instance = this;
@@ -149,7 +150,12 @@ namespace Util.Debugger
         public static void Log(string name, object value)
         {
             if (DebugEnabled)
+                ValueDebugger.ValueLog(name, value);
+        }
 
+        public static void QuickLog<T>(this T value, string name)
+        {
+            if (DebugEnabled)
                 ValueDebugger.ValueLog(name, value);
         }
     }

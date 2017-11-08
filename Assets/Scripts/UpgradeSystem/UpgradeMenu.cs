@@ -106,14 +106,14 @@ public class UpgradeMenu : MonoBehaviour
         AddCatagory("Cannon Upgrades", "Upgrades for your main Cannon");
         AddUpgrade("Cannon", "Accuracy", 200, 1.2f, "Cannon Accuracy", "Increases the accuracy of the cannon", 5);
         AddUpgrade("Cannon", "Damage", 350, 1.4f, "Cannon Damage", "Increases the ammount of damage dealth with each shot");
-        AddUpgrade("Cannon", "FireRate", 475, 1.7f, "Cannon Firerate", "Increases the ammount of bullets shot by the Cannon", 10);
+        AddUpgrade("Cannon", "FireRate", 475, 1.7f, "Cannon Firerate", "Increases the ammount of bullets shot by the Cannon", 20);
 
         //Granade
         AddCatagory("Granade Upgrades", "Upgrades for a Explosive helper!");
         AddUpgrade("Granade", "Unlocked", 5000, 0, "Unlock Granade", "Unlocks the Granade");
         AddUpgrade("Granade", "Damage", 2000, 1.3f, " Increased Damage", "Increases the damage each piece of shrapnal does");
-        AddUpgrade("Granade", "Fragments", 1500, 1.7f, "More Shrapnal!", "Increases the number of pieces the granade explodes into");
-        AddUpgrade("Granade", "FireRate", 4000, 2f, "Increased Fire rate", "Increases the rate of fireing the granade");
+        AddUpgrade("Granade", "Fragments", 1500, 1.7f, "More Shrapnal!", "Increases the number of pieces the granade explodes into",30);
+        AddUpgrade("Granade", "FireRate", 4000, 2f, "Increased Fire rate", "Increases the rate of fireing the granade",20);
     }
 
 
