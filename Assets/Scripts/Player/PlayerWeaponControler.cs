@@ -97,14 +97,12 @@ public class PlayerWeaponControler : MonoBehaviour
     {
         if (!GameManager.playerStats.canFire(MainWeapon.energyCost))
             return;
-
         if(MainWeapon.Shoot(gameObject, weaponOffset, getAddedVelocity()))
         {
             GameManager.playerStats.RemoveEnergy(MainWeapon.energyCost);
             onFireWeapon?.Invoke(_CurrentWeapon);
         }
 
-        
     }
 
     Vector2 getAddedVelocity()

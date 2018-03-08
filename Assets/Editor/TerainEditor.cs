@@ -9,7 +9,7 @@ using System.Collections.Generic;
 public class TerainEditor : EditorWindow
 {
     #region Statics
-    [MenuItem("Window/Terain Editor")]
+    [MenuItem("GameEdit/Formation Editor")]
     public static void ShowWindow()
     {
         //Show existing window instance. If one doesn't exist, make one.

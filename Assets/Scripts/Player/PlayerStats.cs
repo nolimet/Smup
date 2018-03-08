@@ -36,6 +36,7 @@ public class PlayerStats : MonoBehaviour {
         if (currentEnergy < maxEnergy && !PlayerWeaponControler.Firing) 
             currentEnergy += 16f * Time.deltaTime;
         
+        //Update Status display
         Energy.UpdateSize(currentEnergy);
         Health.UpdateSize(currentHealth);
         CollectedScrapDisplay.text = "Scrap Collected: " + GameManager.pickupManager.pickedUpScrap;

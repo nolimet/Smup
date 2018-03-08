@@ -38,11 +38,6 @@ public class WaveControler : MonoBehaviour {
             patterns[(int)v.z].Add(v, tempDictonary[v]);
         }
         createWave();
-
-        Debugger.DebugEnabled = true;
-
-        patterns.Length.QuickLog("WAVE SPAWNER! Dictorary Count");
-        currentEnemies.Count.QuickLog("Enemy Count");
     }
 
     void Destroy()
