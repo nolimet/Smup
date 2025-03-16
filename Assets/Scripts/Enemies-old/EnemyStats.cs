@@ -30,7 +30,7 @@ namespace Enemies_old
 
         public void OnTriggerEnter2D(Collider2D collision)
         {
-            if (collision.tag == "backbullet Remover")
+            if (collision.CompareTag("backbullet Remover"))
                 StartCoroutine(Remove(0f, false));
         }
 

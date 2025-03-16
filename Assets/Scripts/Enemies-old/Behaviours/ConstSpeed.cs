@@ -11,10 +11,6 @@ namespace Enemies_old.Behaviours
         {
             while (IsAlive)
             {
-                if (!AppFocus)
-                    while (!AppFocus)
-                        yield return new WaitForSeconds(TickTimeFrag);
-
                 R.linearVelocity = speed;
                 yield return new WaitForSeconds(TickTimeFrag);
             }

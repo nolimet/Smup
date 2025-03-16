@@ -125,7 +125,7 @@ namespace UpgradeSystem
         /// <param name="displayName"> The name that will be displayed on screen for the upgrade</param>
         /// <param name="description">The discription that the upgrade will be given on screen</param>
         /// <param name="maxLevel">The maxium level of the upgrade. Leave it to default when wanting to disable</param>
-        private void AddUpgrade(string groupName, string fieldName, float startCost, float mult, string displayName, string description, int maxLevel = 1)
+        private void AddUpgrade(string groupName, string fieldName, float startCost, float mult, string displayName, string description, int maxLevel = -1)
         {
             var element = Instantiate(parentUpgrade, contentParent, false);
             element.gameObject.SetActive(true);
@@ -279,7 +279,7 @@ namespace UpgradeSystem
 
                 return fieldValue switch
                 {
-                    int level when level >= _maxLevel => true,
+                    int level when level >= _maxLevel || level == -1 => true,
                     bool when true => true,
                     _ => false
                 };

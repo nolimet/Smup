@@ -11,14 +11,14 @@ namespace Enemies
         private void Start()
         {
             _attackPattern = new ShootFixedIntervalAttack();
-            _movementPattern = new LinearMovement();
+            _movementPattern = new LinearMovement(gameObject);
             //attackPattern.Weapon = new WeaponInterfaces.MiniGun();
         }
 
         private void Update()
         {
             _attackPattern.Attack(gameObject);
-            _movementPattern.Move(gameObject, speed: 1f);
+            _movementPattern.Move(speed: 1f);
         }
     }
 }

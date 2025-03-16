@@ -7,7 +7,7 @@ namespace Enemies_old.Behaviours
     [RequireComponent(typeof(Rigidbody2D))]
     public class Enemybase : MonoBehaviour
     {
-        protected bool AppFocus = true, AttackBehaviourRunning, MoveBehaviourRunning, IsAlive;
+        protected bool AttackBehaviourRunning, MoveBehaviourRunning, IsAlive;
         protected Rigidbody2D R;
         protected const int TicksPerSecond = 30;
         protected readonly float TickTimeFrag = 1f / TicksPerSecond;
@@ -27,17 +27,6 @@ namespace Enemies_old.Behaviours
             // while(appFocus)
 
             yield return new WaitForEndOfFrame();
-        }
-
-        private void OnApplicationFocus(bool focus)
-        {
-            //appFocus = focus;
-            //if(!appFocus)
-            //{
-            //    AttackBehaviourRunning = MoveBehaviourRunning = false;
-            //}
-            //startBehaviours();
-            // startCoroutines();
         }
 
         protected void OnEnable()

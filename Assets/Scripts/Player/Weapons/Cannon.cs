@@ -25,7 +25,7 @@ namespace Player.Weapons
 
         public Cannon()
         {
-            var fireRate = Mathf.RoundToInt(55 * Mathf.Pow(1.3f, GameManager.Upgrades.cannon.fireRate));
+            var fireRate = Mathf.RoundToInt(75 * Mathf.Pow(1.3f, GameManager.Upgrades.cannon.fireRate));
 
             _bulletDamage = 7f * Mathf.Pow(1.3f, GameManager.Upgrades.cannon.damage);
             _accuracy = 4 * Mathf.Pow(0.9f, GameManager.Upgrades.cannon.accuracy);

@@ -9,23 +9,31 @@ namespace Enemies
 
     public class ShootFixedIntervalAttack : IAttack
     {
-        private float _counter;
-        private int _fireRepeator;
+        //Shot a number of shots every so many seconds
+        private readonly float _salvoInterval;
+        private readonly int _salvoSize;
+        private readonly float _shotInterval;
+
+        private float _salvoTimer;
+        private float _shotTimer;
+        private float _salvoCounter;
 
         public void Attack(GameObject enity)
         {
-            if (_fireRepeator <= 0 && _counter >= 5)
+            if (_salvoCounter == 0 && _salvoCounter > _salvoInterval)
             {
-                _counter = 0f;
-                _fireRepeator = 5;
+                _salvoCounter = _salvoSize;
+                _shotTimer = 0;
             }
-            else if (_fireRepeator > 0 && _counter >= 0.3f)
+            else if (_salvoCounter > 0 && _shotInterval <= 0)
             {
-                _counter = 0f;
-                _fireRepeator--;
+                _salvoTimer = _shotInterval;
+                _salvoCounter--;
+                //TODO Implement shoot
             }
 
-            _counter += Time.deltaTime;
+            _shotTimer -= Time.deltaTime;
+            _salvoTimer -= Time.deltaTime;
         }
     }
 }

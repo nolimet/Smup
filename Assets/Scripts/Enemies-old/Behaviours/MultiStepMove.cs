@@ -31,9 +31,6 @@ namespace Enemies_old.Behaviours
                     var k = duration[i] * TicksPerSecond;
                     for (var j = 0; j < k; j++)
                     {
-                        while (!AppFocus)
-                            yield return new WaitForSeconds(TickTimeFrag);
-
                         R.linearVelocity = Vector2.Lerp(lastSpeed, movePatern[i], 1f / k * j);
                         yield return new WaitForSeconds(TickTimeFrag);
                     }
