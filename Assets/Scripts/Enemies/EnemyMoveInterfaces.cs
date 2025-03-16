@@ -1,49 +1,48 @@
-﻿using UnityEngine;
-using System.Collections;
-using System;
+﻿using System;
+using UnityEngine;
 
-namespace Enemy.Interfaces.Move
+namespace Enemies
 {
-
     public interface IMovement
     {
-        void Move(GameObject enity, Vector2? movelocation = null, float Speed = 1f, float moveDelay = 0f);
+        void Move(GameObject enity, Vector2? movelocation = null, float speed = 1f, float moveDelay = 0f);
     }
 
     public class LinearMovement : IMovement
     {
-        Rigidbody2D ri;
-        public void Move(GameObject enity, Vector2? movelocation = null, float Speed = 1f, float moveDelay = 0f)
-        {
-            ri = enity.GetComponent<Rigidbody2D>();
+        private Rigidbody2D _ri;
 
-            if (ri.velocity.x < -10f)
-                ri.AddForce(new Vector2(-5 * ri.mass * Speed, 0), ForceMode2D.Force);
+        public void Move(GameObject enity, Vector2? movelocation = null, float speed = 1f, float moveDelay = 0f)
+        {
+            _ri = enity.GetComponent<Rigidbody2D>();
+
+            if (_ri.linearVelocity.x < -10f)
+                _ri.AddForce(new Vector2(-5 * _ri.mass * speed, 0), ForceMode2D.Force);
         }
     }
 
-    public class SenoidalMovement : IMovement
+    public class UpDownWaveMove : IMovement
     {
-        private const float amplitude = 1f;
-        private const float frequency = 2f;
+        private const float Amplitude = 1f;
+        private const float Frequency = 2f;
 
-        Rigidbody2D ri;
-        float yMovement;
+        private Rigidbody2D _ri;
+        private float _yMovement;
 
-        public void Move(GameObject enity, Vector2? movelocation = null, float Speed = 1f, float moveDelay = 0f)
+        public void Move(GameObject enity, Vector2? movelocation = null, float speed = 1f, float moveDelay = 0f)
         {
-            ri = enity.AddComponent<Rigidbody2D>();
+            _ri = enity.AddComponent<Rigidbody2D>();
 
-            yMovement = amplitude * (Mathf.Sin(2 * Mathf.PI * frequency * Time.time) - Mathf.Sin(2 * Mathf.PI * frequency * (Time.time - Time.deltaTime)));
+            _yMovement = Amplitude * (Mathf.Sin(2 * Mathf.PI * Frequency * Time.time) - Mathf.Sin(2 * Mathf.PI * Frequency * (Time.time - Time.deltaTime)));
 
-            ri.AddForce(new Vector2(Time.deltaTime * 10f, yMovement) * ri.mass);
+            _ri.AddForce(new Vector2(Time.deltaTime * 10f, _yMovement) * _ri.mass);
             //enity.transform.Translate(Time.deltaTime * 10f, yMovement, 0f);
         }
     }
 
     public class MoveToLocation : IMovement
     {
-        public void Move(GameObject enity, Vector2? movelocation = null, float Speed = 1f, float moveDelay = 0f)
+        public void Move(GameObject enity, Vector2? movelocation = null, float speed = 1f, float moveDelay = 0f)
         {
             throw new NotImplementedException();
         }

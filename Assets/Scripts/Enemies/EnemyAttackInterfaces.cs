@@ -1,32 +1,31 @@
 ﻿using UnityEngine;
-using System.Collections;
 
-namespace Enemy.Interfaces.Attack
+namespace Enemies
 {
     public interface IAttack
     {
-        void Attack(GameObject Enity);
+        void Attack(GameObject enity);
     }
 
-    public class ShootFixedIntervalAttack: IAttack
+    public class ShootFixedIntervalAttack : IAttack
     {
-        float counter;
-        int fireRepeator;
+        private float _counter;
+        private int _fireRepeator;
 
-        public void Attack(GameObject Enity)
+        public void Attack(GameObject enity)
         {
-            if(fireRepeator <=0 && counter>=5)
+            if (_fireRepeator <= 0 && _counter >= 5)
             {
-                counter = 0f;
-                fireRepeator = 5;
+                _counter = 0f;
+                _fireRepeator = 5;
             }
-            else if (fireRepeator > 0 && counter >= 0.3f)
+            else if (_fireRepeator > 0 && _counter >= 0.3f)
             {
-                counter = 0f;
-                fireRepeator--;
+                _counter = 0f;
+                _fireRepeator--;
             }
 
-            counter += Time.deltaTime;
+            _counter += Time.deltaTime;
         }
     }
 }

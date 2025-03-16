@@ -1,93 +1,88 @@
-﻿using UnityEngine;
+﻿using Player;
+using UnityEngine;
 using UnityEngine.SceneManagement;
-using Util.Serial;
-using System.Collections;
+using UnityEngine.Serialization;
+using UpgradeSystem;
+using Util;
+using Util.DebugHelpers;
+using Util.Saving;
 
-public class GameManager : MonoBehaviour
+namespace Managers
 {
-
-    public MoveBoxScaler _screen;
-    public PlayerStats _playerStats;
-    public PlayerWeaponControler _playerWeaponControler;
-    public UpgradeData _upgrades;
-    public PickupManager _pickupManager;
-
-    public static MoveBoxScaler screen;
-    public static PlayerStats playerStats;
-    public static PlayerWeaponControler playerWeaponControler;
-    public static UpgradeData upgrades
+    public class GameManager : MonoBehaviour
     {
-        get
+        [FormerlySerializedAs("_screen")] [SerializeField] private MoveBoxScaler screen;
+        [FormerlySerializedAs("_playerStats")] [SerializeField] private PlayerStats playerStats;
+        [FormerlySerializedAs("_playerWeaponControler")] [SerializeField] private PlayerWeaponControler playerWeaponControler;
+        [FormerlySerializedAs("_upgrades")] [SerializeField] private UpgradeData upgrades;
+        [FormerlySerializedAs("_pickupManager")] [SerializeField] private PickupManager pickupManager;
+
+        public static MoveBoxScaler Screen;
+        public static PlayerStats Stats;
+        public static PlayerWeaponControler WeaponController;
+
+        public static UpgradeData Upgrades
         {
-            if (instance._upgrades == null)
+            get
             {
-                Serialization.Load("upgrade", Serialization.fileTypes.binary, ref instance._upgrades);
+                if (Instance.upgrades == null) Serialization.Load("upgrade", Serialization.FileTypes.Binary, ref Instance.upgrades);
+
+                return Instance.upgrades;
             }
-
-            return instance._upgrades;
         }
-    }
-    public static PickupManager pickupManager;
-    public static GameManager instance
-    {
-        get
-        {
-            if (_instance == null || !_instance)
-                FindObjectOfType<GameManager>();
 
-            if (_instance == null || !_instance)
-                Debug.Log("INSTANCE NOT FOUND");
+        public static PickupManager PickupManager;
+
+        public static GameManager Instance
+        {
+            get
+            {
+                if (_instance == null || !_instance)
+                    FindAnyObjectByType<GameManager>();
+
+                if (_instance == null || !_instance)
+                    Debug.Log("INSTANCE NOT FOUND");
 
                 return _instance;
+            }
         }
-    }
-    static GameManager _instance;
-    public void Awake()
-    {
-        _instance = this;
-        //assigning screen size
-        if (_screen != null)
-            screen = _screen;
-        else
-            Debug.LogError("screen not assigned in inspector!");
 
-        //assigning player stats
-        if (_playerStats != null)
-            playerStats = _playerStats;
-        else
-            Debug.LogError("playerStats not assigned in inspector!");
+        private static GameManager _instance;
 
-        //assiging player weapon controler
-        if (_playerWeaponControler != null)
-            playerWeaponControler = _playerWeaponControler;
-        else
-            Debug.LogError("PlayerWeapon Controler not assigned in inspector");
-
-        if (_pickupManager != null)
-            pickupManager = _pickupManager;
-        else
-            Debug.LogError("Pickupmanager was not assigned in inspector");
-
-        Serialization.Load("upgrade", Serialization.fileTypes.binary, ref _upgrades);
-
-        Util.Debugger.Debugger.DebugEnabled = true;
-    }
-
-    public void OnDestroy()
-    {
-        screen = null;
-        playerStats = null;
-        playerWeaponControler = null;
-        pickupManager = null;
-        _instance = null;
-    }
-
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Escape))
+        public void Awake()
         {
-            //Application.LoadLevel(0);
-            SceneManager.LoadScene(0,LoadSceneMode.Single);
+            if (_instance != null)
+            {
+                Debug.LogError("More than one GameManager!. Destroying duplicate GameManager");
+                Destroy(this);
+                return;
+            }
+
+            _instance = this;
+
+            Screen = screen;
+            Stats = playerStats;
+            WeaponController = playerWeaponControler;
+            PickupManager = pickupManager;
+
+            Serialization.Load("upgrade", Serialization.FileTypes.Binary, ref upgrades); //TODO move to a playerSaveData manager of some sort
+
+            Debugger.DebugEnabled = true;
+        }
+
+        public void OnDestroy()
+        {
+            Screen = null;
+            Stats = null;
+            WeaponController = null;
+            PickupManager = null;
+            _instance = null;
+        }
+
+        private void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.Escape)) //TODO refactor to use a asset refrence. To make sure we returned to the menu
+                SceneManager.LoadScene(0, LoadSceneMode.Single);
         }
     }
 }

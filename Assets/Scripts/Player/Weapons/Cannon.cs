@@ -1,82 +1,72 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿using System;
+using Generic_Objects;
+using Managers;
+using ObjectPools;
+using UnityEngine;
+using Random = UnityEngine.Random;
 
-namespace player.Weapon
+namespace Player.Weapons
 {
     public class Cannon : IBaseWeapon
     {
+        private DateTime _lastShot;
+
+        private readonly int _bulletsPerShot;
+
+        private readonly float _fireDelay; //in miliseconds
+        private readonly float _accuracy;
+        private readonly float _bulletSpeed;
+        private readonly float _bulletDamage;
+
+        private BulletGeneric _w;
+        private readonly int _energyCost;
+        public float EnergyCost => _energyCost;
+        public float DelayDelta => (float)(DateTime.Now - _lastShot).TotalMilliseconds / _fireDelay;
+
         public Cannon()
         {
-            //rounds per minute
-            fireRate = Mathf.RoundToInt(55 * Mathf.Pow(1.3f, GameManager.upgrades.Cannon.FireRate));
-            //damage per bullet
-            BulletDamage = 7f * Mathf.Pow(1.3f, GameManager.upgrades.Cannon.Damage);
-            Accuracy = 4 * Mathf.Pow(0.9f, GameManager.upgrades.Cannon.Accuracy);
-            BulletSpeed = 9f * Mathf.Pow(1.1f, 1);
+            var fireRate = Mathf.RoundToInt(55 * Mathf.Pow(1.3f, GameManager.Upgrades.cannon.fireRate));
 
-            fireDelay = 60000f / fireRate;
+            _bulletDamage = 7f * Mathf.Pow(1.3f, GameManager.Upgrades.cannon.damage);
+            _accuracy = 4 * Mathf.Pow(0.9f, GameManager.Upgrades.cannon.accuracy);
+            _bulletSpeed = 9f * Mathf.Pow(1.1f, 1);
 
-            if (fireDelay < 1000 / 60f)
+            _fireDelay = 60000f / fireRate;
+
+            if (_fireDelay < 1000 / 60f)
             {
-                float temp = fireDelay;
-                bulletsPerShot = 1;
-                while (fireDelay < 1000 / 60f)
+                var temp = _fireDelay;
+                _bulletsPerShot = 1;
+                while (_fireDelay < 1000 / 60f)
                 {
-                    fireDelay += temp;
-                    bulletsPerShot++;
+                    _fireDelay += temp;
+                    _bulletsPerShot++;
                 }
             }
             else
-                bulletsPerShot = 1;
+            {
+                _bulletsPerShot = 1;
+            }
 
             _energyCost = 20;
-
-           // bulletsPerShot *= Mathf.RoundToInt(5*Mathf.Pow(1.2f, GameManager.upgrades.ShotGunBulletsPerShot));
         }
 
-        System.DateTime lastShot;
-        int bulletsPerShot;
-        //shots per minut;
-        int fireRate;
-        //number of millisecond of delay per shot
-        float fireDelay;
-        float Accuracy;
-        float BulletSpeed;
-        float BulletDamage;
-
-        BulletGeneric W;
-        int _energyCost ;
-        public float energyCost
+        public bool TryShoot(GameObject entiy, Vector3 weaponOffSet, Vector2 inherentVelocity)
         {
-            get
+            if ((DateTime.Now - _lastShot).TotalMilliseconds >= _fireDelay)
             {
-                return _energyCost;
-            }
-        }
-
-        public float delayDelta
-        {
-            get
-            {
-                return (float)(System.DateTime.Now - lastShot).TotalMilliseconds / fireDelay;
-            }
-        }
-
-        public bool Shoot(GameObject Entiy, Vector3 weaponOffSet, Vector2 inherentVelocity)
-        {
-            if ((System.DateTime.Now - lastShot).TotalMilliseconds >= fireDelay)
-            {
-                lastShot = System.DateTime.Now;
+                _lastShot = DateTime.Now;
                 float angle;
-                for (int i = 0; i < bulletsPerShot; i++)
+                for (var i = 0; i < _bulletsPerShot; i++)
                 {
-                    W = BulletPool.GetBullet(BulletGeneric.Type.Bullet);
+                    _w = BulletPool.GetBullet(BulletGeneric.Type.Bullet);
 
-                    angle = (Random.Range(-0.5f, 0.5f) * Accuracy);
+                    angle = Random.Range(-0.5f, 0.5f) * _accuracy;
 
-                    W.transform.position = Entiy.transform.position + weaponOffSet;
-                    W.Init(BulletDamage, angle, BulletSpeed);
+                    _w.transform.position = entiy.transform.position + weaponOffSet;
+                    _w.Init(_bulletDamage, angle, _bulletSpeed);
                 }
+
                 return true;
             }
 

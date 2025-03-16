@@ -1,39 +1,44 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿using Managers;
+using UnityEngine;
+using Util;
 
+namespace Player
+{
+    [RequireComponent(typeof(Rigidbody2D), typeof(BoxCollider2D))]
+    public class PlayerMoveControler : MonoBehaviour
+    {
+        private const float Speed = 6f;
+        private float _booster = 1.8f;
+        private float _boostCost = 20; // persecond value
 
-[RequireComponent(typeof(Rigidbody2D),typeof(BoxCollider2D))]
-public class PlayerMoveControler : MonoBehaviour {
+        private Rigidbody2D _rig;
 
-    const float speed = 6f;
-    float booster = 1.8f;
-    float boostCost = 20; // persecond value
-    Rigidbody2D rig;
-	// Use this for initialization
-	void Start () {
-        rig = GetComponent<Rigidbody2D>();
-	}
-	
-	// Update is called once per frame
-	void Update () {
-        Vector2 dir = Vector2.zero;
-
-        if (Input.GetAxis(Axis.Horizontal) > 0)
-            dir.x = speed * Input.GetAxis(Axis.Horizontal);
-        if (Input.GetAxis(Axis.Horizontal) < 0)
-            dir.x = speed * 0.7f * Input.GetAxis(Axis.Horizontal);
-        if (Input.GetAxis(Axis.Vertical) != 0)
-            dir.y = speed * 0.75f * Input.GetAxis(Axis.Vertical);
-
-        if (Input.GetAxis(Axis.Boost) != 0)
+        // Use this for initialization
+        private void Start()
         {
-            if (GameManager.playerStats.canFire(boostCost * Time.deltaTime))
-            {
-                GameManager.playerStats.RemoveEnergy(boostCost * Time.deltaTime);
-                dir *= booster;
-            }
+            _rig = GetComponent<Rigidbody2D>();
         }
 
-        rig.velocity = dir;
-	}
+        // Update is called once per frame
+        private void Update()
+        {
+            var dir = Vector2.zero;
+
+            if (Input.GetAxis(Axis.Horizontal) > 0)
+                dir.x = Speed * Input.GetAxis(Axis.Horizontal);
+            if (Input.GetAxis(Axis.Horizontal) < 0)
+                dir.x = Speed * 0.7f * Input.GetAxis(Axis.Horizontal);
+            if (Input.GetAxis(Axis.Vertical) != 0)
+                dir.y = Speed * 0.75f * Input.GetAxis(Axis.Vertical);
+
+            if (Input.GetAxis(Axis.Boost) != 0)
+                if (GameManager.Stats.CanFire(_boostCost * Time.deltaTime))
+                {
+                    GameManager.Stats.RemoveEnergy(_boostCost * Time.deltaTime);
+                    dir *= _booster;
+                }
+
+            _rig.linearVelocity = dir;
+        }
+    }
 }

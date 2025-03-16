@@ -1,12 +1,12 @@
-﻿using UnityEngine;
-using System.Collections;
-using System.Collections.Generic;
-using System.Xml.Serialization;
+﻿using System;
 using System.IO;
+using System.Xml.Serialization;
+using UnityEngine;
 
 namespace Util.XML
 {
-    [XmlRoot("WaveData"), System.Serializable]
+    [XmlRoot("WaveData")]
+    [Serializable]
     public class DataContainer
     {
         //[XmlArray("waves"), XmlArrayItem("wave")]
@@ -14,14 +14,13 @@ namespace Util.XML
 
         public void Save(string path, string fileName)
         {
-            string pathpoint = Path.Combine(Application.dataPath, path);
+            var pathpoint = Path.Combine(Application.dataPath, path);
             try
             {
                 var serializer = new XmlSerializer(typeof(DataContainer));
 
-
                 if (!Directory.Exists(pathpoint))
-                    System.IO.Directory.CreateDirectory(Path.Combine(Application.dataPath, path));
+                    Directory.CreateDirectory(Path.Combine(Application.dataPath, path));
 
                 using (var stream = new FileStream(Path.Combine(Path.Combine(Application.dataPath, path), fileName), FileMode.Create))
                 {

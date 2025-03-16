@@ -1,87 +1,89 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿using System.Collections;
+using UnityEngine;
+using UnityEngine.Serialization;
 
-[RequireComponent(typeof(PolygonCollider2D))]
-[RequireComponent(typeof(Rigidbody2D))]
-public class PlayerProjectileGeneric : MonoBehaviour {
-
-    public WeaponTable.Weapons WeaponType;
-    protected Vector2 moveDir;
-    protected float speed, damage;
-    protected Rigidbody2D rigi;
-    protected bool markedForRemove;
-
-    /// <summary>
-    /// Sets the paramaters that the bullet will use to move around
-    /// </summary>
-    /// <param name="moveDirNormal">The move direction clamped between 1 & -1</param>
-    /// <param name="speed">How quickly it will move</param>
-    /// <param name="damage">The amount of damage that will be done on impact</param>
-    /// <param name="addVelo">Add Exstra velocity from for example the player or enemies</param>
-    public virtual void Init(Vector2 addVelo,Vector2 moveDirNormal, float speed, float damage)
+namespace Depricated_Scripts
+{
+    [RequireComponent(typeof(PolygonCollider2D))]
+    [RequireComponent(typeof(Rigidbody2D))]
+    public class PlayerProjectileGeneric : MonoBehaviour
     {
-        this.moveDir = moveDirNormal;
-        this.speed = speed;
-        this.damage = damage;
+        [FormerlySerializedAs("WeaponType")] public WeaponTable.Weapons weaponType;
+        protected Vector2 MoveDir;
+        protected float Speed, Damage;
+        protected Rigidbody2D Rigi;
+        protected bool MarkedForRemove;
 
-        if(!rigi)
-            rigi = GetComponent<Rigidbody2D>();
-
-        rigi.velocity = (moveDir * speed) + addVelo;
-    }
-
-    protected virtual void Start()
-    {
-        rigi = GetComponent<Rigidbody2D>();
-    }
-
-    protected virtual void OnEnable()
-    {
-        GetComponent<PolygonCollider2D>().enabled = true;
-         GetComponent<SpriteRenderer>().color = Color.white;
-        markedForRemove = false;
-    }
-
-    public void OnCollisionEnter2D(Collision2D coll)
-    {
-        if (!markedForRemove)
+        /// <summary>
+        /// Sets the paramaters that the bullet will use to move around
+        /// </summary>
+        /// <param name="moveDirNormal">The move direction clamped between 1 & -1</param>
+        /// <param name="speed">How quickly it will move</param>
+        /// <param name="damage">The amount of damage that will be done on impact</param>
+        /// <param name="addVelo">Add Exstra velocity from for example the player or enemies</param>
+        public virtual void Init(Vector2 addVelo, Vector2 moveDirNormal, float speed, float damage)
         {
-            //  rigi.AddTorque(Random.Range(-10, 10));
-            StartCoroutine(Remove(0.5f));
-            coll.gameObject.SendMessage("hit", damage, SendMessageOptions.DontRequireReceiver);
+            MoveDir = moveDirNormal;
+            Speed = speed;
+            Damage = damage;
+
+            if (!Rigi)
+                Rigi = GetComponent<Rigidbody2D>();
+
+            Rigi.linearVelocity = MoveDir * speed + addVelo;
         }
-    }
 
-    public void OnTriggerEnter2D(Collider2D other)
-    {
-        if (!markedForRemove)
-            StartCoroutine(Remove(0f));
-       
-    }
-
-    IEnumerator Remove(float delay)
-    {
-        if (!markedForRemove)
+        protected virtual void Start()
         {
-            const float frag = 1f / 30;
-            SpriteRenderer r = GetComponent<SpriteRenderer>();
-            Color StartColor = r.color;
-            Color TargetColor = r.color;
+            Rigi = GetComponent<Rigidbody2D>();
+        }
 
-            TargetColor.a = 0;
-            markedForRemove = true;
+        protected virtual void OnEnable()
+        {
+            GetComponent<PolygonCollider2D>().enabled = true;
+            GetComponent<SpriteRenderer>().color = Color.white;
+            MarkedForRemove = false;
+        }
 
-            yield return new WaitForSeconds(delay);
-            GetComponent<PolygonCollider2D>().enabled = false;
-
-            for (int i = 0; i < 30; i++)
+        public void OnCollisionEnter2D(Collision2D coll)
+        {
+            if (!MarkedForRemove)
             {
-                r.color = Color.Lerp(StartColor, TargetColor, frag * i);
-                yield return new WaitForEndOfFrame();
+                //  rigi.AddTorque(Random.Range(-10, 10));
+                StartCoroutine(Remove(0.5f));
+                coll.gameObject.SendMessage("hit", Damage, SendMessageOptions.DontRequireReceiver);
             }
+        }
 
-           // BulletPool.RemoveBullet(this);
-            
+        public void OnTriggerEnter2D(Collider2D other)
+        {
+            if (!MarkedForRemove)
+                StartCoroutine(Remove(0f));
+        }
+
+        private IEnumerator Remove(float delay)
+        {
+            if (!MarkedForRemove)
+            {
+                const float frag = 1f / 30;
+                var r = GetComponent<SpriteRenderer>();
+                var startColor = r.color;
+                var targetColor = r.color;
+
+                targetColor.a = 0;
+                MarkedForRemove = true;
+
+                yield return new WaitForSeconds(delay);
+                GetComponent<PolygonCollider2D>().enabled = false;
+
+                for (var i = 0; i < 30; i++)
+                {
+                    r.color = Color.Lerp(startColor, targetColor, frag * i);
+                    yield return new WaitForEndOfFrame();
+                }
+
+                // BulletPool.RemoveBullet(this);
+            }
         }
     }
 }

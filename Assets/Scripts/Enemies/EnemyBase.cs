@@ -1,28 +1,24 @@
 ﻿using UnityEngine;
-using Enemy.Interfaces.Attack;
-using Enemy.Interfaces.Move;
-using System.Collections;
 
-namespace Enemy
+namespace Enemies
 {
     [RequireComponent(typeof(Rigidbody2D))]
     public class EnemyBase : MonoBehaviour
     {
-        IAttack attackPattern;
-        IMovement movementPattern;
+        private IAttack _attackPattern;
+        private IMovement _movementPattern;
 
-        void Start()
+        private void Start()
         {
-            attackPattern = new ShootFixedIntervalAttack();
-            movementPattern = new Enemy.Interfaces.Move.LinearMovement();
+            _attackPattern = new ShootFixedIntervalAttack();
+            _movementPattern = new LinearMovement();
             //attackPattern.Weapon = new WeaponInterfaces.MiniGun();
-           
         }
 
-        void Update()
+        private void Update()
         {
-            attackPattern.Attack(gameObject);
-            movementPattern.Move(gameObject, Speed:1f);
+            _attackPattern.Attack(gameObject);
+            _movementPattern.Move(gameObject, speed: 1f);
         }
     }
 }

@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 namespace Util.UI
 {
@@ -8,7 +7,6 @@ namespace Util.UI
     /// </summary>
     public class BasicSceneControle : MonoBehaviour
     {
-
         public void OpenScene(string name)
         {
             SceneControler.Load(name);

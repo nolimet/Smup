@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using System.Collections;
+using UnityEngine.Serialization;
 
 namespace Util
 {
@@ -8,21 +8,19 @@ namespace Util
     /// </summary>
     public class ScaleToCameraView : MonoBehaviour
     {
-        [SerializeField]
-        Camera cam = null;
-        [SerializeField]
-        Vector2 ScaleSize = Vector2.zero;
+        [SerializeField] private Camera cam;
+        [FormerlySerializedAs("ScaleSize")] [SerializeField] private Vector2 scaleSize = Vector2.zero;
 
-        void Start()
+        private void Start()
         {
-            Vector2 tmp = ScaleSize / 100f;
+            var tmp = scaleSize / 100f;
 
             //Vector3 pos = cam.ScreenToWorldPoint(new Vector3(Screen.width / 2f, Screen.width / 2f, transform.position.z - cam.transform.position.z));
 
-            Vector3 p1 = cam.ScreenToWorldPoint(new Vector3(0, 0, transform.position.z - cam.transform.position.z));
-            Vector3 p2 = cam.ScreenToWorldPoint(new Vector3(tmp.x * Screen.width, tmp.y * Screen.height, transform.position.z - cam.transform.position.z));
+            var p1 = cam.ScreenToWorldPoint(new Vector3(0, 0, transform.position.z - cam.transform.position.z));
+            var p2 = cam.ScreenToWorldPoint(new Vector3(tmp.x * Screen.width, tmp.y * Screen.height, transform.position.z - cam.transform.position.z));
 
-            Vector3 newScale = p1 - p2;
+            var newScale = p1 - p2;
 
             if (newScale.x < 0)
                 newScale.x = -newScale.x;
@@ -36,12 +34,12 @@ namespace Util
             transform.rotation = cam.transform.rotation;
         }
 
-        void OnDrawGizmosSelected()
+        private void OnDrawGizmosSelected()
         {
-            Vector2 tmp = ScaleSize / 100f;
+            var tmp = scaleSize / 100f;
 
-            Vector3 p1 = cam.ScreenToWorldPoint(new Vector3(0, 0, transform.position.z - cam.transform.position.z));
-            Vector3 p2 = cam.ScreenToWorldPoint(new Vector3(tmp.x * Screen.width, tmp.y * Screen.height, transform.position.z - cam.transform.position.z));
+            var p1 = cam.ScreenToWorldPoint(new Vector3(0, 0, transform.position.z - cam.transform.position.z));
+            var p2 = cam.ScreenToWorldPoint(new Vector3(tmp.x * Screen.width, tmp.y * Screen.height, transform.position.z - cam.transform.position.z));
 
             Gizmos.color = Color.yellow;
             Gizmos.DrawSphere(p1, 0.4F);

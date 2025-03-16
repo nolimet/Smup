@@ -1,25 +1,21 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 namespace Util
 {
     public class _2DCamMove : MonoBehaviour
     {
+        [SerializeField] private float speed;
 
-        [SerializeField]
-        private float speed;
+        [SerializeField] private bool useDeltaTime;
 
-        [SerializeField]
-        private bool useDeltaTime;
-
-        void Update()
+        private void Update()
         {
-            transform.position += move();
+            transform.position += Move();
         }
 
-        Vector3 move()
+        private Vector3 Move()
         {
-            Vector3 output = new Vector3();
+            var output = new Vector3();
             output.x = Input.GetAxis("Horizontal") * speed * (useDeltaTime ? Time.deltaTime : 1);
             output.y = Input.GetAxis("Vertical") * speed * (useDeltaTime ? Time.deltaTime : 1);
 

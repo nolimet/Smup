@@ -1,30 +1,27 @@
 ﻿using UnityEngine;
-using System.Collections;
+using UnityEngine.Serialization;
 
-public class MenuManager : MonoBehaviour {
-
-    public GameObject[] SubMenus;
-    
-    void Start()
+namespace Managers
+{
+    public class MenuManager : MonoBehaviour
     {
-        CloseSubMenu();
-    }
+        [FormerlySerializedAs("SubMenus")] [SerializeField] private GameObject[] subMenus;
 
-    public void OpenMenu(int index)
-    {
-        CloseSubMenu();
-
-        if (index < SubMenus.Length)
+        private void Start()
         {
-            SubMenus[index].SetActive(true);
+            CloseSubMenu();
         }
-    }
 
-    public void CloseSubMenu()
-    {
-        foreach (GameObject item in SubMenus)
+        public void OpenMenu(int index)
         {
-            item.SetActive(false);
+            CloseSubMenu();
+
+            if (index < subMenus.Length) subMenus[index].SetActive(true);
+        }
+
+        public void CloseSubMenu()
+        {
+            foreach (var item in subMenus) item.SetActive(false);
         }
     }
 }

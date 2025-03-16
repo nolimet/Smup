@@ -1,483 +1,353 @@
-﻿using UnityEngine;
+﻿using System;
+using System.Collections.Generic;
+using Menus.MenuParts;
+using NUnit.Framework;
+using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 using Util;
-using Util.Serial;
-using System.Collections;
-using System.Collections.Generic;
-using System;
+using Util.Saving;
 
-public class UpgradeMenu : MonoBehaviour
+namespace UpgradeSystem
 {
-
-    [SerializeField]
-    public UpgradeData upgrades;
-
-    public Text UpgradeCurrency;
-    public UpgradeItem ParentUpgrade;
-    public UpgradeCatagory parentCatagory;
-    public Transform ContentParent;
-
-    public List<UpgradeObject> Upgrades;
-    public List<CatagoryObject> cats;
-    CatagoryObject currentCatagory;
-
-    private static UpgradeMenu instance;
-    public static UpgradeData upgradeData { get { return instance.upgrades; } }
-    #region private Functions
-    void Awake()
+    public class UpgradeMenu : MonoBehaviour
     {
-        if (!instance)
-            instance = this;
-        Serialization.Load("upgrade", Serialization.fileTypes.binary, ref upgrades);
+        [SerializeField] private UpgradeData upgrades;
 
-        if (upgrades == null)
+        [FormerlySerializedAs("UpgradeCurrency")] [SerializeField] private Text upgradeCurrency;
+        [FormerlySerializedAs("ParentUpgrade")] [SerializeField] private UpgradeItem parentUpgrade;
+        [FormerlySerializedAs("parentCatagory")] [SerializeField] private UpgradeCatagory parentCategory;
+        [FormerlySerializedAs("ContentParent")] [SerializeField] private Transform contentParent;
+
+        // ReSharper disable once CollectionNeverQueried.Local
+        private readonly List<UpgradeObject> _upgrades = new(); //used to keep some data alive and in memory
+
+        // ReSharper disable once CollectionNeverQueried.Local
+        private readonly List<CategoryObject> _cats = new(); //used to keep some data alive and in memory
+
+        private CategoryObject _currentCategory;
+
+        private static UpgradeMenu _instance;
+        private static UpgradeData Data => _instance.upgrades;
+
+        private void Awake()
         {
-            upgrades = new UpgradeData();
-            Serialization.Save("upgrade", Serialization.fileTypes.binary, upgrades);
+            if (!_instance) _instance = this;
+
+            Serialization.Load("upgrade", Serialization.FileTypes.Binary, ref upgrades);
+
+            if (upgrades == null)
+            {
+                upgrades = new UpgradeData();
+                Serialization.Save("upgrade", Serialization.FileTypes.Binary, upgrades);
+            }
+
+            parentUpgrade.gameObject.SetActive(false);
+            parentCategory.gameObject.SetActive(false);
+            InitUpgradeFunctions();
         }
-        ParentUpgrade.gameObject.SetActive(false);
-        parentCatagory.gameObject.SetActive(false);
-        InitUpgradeFunctions();
-    }
-    void Update()
-    {
-        if (!instance)
-            instance = this;
 
-        UpgradeCurrency.text = upgrades.UpgradeCurrency.ToString() + "$";
-    }
-    void OnDestroy()
-    {
-        Serialization.Save("upgrade", Serialization.fileTypes.binary, upgrades);
-    }
-
-    public void OnDisable()
-    {
-        Serialization.Save("upgrade", Serialization.fileTypes.binary, upgrades);
-    }
-
-    bool canBuy(float value, bool substract)
-    {
-        if (upgrades.UpgradeCurrency >= value)
+        private void Update()
         {
-            if (substract)
-                upgrades.UpgradeCurrency -= (int)value;
-            return true;
+            if (!_instance)
+                _instance = this;
+
+            upgradeCurrency.text = upgrades.upgradeCurrency.ToString() + "$";
         }
-        return false;
-    }
-    /// <summary>
-    /// A init function for all upgrades
-    /// </summary>
-    void InitUpgradeFunctions()
-    {
 
-        //scrapCollection
-        AddCatagory("Scrap Collection", "Enchance your scrap collection ability");
-        AddUpgrade("", "ScrapConversionRate", 900, 1.3f, "Scrap sell rate", "Improves for how much you sell each piece of scrap");
-        AddUpgrade("", "ScrapCollectionRange", 650, 1.3f, "Scrap Collection Range", "Makes the collection range bigger", 10);
-        AddUpgrade("", "ScrapCollectionSpeed", 650, 1.5f, "Scrap Collection Speed", "Improves how fast the scrap moves towards you", 5);
-
-        //Hull
-        AddCatagory("Ship Upgrades", "Upgrades that make your ship strong, faster and generaly better");
-        AddUpgrade("", "hullUpgradeLevel", 50, 2f, "Hull Upgrade", "Upgrading the hull allows the ship to take more hits", 10);
-        AddUpgrade("", "armorUpgradeLevel", 100, 1.4f, "Armor Upgrade", "Upgrades the ammount of armor the ship has");
-
-        //Shield
-        AddUpgrade("", "UnlockedShield", 1200, 0, "Unlock Shield", "Unlocks the shield");
-        AddUpgrade("", "shieldGeneratorLevel", 1300, 1.2f, "Shield Regeneration Speed", "Increases the regeneration speed of the shield");
-        AddUpgrade("", "shieldCapacitorLevel", 1800, 1.2f, "Shield capacity upgrade", "Increases the capacity of the shield");
-
-        //shotgun
-        AddCatagory("Shotgun Upgrades", " Upgrades for your shotgun");
-        AddUpgrade("Shotgun", "Unlocked", 750, 0, "Unlocks Shotgun", "Unlocks the Shotgun");
-        AddUpgrade("Shotgun", "Accuracy", 1425, 1.8f, "Increase Accuracy", "Decreases the spread of the shotgun", 10);
-        AddUpgrade("Shotgun", "Damage", 1250, 1.3f, "Damage per frament", "Increases the damage each fragment does");
-        AddUpgrade("Shotgun", "FireRate", 750, 1.3f, "Fragments per Shotgun shot", "Increases the number of fragments shot out per shot", 6);
-
-        //machineGun
-        AddCatagory("Machinegun Upgrades", "Upgrades for your machinegun");
-        AddUpgrade("MiniGun", "Unlocked", 700, 0, "Unlock Machinegun", "Unlocks the Machinegun");
-        AddUpgrade("MiniGun", "Accuracy", 3000, 1.3f, "Increase Accuracy", "Increases Accuracy of the Machinegun", 10);
-        AddUpgrade("MiniGun", "Damage", 4000, 1.1f, "Increase Damage", "Increases the damage each bullet of the machine gun does");
-        AddUpgrade("MiniGun", "FireRate", 2500, 1.2f, "Increase Firerate", "Increases number of bullets shot out by the machine gun every second", 20);
-
-        //Cannon
-        AddCatagory("Cannon Upgrades", "Upgrades for your main Cannon");
-        AddUpgrade("Cannon", "Accuracy", 200, 1.2f, "Cannon Accuracy", "Increases the accuracy of the cannon", 5);
-        AddUpgrade("Cannon", "Damage", 350, 1.4f, "Cannon Damage", "Increases the ammount of damage dealth with each shot");
-        AddUpgrade("Cannon", "FireRate", 475, 1.7f, "Cannon Firerate", "Increases the ammount of bullets shot by the Cannon", 20);
-
-        //Granade
-        AddCatagory("Granade Upgrades", "Upgrades for a Explosive helper!");
-        AddUpgrade("Granade", "Unlocked", 5000, 0, "Unlock Granade", "Unlocks the Granade");
-        AddUpgrade("Granade", "Damage", 2000, 1.3f, " Increased Damage", "Increases the damage each piece of shrapnal does");
-        AddUpgrade("Granade", "Fragments", 1500, 1.7f, "More Shrapnal!", "Increases the number of pieces the granade explodes into",30);
-        AddUpgrade("Granade", "FireRate", 4000, 2f, "Increased Fire rate", "Increases the rate of fireing the granade",20);
-    }
-
-
-    ///// <summary>
-    ///// Addes a new upgrade
-    ///// </summary>
-    ///// <param name="UpgradeFunc">The function that does the actual upgrading</param>
-    ///// <param name="StartCost">The starting cost of the upgrade</param>
-    ///// <param name="Mult">set to zero if only buy one. How steep the increase curve is</param>
-    ///// <param name="StartLevel">The level the upgrade has when the scene is loaded</param>
-    ///// <param name="name"> The name that will be displayed on screen for the upgrade</param>
-    ///// <param name="discription">The discription that the upgrade will be given on screen</param>
-    //void addUpgrade(Func<int, bool, bool> UpgradeFunc, float StartCost, float Mult, int StartLevel, string name, string discription)
-    //{
-    //    UpgradeItem e = Instantiate(ParentUpgrade, Vector3.zero, Quaternion.identity) as UpgradeItem;
-    //    e.transform.SetParent(ContentParent, false);
-    //    e.gameObject.SetActive(true);
-    //    e.Name.text = name;
-    //    e.Discription.text = discription;
-
-    //    Upgrades.Add(new UpgradeObject(UpgradeFunc, StartCost, Mult, StartLevel, e));
-    //}
-
-    /// <summary>
-    /// Addes a new upgrade using the new system. It gets a value by its name and edit's it that way.
-    /// This way it does not require a function for every upgrade making it much more effecient.
-    /// </summary>
-    /// <param name="system">The name of the struct Leave empty when no struct applies</param>
-    /// <param name="refrence">The name of the varible as it's named in UpgradeData.cs</param>
-    /// <param name="StartCost">The intal cost of the upgrade</param>
-    /// <param name="Mult">set to zero it value is a bool. </param>
-    /// <param name="name"> The name that will be displayed on screen for the upgrade</param>
-    /// <param name="discription">The discription that the upgrade will be given on screen</param>
-    /// <param name="MaxLevel">The maxium level of the upgrade. Leave it to default when wanting to disable</param>
-    void AddUpgrade(string system, string refrence, float StartCost, float Mult, string name, string discription, int MaxLevel = -1)
-    {
-        UpgradeItem e = Instantiate(ParentUpgrade, Vector3.zero, Quaternion.identity) as UpgradeItem;
-        e.transform.SetParent(ContentParent, false);
-        e.gameObject.SetActive(true);
-        e.Name.text = name;
-        e.Discription.text = discription;
-
-        UpgradeObject u = new UpgradeObject(system, refrence, StartCost, MaxLevel, Mult, e);
-        currentCatagory.AddNew(u);
-        Upgrades.Add(u);
-    }
-
-    void AddCatagory(string name, string discription)
-    {
-        UpgradeCatagory u = Instantiate(parentCatagory);
-        u.gameObject.SetActive(true);
-        u.transform.SetParent(ContentParent, false);
-
-        CatagoryObject o = new CatagoryObject(u, name, discription);
-
-        currentCatagory = o;
-        o.ToggleAll();
-        cats.Add(o);
-    }
-    #endregion
-
-    [System.Serializable]
-    public class UpgradeObject
-    {
-        UpgradeItem visual;
-
-        Func<int, bool, bool> UpgradeFunc;
-
-        float StartCost, Mult;
-
-        int Level = 0, MaxLevel = -1;
-        string refrence;
-        string system;
-
-        public bool Enabled { set { visual.gameObject.SetActive(value); } }
-
-        /// <summary>
-        /// Old Function Deceperated
-        /// </summary>
-        /// <param name="UpgradeFunc">The function that will be called when upgrade button is clicked</param>
-        /// <param name="StartCost">STarting cost</param>
-        /// <param name="Mult">multipier. when zero it will only upgrade once</param>
-        /// <param name="StartLevel">The starting level</param>
-        /// <param name="visual">visual object. Used to assign stuff </param>
-        [Obsolete("This is the old version use the (string,string,float,int,float,UpgradeItem) one instead", true)]
-        public UpgradeObject(Func<int, bool, bool> UpgradeFunc, float StartCost, float Mult, int StartLevel, UpgradeItem visual)
+        private void OnDestroy()
         {
-            this.visual = visual;
+            Serialization.Save("upgrade", Serialization.FileTypes.Binary, upgrades);
+        }
 
-            this.UpgradeFunc = UpgradeFunc;
-            this.StartCost = StartCost;
-            this.Mult = Mult;
-
-            Level = StartLevel;
-
-            this.visual.Price.text = GetPrice().ToString();
-            this.visual.Buy.onClick.AddListener(delegate { Upgrade(); });
-
-            UpdateColour(false);
-            UpdateLevel();
+        public void OnDisable()
+        {
+            Serialization.Save("upgrade", Serialization.FileTypes.Binary, upgrades);
         }
 
         /// <summary>
-        /// Adds a new upgrade object
+        /// A init function for all upgrades
         /// </summary>
-        /// <param name="system">Sub location of the variable</param>
-        /// <param name="refrence">name of the upgrade variable</param>
-        /// <param name="StartCost">The starting cost of the Upgrade</param>
-        /// <param name="MaxLevel">The maximum level set to zero for unlimted upgrades</param>
-        /// <param name="Mult"> by how much the upgrade goes up each time</param>
-        /// <param name="visual">The object that will be shown on screen</param>
-        public UpgradeObject(string system, string refrence, float StartCost, int MaxLevel, float Mult, UpgradeItem visual)
+        private void InitUpgradeFunctions()
         {
-            if (system == "")
-            {
-                var temp = upgradeData.GetType().GetField(refrence).GetValue(upgradeData);
+            //scrapCollection
+            AddCategory("Scrap Collection", "Improve your scrap collection ability");
+            AddUpgrade(string.Empty, nameof(UpgradeData.scrapConversionRate), 900, 1.3f, "Scrap sell rate", "Improves for how much you sell each piece of scrap");
+            AddUpgrade(string.Empty, nameof(UpgradeData.scrapCollectionRange), 650, 1.3f, "Scrap Collection Range", "Makes the collection range bigger", 10);
+            AddUpgrade(string.Empty, nameof(UpgradeData.scrapCollectionSpeed), 650, 1.5f, "Scrap Collection Speed", "Improves how fast the scrap moves towards you", 5);
 
-                if (Mult > 0)
-                {
-                    Level = (int)temp;
-                }
-                else
-                {
-                    bool b = (bool)temp;
-                    Level = b.toInt();
-                }
-            }
-            else
-            {
-                var systemTemp = upgradeData.GetType().GetField(system).GetValue(upgradeData);
-                if (systemTemp == null)
-                    Debug.LogError("No such value as " + system + " in UpgradeData.cs");
+            //Hull
+            AddCategory("Ship Upgrades", "Upgrades that make your ship strong, faster and generally better");
+            AddUpgrade(string.Empty, nameof(UpgradeData.hullUpgradeLevel), 50, 2f, "Hull Upgrade", "Upgrading the hull allows the ship to take more hits", 10);
+            AddUpgrade(string.Empty, nameof(UpgradeData.armorUpgradeLevel), 100, 1.4f, "Armor Upgrade", "Upgrades the amount of armor the ship has");
 
-                var temp = systemTemp.GetType().GetField(refrence).GetValue(systemTemp);
+            //Shield
+            AddUpgrade(string.Empty, nameof(UpgradeData.unlockedShield), 1200, 0, "Unlock Shield", "Unlocks the shield");
+            AddUpgrade(string.Empty, nameof(UpgradeData.shieldGeneratorLevel), 1300, 1.2f, "Shield Regeneration Speed", "Increases the regeneration speed of the shield");
+            AddUpgrade(string.Empty, nameof(UpgradeData.shieldCapacitorLevel), 1800, 1.2f, "Shield capacity upgrade", "Increases the capacity of the shield");
 
-                if (Mult > 0)
-                {
-                    Level = (int)temp;
-                }
-                else
-                {
-                    bool b = (bool)temp;
-                    Level = b.toInt();
-                }
-            }
+            //shotgun
+            AddCategory("Shotgun Upgrades", " Upgrades for your shotgun");
+            AddUpgrade(nameof(UpgradeData.shotgun), nameof(CommonWeaponUpgrade.unlocked), 750, 0, "Unlocks Shotgun", "Unlocks the Shotgun");
+            AddUpgrade(nameof(UpgradeData.shotgun), nameof(CommonWeaponUpgrade.accuracy), 1425, 1.8f, "Increase Accuracy", "Decreases the spread of the shotgun", 10);
+            AddUpgrade(nameof(UpgradeData.shotgun), nameof(CommonWeaponUpgrade.damage), 1250, 1.3f, "Damage per fragment", "Increases the damage each fragment does");
+            AddUpgrade(nameof(UpgradeData.shotgun), nameof(CommonWeaponUpgrade.fireRate), 750, 1.3f, "Fragments per Shotgun shot", "Increases the number of fragments shot out per shot", 6);
 
+            //machineGun
+            AddCategory("Machine-gun Upgrades", "Upgrades for your machine-gun");
+            AddUpgrade(nameof(UpgradeData.miniGun), nameof(CommonWeaponUpgrade.unlocked), 700, 0, "Unlock Machine-gun", "Unlocks the Machine-gun");
+            AddUpgrade(nameof(UpgradeData.miniGun), nameof(CommonWeaponUpgrade.accuracy), 3000, 1.3f, "Increase Accuracy", "Increases Accuracy of the Machine-gun", 10);
+            AddUpgrade(nameof(UpgradeData.miniGun), nameof(CommonWeaponUpgrade.damage), 4000, 1.1f, "Increase Damage", "Increases the damage each bullet of the machine gun does");
+            AddUpgrade(nameof(UpgradeData.miniGun), nameof(CommonWeaponUpgrade.fireRate), 2500, 1.2f, "Increase Fire-rate", "Increases number of bullets shot out by the machine gun every second", 20);
 
-            this.StartCost = StartCost;
-            this.Mult = Mult;
-            this.refrence = refrence;
-            this.visual = visual;
-            this.system = system;
-            this.MaxLevel = MaxLevel;
+            //Cannon
+            AddCategory("Cannon Upgrades", "Upgrades for your main Cannon");
+            AddUpgrade(nameof(UpgradeData.cannon), nameof(CommonWeaponUpgrade.accuracy), 200, 1.2f, "Cannon Accuracy", "Increases the accuracy of the cannon", 5);
+            AddUpgrade(nameof(UpgradeData.cannon), nameof(CommonWeaponUpgrade.damage), 350, 1.4f, "Cannon Damage", "Increases the amount of damage dealt with each shot");
+            AddUpgrade(nameof(UpgradeData.cannon), nameof(CommonWeaponUpgrade.fireRate), 475, 1.7f, "Cannon Fire-rate", "Increases the amount of bullets shot by the Cannon", 20);
 
-            this.visual.Price.text = GetPrice().ToString();
-            this.visual.Buy.onClick.AddListener(delegate { Upgrade(); });
-
-            UpdateColour(false);
-            UpdateLevel();
-        }
-
-        //function called when upgrading. called by buy button
-        public void Upgrade()
-        {
-            UpdateColour(true);
-            visual.Price.text = GetPrice().ToString();
-            UpdateLevel();
-        }
-
-        //calculates the price
-        private int GetPrice()
-        {
-            if (Mult > 0)
-                return (int)(StartCost * Mathf.Pow(Mult, Level));
-            else
-                return (int)StartCost;
-        }
-
-        //updates colour
-        void UpdateColour(bool pay)
-        {
-            ColorBlock cb = visual.Buy.colors;
-
-            if ((UpgradeFunc != null && UpgradeFunc(GetPrice(), pay)) || CanBuyUpgrade(pay))
-            {
-                cb.pressedColor = Color.green;
-                cb.highlightedColor = Color.green + Color.gray;
-            }
-            else
-            {
-                cb.pressedColor = Color.red;
-                cb.highlightedColor = Color.red + Color.gray;
-            }
-            visual.Buy.colors = cb;
-        }
-
-        //update value show for level
-        void UpdateLevel()
-        {
-            if (Mult > 0)
-            {
-                visual.CurrentLevel.text = "Level \n" + Level.ToString();
-                if (MaxLevel > 0)
-                    visual.CurrentLevel.text += "/" + MaxLevel.ToString();
-            }
-            else
-            {
-                visual.CurrentLevel.text = "Unlocked \n";
-                if (Level == 0)
-                    visual.CurrentLevel.text += "NO";
-                else
-                    visual.CurrentLevel.text += "YES";
-            }
+            //Granade
+            AddCategory("Grenade Upgrades", "Upgrades for a Explosive helper!");
+            AddUpgrade(nameof(UpgradeData.grenade), nameof(CommonWeaponUpgrade.unlocked), 5000, 0, "Unlock Grenade", "Unlocks the Grenade");
+            AddUpgrade(nameof(UpgradeData.grenade), nameof(CommonWeaponUpgrade.damage), 2000, 1.3f, " Increased Damage", "Increases the damage each piece of shrapnel does");
+            AddUpgrade(nameof(UpgradeData.grenade), nameof(CommonWeaponUpgrade.fragments), 1500, 1.7f, "More Shrapnel!", "Increases the number of pieces the grenade explodes into", 30);
+            AddUpgrade(nameof(UpgradeData.grenade), nameof(CommonWeaponUpgrade.fireRate), 4000, 2f, "Increased Fire rate", "Increases the rate of firing the grenade", 20);
         }
 
         /// <summary>
-        /// Uses only the refrence string
+        /// Addes a new upgrade using the new system. It gets a value by its name and edit's it that way.
+        /// This way it does not require a function for every upgrade making it much more effecient.
         /// </summary>
-        /// <param name="substract">just a price check?</param>
-        /// <returns></returns>
-        bool CanBuyCheck(bool substract)
+        /// <param name="groupName">The name of the struct Leave empty when no struct applies</param>
+        /// <param name="fieldName">The name of the varible as it's named in UpgradeData.cs</param>
+        /// <param name="startCost">The intal cost of the upgrade</param>
+        /// <param name="mult">set to zero it value is a bool. </param>
+        /// <param name="displayName"> The name that will be displayed on screen for the upgrade</param>
+        /// <param name="description">The discription that the upgrade will be given on screen</param>
+        /// <param name="maxLevel">The maxium level of the upgrade. Leave it to default when wanting to disable</param>
+        private void AddUpgrade(string groupName, string fieldName, float startCost, float mult, string displayName, string description, int maxLevel = 1)
         {
-            if (upgradeData.UpgradeCurrency >= GetPrice() && (MaxLevel < 0 || MaxLevel > 0 && Level < MaxLevel) && (Mult > 0 || Mult <= 0 && Level <= 0))
+            var element = Instantiate(parentUpgrade, contentParent, false);
+            element.gameObject.SetActive(true);
+            element.DisplayName = displayName;
+            element.Description = description;
+
+            var u = new UpgradeObject(groupName, fieldName, startCost, maxLevel, mult, element);
+            _currentCategory.AddNew(u);
+            _upgrades.Add(u);
+        }
+
+        private void AddCategory(string displayName, string discription)
+        {
+            var newCategory = Instantiate(parentCategory, contentParent, false);
+            newCategory.gameObject.SetActive(true);
+
+            var o = new CategoryObject(newCategory, displayName, discription);
+
+            _currentCategory = o;
+            o.ToggleAll();
+            _cats.Add(o);
+        }
+
+        [Serializable]
+        public class UpgradeObject
+        {
+            private UpgradeItem _visual;
+
+            private Func<int, bool, bool> _upgradeFunc;
+
+            private float _startCost, _mult;
+
+            private int _level, _maxLevel;
+            private string _fieldName;
+            private string _groupName;
+
+            public bool Enabled
             {
-                if (substract)
+                set => _visual.gameObject.SetActive(value);
+            }
+
+            /// <summary>
+            /// Adds a new upgrade object
+            /// </summary>
+            /// <param name="groupName">Sub location of the variable</param>
+            /// <param name="fieldName">name of the upgrade variable</param>
+            /// <param name="startCost">The starting cost of the Upgrade</param>
+            /// <param name="maxLevel">The maximum level set to zero for unlimted upgrades</param>
+            /// <param name="mult"> by how much the upgrade goes up each time</param>
+            /// <param name="visual">The object that will be shown on screen</param>
+            public UpgradeObject(string groupName, string fieldName, float startCost, int maxLevel, float mult, UpgradeItem visual)
+            {
+                object groupValue = Data;
+                if (!string.IsNullOrEmpty(groupName))
                 {
-                    var dat = upgradeData.GetType().GetField(refrence).GetValue(upgradeData);
+                    groupValue = Data.GetType().GetField(groupName).GetValue(Data);
+                    Assert.NotNull(groupValue, $"The group {groupName} was not found");
+                }
 
-                    if (Mult > 0)
-                    {
+                var fieldValue = groupValue.GetType().GetField(fieldName).GetValue(groupValue);
+                Assert.NotNull(fieldValue, $"failed to find {fieldName} for {groupName}");
 
-                        if (MaxLevel > 0 && Level >= MaxLevel)
-                            return false;
+                if (mult > 0)
+                {
+                    _level = (int)fieldValue;
+                }
+                else
+                {
+                    var b = (bool)fieldValue;
+                    _level = b.ToInt();
+                }
 
-                        upgradeData.UpgradeCurrency -= GetPrice();
-                        int f;
+                _startCost = startCost;
+                _mult = mult;
+                _fieldName = fieldName;
+                _visual = visual;
+                _groupName = groupName;
+                _maxLevel = maxLevel;
 
-                        f = (int)dat;
-                        Level++;
-                        f = Level;
+                _visual.Price = GetPrice().ToString();
+                _visual.BuyButton.onClick.AddListener(Upgrade);
 
-                        upgradeData.GetType().GetField(refrence).SetValue(upgradeData, f);
-                    }
+                UpdateColour();
+                UpdateLevel();
+            }
+
+            public void Upgrade()
+            {
+                Buy();
+                UpdateColour();
+                _visual.Price = GetPrice().ToString();
+                UpdateLevel();
+            }
+
+            private int GetPrice()
+            {
+                if (_mult > 0)
+                    return (int)(_startCost * Mathf.Pow(_mult, _level));
+                return (int)_startCost;
+            }
+
+            private bool CanAfford()
+            {
+                return Data.upgradeCurrency >= GetPrice();
+            }
+
+            private void UpdateColour()
+            {
+                var colorBlock = _visual.BuyButton.colors;
+
+                if (CanAfford() && !UpgradeMaxed())
+                {
+                    colorBlock.pressedColor = Color.green;
+                    colorBlock.highlightedColor = Color.green + Color.gray;
+                }
+                else
+                {
+                    colorBlock.pressedColor = Color.red;
+                    colorBlock.highlightedColor = Color.red + Color.gray;
+                }
+
+                _visual.BuyButton.colors = colorBlock;
+            }
+
+            private void UpdateLevel()
+            {
+                if (_mult > 0)
+                {
+                    _visual.CurrentLevel = $"Level \n{_level}";
+                    if (_maxLevel > 0)
+                        _visual.CurrentLevel += $"/{_maxLevel}";
+                }
+                else
+                {
+                    _visual.CurrentLevel = "Unlocked \n";
+                    if (_level == 0)
+                        _visual.CurrentLevel += "NO";
                     else
-                    {
-                        bool f;
-                        f = (bool)dat;
-                        if (f)
-                            return false;
-
-                        upgradeData.UpgradeCurrency -= GetPrice();
-
-                        f = true;
-                        Level = 1;
-                        upgradeData.GetType().GetField(refrence).SetValue(upgradeData, f);
-
-                    }
-
+                        _visual.CurrentLevel += "YES";
                 }
+            }
+
+            /// <summary>
+            /// Has the upgrades last leven been bought or just unlocked.
+            /// </summary>
+            /// <returns>True if it was maxed out, false if it was not</returns>
+            private bool UpgradeMaxed()
+            {
+                var groupValue = Data.GetType().GetField(_groupName).GetValue(Data) ?? Data;
+                var fieldValue = groupValue.GetType().GetField(_fieldName).GetValue(groupValue);
+
+                return fieldValue switch
+                {
+                    int level when level >= _maxLevel => true,
+                    bool when true => true,
+                    _ => false
+                };
+            }
+
+            private bool Buy()
+            {
+                if (!CanAfford() || UpgradeMaxed()) return false;
+
+                var groupValue = Data.GetType().GetField(_groupName).GetValue(Data) ?? Data;
+                var fieldValue = groupValue.GetType().GetField(_fieldName).GetValue(groupValue);
+
+                switch (fieldValue)
+                {
+                    case int level:
+                        Data.upgradeCurrency -= GetPrice();
+                        _level = ++level;
+                        Data.GetType().GetField(_fieldName).SetValue(Data, level);
+                        break;
+
+                    case bool:
+                        Data.upgradeCurrency -= GetPrice();
+
+                        _level = 1;
+                        Data.GetType().GetField(_fieldName).SetValue(Data, true);
+                        break;
+                }
+
                 return true;
             }
-            return false;
-        }
-        /// <summary>
-        /// Uses both the System and Refrence string
-        /// </summary>
-        /// <param name="substact">just a price check?</param>
-        /// <returns></returns>
-        bool CanBuyCheck2(bool substract)
-        {
-            if (upgradeData.UpgradeCurrency >= GetPrice() && (MaxLevel < 0 || MaxLevel > 0 && Level < MaxLevel) && (Mult > 0 || Mult <= 0 && Level <= 0))
+
+            public void Move(Vector2 newpos)
             {
-                if (substract)
-                {
-                    var sys = upgradeData.GetType().GetField(system).GetValue(upgradeData);
-                    var dat = sys.GetType().GetField(refrence).GetValue(sys);
-
-                    if (Mult > 0)
-                    {
-
-                        if (MaxLevel > 0 && Level >= MaxLevel)
-                            return false;
-
-                        upgradeData.UpgradeCurrency -= GetPrice();
-                        int f;
-
-                        f = (int)dat;
-                        Level++;
-                        f = Level;
-
-                        sys.GetType().GetField(refrence).SetValue(sys, f);
-                        upgradeData.GetType().GetField(system).SetValue(upgradeData, sys);
-                    }
-                    else
-                    {
-                        bool f;
-                        f = (bool)dat;
-                        if (f)
-                            return false;
-
-                        upgradeData.UpgradeCurrency -= GetPrice();
-
-                        f = true;
-                        Level = 1;
-
-                        sys.GetType().GetField(refrence).SetValue(sys, f);
-                        upgradeData.GetType().GetField(system).SetValue(upgradeData, sys);
-                    }
-
-                }
-                return true;
+                ((RectTransform)_visual.transform).anchoredPosition = newpos;
             }
-            return false;
         }
 
-        bool CanBuyUpgrade(bool substract)
+        [Serializable]
+        public class CategoryObject
         {
-            if (system == "")
-                return CanBuyCheck(substract);
-            else
-                return CanBuyCheck2(substract);
-        }
+            private UpgradeCatagory _visual;
+            private List<UpgradeObject> _subObjs = new();
+            private bool _active = true;
 
-        public void Move(Vector2 newpos)
-        {
-            ((RectTransform)visual.transform).anchoredPosition = newpos;
-        }
-    }
-
-    [System.Serializable]
-    public class CatagoryObject
-    {
-        UpgradeCatagory visual;
-        List<UpgradeObject> subObjs = new List<UpgradeObject>();
-        bool active = true;
-
-        public CatagoryObject(UpgradeCatagory visual, string name, string discription)
-        {
-            this.visual = visual;
-            visual.SetText(name, discription);
-
-            visual.ButtonObj.onClick.AddListener(delegate
+            public CategoryObject(UpgradeCatagory visual, string name, string discription)
             {
-                ToggleAll();
-            });
-        }
+                _visual = visual;
+                visual.SetText(name, discription);
 
-        public void AddNew(UpgradeObject o)
-        {
-            o.Enabled = active;
-            subObjs.Add(o);
-        }
+                visual.ExpandButton.onClick.AddListener(ToggleAll);
+            }
 
-        public void ToggleAll()
-        {
-            active = !active;
-            Vector3 newpos = ((RectTransform)visual.transform).anchoredPosition;
-            foreach (UpgradeObject o in subObjs)
+            public void AddNew(UpgradeObject o)
             {
-                o.Enabled = active;
-                o.Move(newpos);
+                o.Enabled = _active;
+                _subObjs.Add(o);
+            }
+
+            public void ToggleAll()
+            {
+                _active = !_active;
+                Vector3 anchoredPosition = ((RectTransform)_visual.transform).anchoredPosition;
+                foreach (var upgradeObject in _subObjs)
+                {
+                    upgradeObject.Enabled = _active;
+                    upgradeObject.Move(anchoredPosition);
+                }
             }
         }
     }
 }
-
-

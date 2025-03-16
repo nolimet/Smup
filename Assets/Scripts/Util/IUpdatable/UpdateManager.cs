@@ -1,12 +1,12 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-namespace Util.Update
+
+namespace Util.IUpdatable
 {
     public class UpdateManager : MonoBehaviour
     {
-        public static UpdateManager instance
+        public static UpdateManager Instance
         {
             get
             {
@@ -15,7 +15,7 @@ namespace Util.Update
                 _instance = FindObjectOfType<UpdateManager>();
                 if (_instance)
                     return _instance;
-                GameObject g = new GameObject("Update Manager");
+                var g = new GameObject("Update Manager");
                 _instance = g.AddComponent<UpdateManager>();
                 if (_instance)
                     return _instance;
@@ -24,62 +24,63 @@ namespace Util.Update
                 return null;
             }
         }
+
         private static UpdateManager _instance;
 
         /// <summary>
         /// Debug value
         /// </summary>
-        [SerializeField, ReadOnly]
-        private int updatablesCount;
-        private List<IUpdatable> updateAbles;
-        private List<IContinuesUpdateAble> continuesUpdateables;
+        [SerializeField] [ReadOnly] private int updatablesCount;
 
-        bool paused = false;
+        private List<IUpdatable> _updateAbles;
+        private List<IContinuesUpdateAble> _continuesUpdateables;
+
+        private bool _paused = false;
 
         // Use this for initialization
         private void Awake()
         {
-            updateAbles = new List<IUpdatable>();
-            continuesUpdateables = new List<IContinuesUpdateAble>();
+            _updateAbles = new List<IUpdatable>();
+            _continuesUpdateables = new List<IContinuesUpdateAble>();
         }
 
         // Update is called once per frame
         private void Update()
         {
-            if (updateAbles == null) updateAbles = new List<IUpdatable>();
+            if (_updateAbles == null) _updateAbles = new List<IUpdatable>();
 
-            updatablesCount = updateAbles.Count;
-            if (!paused)
+            updatablesCount = _updateAbles.Count;
+            if (!_paused)
             {
-                List<IUpdatable> tmp = updateAbles.ToList();
-                tmp.ForEach(i => i.IUpdate());
+                var tmp = _updateAbles.ToList();
+                tmp.ForEach(i => i.Update());
             }
-            
-            continuesUpdateables.ForEach(i => i.IContinuesUpdate());
-        }
-        
-        public static void addUpdateAble(IUpdatable i)
-        {
-            if (!instance.updateAbles.Contains(i))
-                instance.updateAbles.Add(i);
+
+            _continuesUpdateables.ForEach(i => i.ContinuesUpdate());
         }
 
-        public static void addContinuesUpdateAble(IContinuesUpdateAble i)
+        public static void AddUpdateAble(IUpdatable i)
         {
-            if (!instance.continuesUpdateables.Contains(i))
-                instance.continuesUpdateables.Add(i);
+            if (!Instance._updateAbles.Contains(i))
+                Instance._updateAbles.Add(i);
         }
 
-        public static void removeUpdateAble(IUpdatable i)
+        public static void AddContinuesUpdateAble(IContinuesUpdateAble i)
         {
-            if (instance.updateAbles.Contains(i))
-                instance.updateAbles.Remove(i);
+            if (!Instance._continuesUpdateables.Contains(i))
+                Instance._continuesUpdateables.Add(i);
         }
-        
-        public static void removeContinuesUpdateAble(IContinuesUpdateAble i)
+
+        public static void RemoveUpdateAble(IUpdatable i)
         {
-            if (instance.continuesUpdateables.Contains(i))
-                instance.continuesUpdateables.Remove(i);
+            if (Instance._updateAbles.Contains(i))
+                Instance._updateAbles.Remove(i);
+        }
+
+        public static void RemoveContinuesUpdateAble(IContinuesUpdateAble i)
+        {
+            if (Instance._continuesUpdateables.Contains(i))
+                Instance._continuesUpdateables.Remove(i);
         }
     }
 }

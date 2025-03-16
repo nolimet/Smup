@@ -1,5 +1,4 @@
-﻿
-namespace player.Weapon
+﻿namespace Player.Weapons
 {
     public enum WeaponType
     {

@@ -1,22 +1,21 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿using System.Collections;
+using UnityEngine;
 
-namespace Enemies
+namespace Enemies_old.Behaviours
 {
     public class ConstSpeed : Enemybase
     {
-        [SerializeField]
-        Vector2 speed;
+        [SerializeField] private Vector2 speed;
+
         protected override IEnumerator EnemyMoveBehaviour()
         {
-            while (isAlive)
+            while (IsAlive)
             {
-                if (!appFocus)
-                    while (!appFocus)
+                if (!AppFocus)
+                    while (!AppFocus)
                         yield return new WaitForSeconds(TickTimeFrag);
 
-
-                r.velocity = speed;
+                R.linearVelocity = speed;
                 yield return new WaitForSeconds(TickTimeFrag);
             }
         }

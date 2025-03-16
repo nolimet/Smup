@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
-using System.Collections;
+
 namespace Util.UI
 {
     /// <summary>
@@ -10,12 +11,12 @@ namespace Util.UI
     {
         public Slider slider;
         public ScrollRect scrollRect;
-        public float StartValue;
+        [FormerlySerializedAs("StartValue")] public float startValue;
 
-        void Start()
+        private void Start()
         {
-            slider.value = StartValue;
-            scrollRect.verticalNormalizedPosition = StartValue;
+            slider.value = startValue;
+            scrollRect.verticalNormalizedPosition = startValue;
         }
     }
 }

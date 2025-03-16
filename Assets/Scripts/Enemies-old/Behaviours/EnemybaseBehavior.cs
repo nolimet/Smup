@@ -1,19 +1,20 @@
-﻿using UnityEngine;
-using System.Collections;
-namespace Enemies
+﻿using System.Collections;
+using UnityEngine;
+
+namespace Enemies_old.Behaviours
 {
     [RequireComponent(typeof(PolygonCollider2D))]
     [RequireComponent(typeof(Rigidbody2D))]
     public class Enemybase : MonoBehaviour
     {
-        protected bool appFocus = true, AttackBehaviourRunning = false, MoveBehaviourRunning = false, isAlive = false;
-        protected Rigidbody2D r;
+        protected bool AppFocus = true, AttackBehaviourRunning, MoveBehaviourRunning, IsAlive;
+        protected Rigidbody2D R;
         protected const int TicksPerSecond = 30;
         protected readonly float TickTimeFrag = 1f / TicksPerSecond;
 
-        int health;
+        private int _health;
 
-        virtual protected void Start() { }
+        protected virtual void Start() { }
 
         protected virtual IEnumerator EnemyMoveBehaviour()
         {
@@ -28,9 +29,8 @@ namespace Enemies
             yield return new WaitForEndOfFrame();
         }
 
-        void OnApplicationFocus(bool focus)
+        private void OnApplicationFocus(bool focus)
         {
-
             //appFocus = focus;
             //if(!appFocus)
             //{
@@ -42,8 +42,8 @@ namespace Enemies
 
         protected void OnEnable()
         {
-            isAlive = true;
-            startBehaviours();
+            IsAlive = true;
+            StartBehaviours();
         }
 
         protected void OnDisable()
@@ -52,13 +52,14 @@ namespace Enemies
             MoveBehaviourRunning = false;
         }
 
-        protected void startBehaviours()
+        protected void StartBehaviours()
         {
-            if (!r)
+            if (!R)
             {
-                r = GetComponent<Rigidbody2D>();
-                r.gravityScale = 0;
+                R = GetComponent<Rigidbody2D>();
+                R.gravityScale = 0;
             }
+
             if (!MoveBehaviourRunning)
             {
                 MoveBehaviourRunning = true;
@@ -72,14 +73,8 @@ namespace Enemies
             }
         }
 
-        public virtual void Hit(float dmg)
-        {
+        public virtual void Hit(float dmg) { }
 
-        }
-
-        void GotRemoved()
-        {
-
-        }
+        private void GotRemoved() { }
     }
 }

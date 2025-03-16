@@ -1,16 +1,31 @@
 ﻿using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
-using System.Collections;
 
-public class UpgradeCatagory : MonoBehaviour
+namespace Menus.MenuParts
 {
-    public Text Name;
-    public Text Discription;
-    public Button ButtonObj;
-
-    public void SetText(string Name, string Discription)
+    public class UpgradeCatagory : MonoBehaviour
     {
-        this.Name.text = Name;
-        this.Discription.text = Discription;
+        [FormerlySerializedAs("Name")] [SerializeField] private Text displayName;
+        [FormerlySerializedAs("Discription")] [SerializeField] private Text description;
+        [FormerlySerializedAs("ButtonObj")] [SerializeField] private Button expandButton;
+
+        public string DisplayName
+        {
+            set => displayName.text = value;
+        }
+
+        public string Description
+        {
+            set => description.text = value;
+        }
+
+        public Button ExpandButton => expandButton;
+
+        public void SetText(string displayNameText, string descrption)
+        {
+            displayName.text = displayNameText;
+            description.text = descrption;
+        }
     }
 }

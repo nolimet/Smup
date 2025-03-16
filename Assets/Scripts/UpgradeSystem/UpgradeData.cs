@@ -1,35 +1,46 @@
-﻿[System.Serializable]
-public class UpgradeData {
+﻿using System;
 
-    public long UpgradeCurrency = 0;
+namespace UpgradeSystem
+{
+    [Serializable]
+    public class UpgradeData
+    {
+        public long upgradeCurrency;
 
-    #region Ship-Upgrades
-    //ScrapGetting
-    public int ScrapCollectionRange = 0;
-    public int ScrapCollectionSpeed = 0;
-    public int ScrapConversionRate = 0;
+        //ScrapGetting
+        public int scrapCollectionRange;
+        public int scrapCollectionSpeed;
+        public int scrapConversionRate;
 
-    //Shield
-    public bool UnlockedShield = false;
-    public int shieldGeneratorLevel = 0;
-    public int shieldCapacitorLevel = 0;
-    public bool UnlockedShieldTweaker = false;
+        //Shield
+        public bool unlockedShield;
+        public int shieldGeneratorLevel;
+        public int shieldCapacitorLevel;
+        public bool unlockedShieldTweaker;
 
-    //Hull
-    public int hullUpgradeLevel = 0;
-    public int armorUpgradeLevel = 0;
-    #endregion
+        //Hull
+        public int hullUpgradeLevel;
+        public int armorUpgradeLevel;
 
-    //weaponUpgrades
-    public CommonWeaponUpgrade Cannon, MiniGun, Shotgun,Granade;
+        //weaponUpgrades
+        public CommonWeaponUpgrade cannon;
+        public CommonWeaponUpgrade miniGun;
+        public CommonWeaponUpgrade shotgun;
+        public CommonWeaponUpgrade grenade;
+    }
 
-    [System.Serializable]
+    [Serializable]
     public struct CommonWeaponUpgrade
     {
-        public bool Unlocked;
-        public int Damage, Accuracy, FireRate,Fragments;
+        public bool unlocked;
+        public int damage;
+        public int accuracy;
+        public int fireRate;
+        public int fragments;
 
-        public bool UnlockedTweaker;
-        public float AccuracyAdjustment, SpeedAdjustment, FireRateAdjustment;
+        public bool unlockedTweaker;
+        public float accuracyAdjustment;
+        public float speedAdjustment;
+        public float fireRateAdjustment;
     }
 }

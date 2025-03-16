@@ -1,31 +1,29 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-namespace Util.Update
+namespace Util.IUpdatable
 {
     public class BaseClass : MonoBehaviour, IUpdatable
     {
         // Use this for initialization
-        void Start()
+        private void Start()
         {
-            UpdateManager.addUpdateAble(this);
+            UpdateManager.AddUpdateAble(this);
         }
 
         private void OnEnable()
         {
-            UpdateManager.addUpdateAble(this);
+            UpdateManager.AddUpdateAble(this);
         }
 
         private void OnDisable()
         {
-            UpdateManager.removeUpdateAble(this);
+            UpdateManager.RemoveUpdateAble(this);
         }
 
-        public virtual void IUpdate()
+        public virtual void Update()
         {
-            Debug.Log(System.DateTime.Now);
+            Debug.Log(DateTime.Now);
         }
     }
 }

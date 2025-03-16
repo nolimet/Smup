@@ -1,18 +1,21 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿using Player.Weapons;
+using UnityEngine;
 
-public class Test : MonoBehaviour {
+public class Test : MonoBehaviour
+{
+    public IBaseWeapon Gun;
 
-    public player.Weapon.IBaseWeapon gun;
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    private void Start()
+    {
         //Move = new interfaces.Move.LinearMovement();
-        gun = new player.Weapon.Cannon();
-	}
-	
-	// Update is called once per frame
-	void Update () {
+        Gun = new Cannon();
+    }
+
+    // Update is called once per frame
+    private void Update()
+    {
         //Move.Move(gameObject);
-        gun.Shoot(gameObject, new Vector3(0.5f, 0), Vector2.zero);
-    }   
+        Gun.TryShoot(gameObject, new Vector3(0.5f, 0), Vector2.zero);
+    }
 }

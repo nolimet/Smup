@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using System.Collections;
+using UnityEngine.Serialization;
 
 namespace Util
 {
@@ -8,9 +8,7 @@ namespace Util
     /// </summary>
     public class SnapToScreenPoint : MonoBehaviour
     {
-
-        [SerializeField]
-        new Camera camera;
+        [SerializeField] private new Camera camera;
 
         /// <summary>
         /// Position on screen
@@ -22,26 +20,33 @@ namespace Util
         /// <summary>
         /// Sprite size in pixels to make sure it's does not get streched 
         /// </summary>
-        [Tooltip("Sprite's Size in pixel used to make sure it's scaled correctly")]
-        public Vector2 StartSize = Vector2.one;
+        [FormerlySerializedAs("StartSize")] [Tooltip("Sprite's Size in pixel used to make sure it's scaled correctly")]
+        public Vector2 startSize = Vector2.one;
 
-        public Vector2 PivotPosition = Vector2.one / 2f;
+        [FormerlySerializedAs("PivotPosition")] public Vector2 pivotPosition = Vector2.one / 2f;
 
         /// <summary>
         /// Should the object be moved in this direction
         /// </summary>
-        [SerializeField, Tooltip("Should Object be moved in this direction?")]
-        bool Vertical = false, Horizontal = false;
-        [SerializeField, Tooltip("use center point")]
-        bool UsePivot = false;
+        [FormerlySerializedAs("Vertical")] [SerializeField] [Tooltip("Should Object be moved in this direction?")]
+        private bool vertical;
 
-        void Start()
+        /// <summary>
+        /// Should the object be moved in this direction
+        /// </summary>
+        [FormerlySerializedAs("Horizontal")] [SerializeField] [Tooltip("Should Object be moved in this direction?")]
+        private bool horizontal;
+
+        [FormerlySerializedAs("UsePivot")] [SerializeField] [Tooltip("use center point")]
+        private bool usePivot;
+
+        private void Start()
         {
             if (camera == null)
                 camera = Camera.main;
 
             screenPosition /= 100f;
-            StartSize /= 100f;
+            startSize /= 100f;
 
             DoMove();
 
@@ -54,40 +59,39 @@ namespace Util
             //}
         }
 
-        void Update()
+        private void Update()
         {
             DoMove();
         }
 
-        void DoMove()
+        private void DoMove()
         {
-            Vector3 p1 = camera.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, 0));
+            var p1 = camera.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, 0));
 
             p1.z = transform.position.z;
             p1.y *= screenPosition.y;
             p1.x *= screenPosition.x;
 
             // p1 *= 2f;
-            if (!Vertical)
+            if (!vertical)
                 p1.y = transform.position.y;
 
-            if (!Horizontal)
+            if (!horizontal)
                 p1.x = transform.position.x;
 
-            if (UsePivot)
+            if (usePivot)
             {
-                if (Vertical)
+                if (vertical)
                     if (screenPosition.y > 0)
-                        p1.y += (transform.localScale.y * PivotPosition.y) * StartSize.y;
+                        p1.y += transform.localScale.y * pivotPosition.y * startSize.y;
                     else
-                        p1.y -= (transform.localScale.y * PivotPosition.y) * StartSize.y;
+                        p1.y -= transform.localScale.y * pivotPosition.y * startSize.y;
 
-                if (Horizontal)
+                if (horizontal)
                     if (screenPosition.x > 0)
-                        p1.x += (transform.localScale.x * PivotPosition.x) * StartSize.x;
+                        p1.x += transform.localScale.x * pivotPosition.x * startSize.x;
                     else
-                        p1.x -= (transform.localScale.x * PivotPosition.x) * StartSize.x;
-
+                        p1.x -= transform.localScale.x * pivotPosition.x * startSize.x;
             }
 
             transform.position = p1;

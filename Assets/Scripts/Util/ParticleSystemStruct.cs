@@ -1,22 +1,24 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Util
 {
     /// <summary>
     /// Struct for particle sytems so i don't have to repeat much code
     /// </summary>
-    [System.Serializable]
+    [Serializable]
     public struct ParticleSystemStruct
     {
         public bool enabled;
-        public ParticleSystem System;
+        [FormerlySerializedAs("System")] public ParticleSystem system;
         public ParticleSystem.Particle[] Particles;
         public ParticleSystem.EmissionModule Emission;
         public int maxParticles;
 
-        public void setup()
+        public void Setup()
         {
-            maxParticles = System.main.maxParticles;
+            maxParticles = system.main.maxParticles;
             if (Particles == null || Particles.Length < maxParticles)
                 Particles = new ParticleSystem.Particle[maxParticles];
         }

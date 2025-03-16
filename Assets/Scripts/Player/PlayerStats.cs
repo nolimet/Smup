@@ -1,63 +1,67 @@
-﻿using UnityEngine;
+﻿using Managers;
+using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
-using System.Collections;
+using ValueClasses;
 
-public class PlayerStats : MonoBehaviour {
-
-    [SerializeField]
-    Bar Energy, Health;
-    [SerializeField]
-    Text CollectedScrapDisplay;
-
-    public float currentEnergy = 0;
-    public float maxEnergy = 200;
-
-    public float currentHealth = 0;
-    public float maxHealth = 100;
-
-    public float currentShield = 0;
-    public float maxShield = 0;
-
-    void Start()
+namespace Player
+{
+    public class PlayerStats : MonoBehaviour
     {
-        maxHealth = (GameManager.upgrades.hullUpgradeLevel + 1) * 100;
-        maxShield = (GameManager.upgrades.shieldCapacitorLevel) * 100;
-        Energy.init(maxEnergy, 2f);
-        Health.init(maxHealth, 100);
+        [FormerlySerializedAs("Energy")] [SerializeField] private Bar energy;
+        [FormerlySerializedAs("Health")] [SerializeField] private Bar health;
+        [FormerlySerializedAs("CollectedScrapDisplay")] [SerializeField] private Text collectedScrapDisplay;
 
-        currentHealth = maxHealth;
-        currentEnergy = maxEnergy;
-        Health.UpdateSize(maxHealth);
-    }
-	
-	// Update is called once per frame
-	void Update () 
-    {
-        if (currentEnergy < maxEnergy && !PlayerWeaponControler.Firing) 
-            currentEnergy += 16f * Time.deltaTime;
-        
-        //Update Status display
-        Energy.UpdateSize(currentEnergy);
-        Health.UpdateSize(currentHealth);
-        CollectedScrapDisplay.text = "Scrap Collected: " + GameManager.pickupManager.pickedUpScrap;
-    }
+        public float currentEnergy;
+        public float maxEnergy = 200;
 
-    public bool canFire(float energyNeeded)
-    {
-        if (currentEnergy >= energyNeeded)
-            return true;
-        return false;
-    }
+        public float currentHealth;
+        public float maxHealth = 100;
 
-    public void hit(float value)
-    {
-        currentHealth -= value;
-    }
+        public float currentShield;
+        public float maxShield;
 
-    public void RemoveEnergy(float amount)
-    {
-        currentEnergy -= amount;
-        if (currentEnergy < 0)
-            currentEnergy = 0;
+        private void Start()
+        {
+            maxHealth = (GameManager.Upgrades.hullUpgradeLevel + 1) * 100;
+            maxShield = GameManager.Upgrades.shieldCapacitorLevel * 100;
+            energy.Init(maxEnergy, 2f);
+            health.Init(maxHealth, 100);
+
+            currentHealth = maxHealth;
+            currentEnergy = maxEnergy;
+            health.UpdateSize(maxHealth);
+        }
+
+        // Update is called once per frame
+        private void Update()
+        {
+            if (currentEnergy < maxEnergy && !PlayerWeaponControler.Firing)
+                currentEnergy += 16f * Time.deltaTime;
+
+            //Update Status display
+            energy.UpdateSize(currentEnergy);
+            health.UpdateSize(currentHealth);
+            collectedScrapDisplay.text = "Scrap Collected: " + GameManager.PickupManager.PickedUpScrap;
+        }
+
+        public bool CanFire(float energyNeeded)
+        {
+            if (currentEnergy >= energyNeeded)
+                return true;
+            return false;
+        }
+
+        public void Hit(float value)
+        {
+            currentHealth -= value;
+        }
+
+        public void RemoveEnergy(float amount)
+        {
+            currentEnergy -= amount;
+            if (currentEnergy < 0)
+                currentEnergy = 0;
+        }
     }
 }

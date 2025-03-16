@@ -1,81 +1,84 @@
-﻿using UnityEngine;
-using System.Collections;
-[RequireComponent(typeof(PolygonCollider2D))]
-public class EnemyStats : MonoBehaviour
+﻿using System.Collections;
+using ObjectPools;
+using UnityEngine;
+
+namespace Enemies_old
 {
-
-    public enum Type
+    [RequireComponent(typeof(PolygonCollider2D))]
+    public class EnemyStats : MonoBehaviour
     {
-        shooter = 89,
-        WaveMover = 90,
-        SlowDownSpeedUp = 91
-        //ToDo add More types
-    }
-    protected readonly Bounds maxLimits = new Bounds(Vector3.zero, new Vector3(100, 100, 1));
-    [SerializeField]
-    float health = 10, maxHealth = 10;
-    public Type type;
-    bool markedForRemove = false;
-
-    public virtual void hit(float dmg)
-    {
-        health -= dmg;
-        if (health <= 0 && !markedForRemove)
-            StartCoroutine(Remove(0f, true));
-    }
-
-    public void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.tag == "backbullet Remover")
-            StartCoroutine(Remove(0f, false));
-    }
-
-    protected virtual void Update()
-    {
-        if (!markedForRemove)
+        public enum Type
         {
-            if (!maxLimits.Contains(transform.position))
-                Remove(0, false);
+            Shooter = 89,
+            WaveMover = 90,
+
+            SlowDownSpeedUp = 91
+            //ToDo add More types
         }
-    }
 
-    protected virtual void OnEnable()
-    {
-        GetComponent<Rigidbody2D>().isKinematic = false;
-        GetComponent<PolygonCollider2D>().enabled = true;
-        GetComponent<SpriteRenderer>().color = Color.white;
-        markedForRemove = false;
-        health = maxHealth;
-    }
+        protected readonly Bounds MaxLimits = new(Vector3.zero, new Vector3(100, 100, 1));
+        [SerializeField] private float health = 10, maxHealth = 10;
+        public Type type;
+        private bool _markedForRemove;
 
-    IEnumerator Remove(float delay, bool createPickups)
-    {
-        if (!markedForRemove)
+        public virtual void Hit(float dmg)
         {
-            GetComponent<PolygonCollider2D>().enabled = false;
+            health -= dmg;
+            if (health <= 0 && !_markedForRemove)
+                StartCoroutine(Remove(0f, true));
+        }
 
-            const float frag = 1f / 30;
-            SpriteRenderer r = GetComponent<SpriteRenderer>();
-            Color StartColor = r.color;
-            Color TargetColor = r.color;
+        public void OnTriggerEnter2D(Collider2D collision)
+        {
+            if (collision.tag == "backbullet Remover")
+                StartCoroutine(Remove(0f, false));
+        }
 
-            TargetColor.a = 0;
-            markedForRemove = true;
+        protected virtual void Update()
+        {
+            if (!_markedForRemove)
+                if (!MaxLimits.Contains(transform.position))
+                    Remove(0, false);
+        }
 
-            yield return new WaitForSeconds(delay);
+        protected virtual void OnEnable()
+        {
+            GetComponent<Rigidbody2D>().isKinematic = false;
+            GetComponent<PolygonCollider2D>().enabled = true;
+            GetComponent<SpriteRenderer>().color = Color.white;
+            _markedForRemove = false;
+            health = maxHealth;
+        }
 
-            for (int i = 0; i < 30; i++)
+        private IEnumerator Remove(float delay, bool createPickups)
+        {
+            if (!_markedForRemove)
             {
-                r.color = Color.Lerp(StartColor, TargetColor, frag * i);
-                yield return new WaitForEndOfFrame();
-            }
+                GetComponent<PolygonCollider2D>().enabled = false;
 
-            GetComponent<Rigidbody2D>().isKinematic = true;
-            this.SendMessage("GotRemoved");
-            //ToDo add make scrap and count value dynamic and based on difficlutly of the enemy
-            if (createPickups)
-                PickupPool.CreateScrapCloud(transform.position, new Vector2(7, 7), 5, 20);
-            EnemyPool.RemoveEnemy(this);
+                const float frag = 1f / 30;
+                var r = GetComponent<SpriteRenderer>();
+                var startColor = r.color;
+                var targetColor = r.color;
+
+                targetColor.a = 0;
+                _markedForRemove = true;
+
+                yield return new WaitForSeconds(delay);
+
+                for (var i = 0; i < 30; i++)
+                {
+                    r.color = Color.Lerp(startColor, targetColor, frag * i);
+                    yield return new WaitForEndOfFrame();
+                }
+
+                GetComponent<Rigidbody2D>().isKinematic = true;
+                SendMessage("GotRemoved");
+                //ToDo add make scrap and count value dynamic and based on difficlutly of the enemy
+                if (createPickups)
+                    ScrapPickupPool.CreateScrapCloud(transform.position, new Vector2(7, 7), 5, 20);
+                EnemyPool.RemoveEnemy(this);
+            }
         }
     }
 }

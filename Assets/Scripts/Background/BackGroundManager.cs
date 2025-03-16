@@ -1,35 +1,29 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿using System;
+using UnityEngine;
 
-public class BackGroundManager : MonoBehaviour
+namespace Background
 {
-
-    [SerializeField]Layer[] layers;
-    // Use this for initialization
-    void Start()
+    public class BackGroundManager : MonoBehaviour
     {
+        [SerializeField] private Layer[] layers;
 
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        foreach (Layer l in layers)
+        private void Update()
         {
-            foreach (Transform t in l.parts)
+            foreach (var l in layers)
+            foreach (var t in l.parts)
             {
                 if (t.localPosition.x < l.killPoint)
-                    t.localPosition += new Vector3(l.startPoint*2f, 0);
+                    t.localPosition += new Vector3(l.startPoint * 2f, 0);
                 t.localPosition -= new Vector3(l.speed * Time.deltaTime, 0);
             }
         }
-    }
 
-    [System.Serializable]
-    class Layer
-    {
-        public string name = null;
-        public Transform[] parts = null;
-        public float speed = 0, startPoint = 0, killPoint = 0;
+        [Serializable]
+        private class Layer
+        {
+            public string name;
+            public Transform[] parts;
+            public float speed, startPoint, killPoint;
+        }
     }
 }

@@ -1,53 +1,48 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿using System.Collections;
+using UnityEngine;
+using UnityEngine.Serialization;
 
-namespace Enemies
+namespace Enemies_old.Behaviours
 {
     public class MultiStepMove : Enemybase
     {
-
-        [SerializeField]
-        Vector2[] MovePatern;
-        [SerializeField]
-        float[] duration;
-        [SerializeField]
-        float waitBetweenPatern;
+        [FormerlySerializedAs("MovePatern")] [SerializeField] private Vector2[] movePatern;
+        [SerializeField] private float[] duration;
+        [SerializeField] private float waitBetweenPatern;
 
         protected override void Start()
         {
             base.Start();
-            if (MovePatern.Length != duration.Length)
+            if (movePatern.Length != duration.Length)
                 Debug.LogError("delay and movePatern is not same length");
         }
+
         protected override IEnumerator EnemyMoveBehaviour()
         {
-            int l = MovePatern.Length;
+            var l = movePatern.Length;
             Vector2 lastSpeed;
-            if (!r)
-                r = GetComponent<Rigidbody2D>();
+            if (!R)
+                R = GetComponent<Rigidbody2D>();
 
-            while (isAlive)
-            {
-                for (int i = 0; i < l; i++)
+            while (IsAlive)
+                for (var i = 0; i < l; i++)
                 {
-                    lastSpeed = r.velocity;
-                    float k = duration[i] * TicksPerSecond;
-                    for (int j = 0; j < k; j++)
+                    lastSpeed = R.linearVelocity;
+                    var k = duration[i] * TicksPerSecond;
+                    for (var j = 0; j < k; j++)
                     {
-                        while (!appFocus)
+                        while (!AppFocus)
                             yield return new WaitForSeconds(TickTimeFrag);
 
-                        r.velocity = Vector2.Lerp(lastSpeed, MovePatern[i], (1f / k) * j);
+                        R.linearVelocity = Vector2.Lerp(lastSpeed, movePatern[i], 1f / k * j);
                         yield return new WaitForSeconds(TickTimeFrag);
                     }
+
                     yield return new WaitForSeconds(waitBetweenPatern);
                 }
-            }
 
-           
-            r.velocity = Vector2.zero;
+            R.linearVelocity = Vector2.zero;
             MoveBehaviourRunning = false;
         }
-
     }
 }

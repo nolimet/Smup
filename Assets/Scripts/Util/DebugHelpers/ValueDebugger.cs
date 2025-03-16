@@ -1,21 +1,19 @@
-﻿using UnityEngine;
-using UnityEngine.UI;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Collections;
-using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
 
-
-namespace Util.Debugger
+namespace Util.DebugHelpers
 {
     /// <summary>
     /// On screen debugger usefull when working with a game build but you want to do some error tracking
     /// </summary>
     public class ValueDebugger : MonoBehaviour
     {
-        static ValueDebugger instance;
+        private static ValueDebugger _instance;
 
         protected Dictionary<string, object> Values;
-        protected Text t;
+        protected Text T;
 
         /// <summary>
         /// Value that will be logged. 
@@ -25,45 +23,43 @@ namespace Util.Debugger
         /// <param name="value">Value of the object</param>
         public static void ValueLog(string name, object value)
         {
-            if (instance == null)
-            {
+            if (_instance == null)
                 // if it just lost it's instance
-                instance = FindObjectOfType<ValueDebugger>();
-            }
+                _instance = FindObjectOfType<ValueDebugger>();
 
-            if (instance == null)
+            if (_instance == null)
             {
                 ///Make object if it does not exist
                 //Canvas 
-                GameObject g = new GameObject();
+                var g = new GameObject();
 
-                Canvas c = g.AddComponent<Canvas>();
+                var c = g.AddComponent<Canvas>();
                 c.renderMode = RenderMode.ScreenSpaceOverlay;
                 c.sortingOrder = 7000;
 
-                CanvasScaler sc = g.AddComponent<CanvasScaler>();
+                var sc = g.AddComponent<CanvasScaler>();
                 sc.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
                 sc.referenceResolution = new Vector2(1600, 900);
 
                 //text Display
-                GameObject g2 = new GameObject();
+                var g2 = new GameObject();
                 g2.transform.SetParent(g.transform, false);
 
-                RectTransform rt = g2.AddComponent<RectTransform>();
+                var rt = g2.AddComponent<RectTransform>();
                 rt.anchorMax = new Vector2(1f, 1f);
                 rt.anchorMin = new Vector2(0.5f, 0);
                 rt.sizeDelta = new Vector2(-20, -40);
 
                 rt.anchoredPosition = new Vector2(-20, 0);
 
-                Text t = g2.AddComponent<Text>();
+                var t = g2.AddComponent<Text>();
                 t.font = Resources.GetBuiltinResource<Font>("Arial.ttf");
                 t.color = Color.green;
                 t.fontSize = 20;
                 g2.AddComponent<ValueDebugger>();
 
                 //background Image
-                GameObject g3 = new GameObject();
+                var g3 = new GameObject();
                 g3.transform.SetParent(g.transform, false);
                 g3.transform.SetAsFirstSibling();
 
@@ -73,37 +69,30 @@ namespace Util.Debugger
                 rt.sizeDelta = new Vector2(-20, -40);
 
                 rt.anchoredPosition = new Vector2(-20, 0);
-                
 
-                Image I = g3.AddComponent<Image>();
+                var I = g3.AddComponent<Image>();
                 I.color = new Color(0.1f, 0.1f, 0.1f, 0.7f);
-
 
                 g.name = "util.DebugVisual";
             }
 
-            if (instance && !instance.transform.parent.gameObject.activeSelf) 
-                instance.transform.parent.gameObject.SetActive(true);
+            if (_instance && !_instance.transform.parent.gameObject.activeSelf)
+                _instance.transform.parent.gameObject.SetActive(true);
 
-            if (instance.Values.Keys.Contains(name))
-            {
-                instance.Values[name] = value;
-            }
+            if (_instance.Values.Keys.Contains(name))
+                _instance.Values[name] = value;
             else
-            {
-                instance.Values.Add(name, value);
-            }
+                _instance.Values.Add(name, value);
         }
 
-        
-        void Awake()
+        private void Awake()
         {
-            instance = this;
-            t = GetComponent<Text>();
+            _instance = this;
+            T = GetComponent<Text>();
             Values = new Dictionary<string, object>();
         }
 
-        void Update()
+        private void Update()
         {
             if (!Debugger.DebugEnabled)
                 transform.parent.gameObject.SetActive(false);
@@ -111,26 +100,23 @@ namespace Util.Debugger
             Process();
         }
 
-        void OnDestroy()
+        private void OnDestroy()
         {
-            instance = null;
+            _instance = null;
         }
 
-        string ts;
+        private string _ts;
 
         /// <summary>
         /// create the string that will be displayed on screen
         /// </summary>
-        void Process()
+        private void Process()
         {
-            ts = "";
+            _ts = "";
 
-            foreach (KeyValuePair<string, object> vs in Values)
-            {
-                ts += vs.Key + " : " + vs.Value.ToString() + " \n";
-            }
+            foreach (var vs in Values) _ts += vs.Key + " : " + vs.Value.ToString() + " \n";
 
-            t.text = ts;
+            T.text = _ts;
         }
     }
 

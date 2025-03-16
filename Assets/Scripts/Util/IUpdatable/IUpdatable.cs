@@ -1,25 +1,20 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-namespace Util.Update
+﻿namespace Util.IUpdatable
 {
-
     public interface IUpdatable
     {
         //Update called once a frame
-        void IUpdate();
+        void Update();
     }
 
     public interface IFixedUpdateble
     {
         //Update called once every physics update
-        void IFixedUpdate();
+        void FixedUpdate();
     }
 
     public interface IContinuesUpdateAble
     {
         //game state independent update. Does not react to pause
-        void IContinuesUpdate();
+        void ContinuesUpdate();
     }
 }

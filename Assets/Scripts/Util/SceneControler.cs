@@ -1,8 +1,7 @@
 ﻿//Author Jesse Stam
 //Created 12-2-2016
-using UnityEngine;
+
 using UnityEngine.SceneManagement;
-using System.Collections;
 
 namespace Util
 {
@@ -15,35 +14,33 @@ namespace Util
         /// <summary>
         /// Loads a single scene into the game and unload any otherloaded scenes
         /// </summary>
-        /// <param name="SceneName">Name of the scene that will be loaded</param>
-        public static void Load(string SceneName)
+        /// <param name="sceneName">Name of the scene that will be loaded</param>
+        public static void Load(string sceneName)
         {
-            SceneManager.LoadScene(SceneName, LoadSceneMode.Single);
+            SceneManager.LoadScene(sceneName, LoadSceneMode.Single);
         }
 
         /// <summary>
         /// Loads a scene as a aditive
         /// </summary>
-        /// <param name="SceneName"></param>
-        public static void LoadAddative(string SceneName)
+        /// <param name="sceneName"></param>
+        public static void LoadAddative(string sceneName)
         {
-            SceneManager.LoadScene(SceneName, LoadSceneMode.Additive);
+            SceneManager.LoadScene(sceneName, LoadSceneMode.Additive);
         }
 
         /// <summary>
         /// Unloades a scene
         /// </summary>
-        /// <param name="SceneName">Name of scene that will be unloaded</param>
-        public static void UnloadScene(string SceneName)
+        /// <param name="sceneName">Name of scene that will be unloaded</param>
+        public static void UnloadScene(string sceneName)
         {
-            int scenecount = SceneManager.sceneCount;
+            var scenecount = SceneManager.sceneCount;
 
-            for (int i = 0; i < scenecount; i++)
-            {
-                if (SceneName == SceneManager.GetSceneAt(i).name)
+            for (var i = 0; i < scenecount; i++)
+                if (sceneName == SceneManager.GetSceneAt(i).name)
                     if (SceneManager.GetSceneAt(i).isLoaded)
                         SceneManager.UnloadSceneAsync(i);
-            }
         }
     }
 }

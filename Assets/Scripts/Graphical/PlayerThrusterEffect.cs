@@ -1,196 +1,63 @@
 ﻿using UnityEngine;
+using UnityEngine.Serialization;
 using Util;
-using System.Collections;
 
-public class PlayerThrusterEffect : MonoBehaviour {
-
-    [SerializeField]
-    ParticleSystem[] Up = null, Down = null, Left = null, Right = null;
-   
-    [SerializeField]
-    ParticleSystem[] BoostUp = null, BoostDown = null, BoostLeft = null, BoostRight = null;
-
-    int i;
-    void Update()
+namespace Graphical
+{
+    public class PlayerThrusterEffect : MonoBehaviour
     {
-        if (Input.GetAxis(Axis.Boost) == 0)
-        {
-            UpdateThursters(new Vector2(Input.GetAxis(Axis.Horizontal), Input.GetAxis(Axis.Vertical)));
-            UpdateBoostThursters(Vector2.zero);
-        }
-        else
-        {
-            UpdateBoostThursters(new Vector2(Input.GetAxis(Axis.Horizontal), Input.GetAxis(Axis.Vertical)));
-            UpdateThursters(Vector2.zero);
-        }
-    }
+        [FormerlySerializedAs("Up")] [SerializeField] private ParticleSystem[] up;
+        [FormerlySerializedAs("Down")] [SerializeField] private ParticleSystem[] down;
+        [FormerlySerializedAs("Left")] [SerializeField] private ParticleSystem[] left;
+        [FormerlySerializedAs("Right")] [SerializeField] private ParticleSystem[] right;
 
-    void UpdateThursters(Vector2 dir)
-    {
-        //ToDo figure out how the new way works or changing emissionRates
-        #region dir.y
-        if (dir.y < -0.05)
+        [FormerlySerializedAs("BoostUp")] [SerializeField] private ParticleSystem[] boostUp;
+        [FormerlySerializedAs("BoostDown")] [SerializeField] private ParticleSystem[] boostDown;
+        [FormerlySerializedAs("BoostLeft")] [SerializeField] private ParticleSystem[] boostLeft;
+        [FormerlySerializedAs("BoostRight")] [SerializeField] private ParticleSystem[] boostRight;
+
+        private void Update()
         {
-            for (i = 0; i < Up.Length; i++)
+            var dir = new Vector2(Input.GetAxis(Axis.Horizontal), Input.GetAxis(Axis.Vertical));
+            if (Input.GetAxis(Axis.Boost) == 0)
             {
-                Up[i].SetEmissionRate(10f);
-                Up[i].SetEmissionRate(10f);
+                UpdateThursters(dir);
+                UpdateBoostThursters(Vector2.zero);
             }
-            for (i = 0; i < Down.Length; i++)
-			{
-                Down[i].SetEmissionRate(0);
+            else
+            {
+                UpdateBoostThursters(dir);
+                UpdateThursters(Vector2.zero);
             }
         }
-        else if(dir.y > 0.05)
+
+        private void UpdateThursters(Vector2 dir)
         {
-            for (i = 0; i < Up.Length; i++)
-            {
-                Up[i].SetEmissionRate(0);
-                
-            }
+            var dirY = Mathf.Max(0, Mathf.Abs(dir.y) - 0.05f) * Mathf.Sign(dir.y) * 10;
+            SetDirection(up, Mathf.Max(0, -dirY));
+            SetDirection(down, Mathf.Max(0, dirY));
 
-            for (i = 0; i < Down.Length; i++)
-			{
-			    Down[i].SetEmissionRate(10f);
-
-			}
+            var dirX = Mathf.Max(0, Mathf.Abs(dir.x) - 0.05f) * Mathf.Sign(dir.x) * 10;
+            SetDirection(left, Mathf.Max(0, -dirX));
+            SetDirection(right, Mathf.Max(0, dirX));
         }
-        else
+
+        private void UpdateBoostThursters(Vector2 dir)
         {
-            for (i = 0; i < Up.Length; i++)
-            {
-                Up[i].SetEmissionRate(0);
+            //ToDo figure out how the new way works or changing emissionRates
 
-            }
+            var dirY = Mathf.Max(0, Mathf.Abs(dir.y) - 0.05f) * Mathf.Sign(dir.y) * 10;
+            SetDirection(boostUp, Mathf.Max(0, -dirY));
+            SetDirection(boostDown, Mathf.Max(0, dirY));
 
-            for (i = 0; i < Down.Length; i++)
-            {
-                Down[i].SetEmissionRate(0);
-            }
+            var dirX = Mathf.Max(0, Mathf.Abs(dir.x) - 0.05f) * Mathf.Sign(dir.x) * 10;
+            SetDirection(boostLeft, Mathf.Max(0, -dirX));
+            SetDirection(boostRight, Mathf.Max(0, dirX));
         }
-        #endregion
-        #region dir.x
-        if (dir.x < -0.05)
+
+        private static void SetDirection(ParticleSystem[] sys, float rate)
         {
-            for (i = 0; i < Left.Length; i++)
-            {
-                Left[i].SetEmissionRate(10f * -dir.x);
-            }
-            for (i = 0; i < Right.Length; i++)
-            {
-                Right[i].SetEmissionRate(0);
-            }
+            foreach (var par in sys) par.SetEmissionRate(rate);
         }
-        else if (dir.x > 0.05)
-        {
-            for (i = 0; i < Left.Length; i++)
-            {
-                Left[i].SetEmissionRate(0);
-
-            }
-
-            for (i = 0; i < Right.Length; i++)
-            {
-                Right[i].SetEmissionRate(10f * dir.x);
-            }
-        }
-        else
-        {
-            for (i = 0; i < Left.Length; i++)
-            {
-                Left[i].SetEmissionRate(0);
-
-            }
-
-            for (i = 0; i < Right.Length; i++)
-            {
-                Right[i].SetEmissionRate(0);
-            }
-        }
-        #endregion
-    }
-    void UpdateBoostThursters(Vector2 dir)
-    {
-        //ToDo figure out how the new way works or changing emissionRates
-        #region dir.y
-        if (dir.y < -0.05)
-        {
-            for (i = 0; i < Up.Length; i++)
-            {
-                BoostUp[i].SetEmissionRate(10f);
-                BoostUp[i].SetEmissionRate(10f);
-            }
-            for (i = 0; i < Down.Length; i++)
-            {
-                BoostDown[i].SetEmissionRate(0);
-            }
-        }
-        else if (dir.y > 0.05)
-        {
-            for (i = 0; i < Up.Length; i++)
-            {
-                BoostUp[i].SetEmissionRate(0);
-
-            }
-
-            for (i = 0; i < Down.Length; i++)
-            {
-                BoostDown[i].SetEmissionRate(10f);
-
-            }
-        }
-        else
-        {
-            for (i = 0; i < Up.Length; i++)
-            {
-                BoostUp[i].SetEmissionRate(0);
-
-            }
-
-            for (i = 0; i < Down.Length; i++)
-            {
-                BoostDown[i].SetEmissionRate(0);
-            }
-        }
-        #endregion
-        #region dir.x
-        if (dir.x < -0.05)
-        {
-            for (i = 0; i < Left.Length; i++)
-            {
-                BoostLeft[i].SetEmissionRate(10f * -dir.x);
-            }
-            for (i = 0; i < Right.Length; i++)
-            {
-                BoostRight[i].SetEmissionRate(0);
-            }
-        }
-        else if (dir.x > 0.05)
-        {
-            for (i = 0; i < Left.Length; i++)
-            {
-                BoostLeft[i].SetEmissionRate(0);
-
-            }
-
-            for (i = 0; i < Right.Length; i++)
-            {
-                BoostRight[i].SetEmissionRate(10f * dir.x);
-            }
-        }
-        else
-        {
-            for (i = 0; i < Left.Length; i++)
-            {
-                BoostLeft[i].SetEmissionRate(0);
-
-            }
-
-            for (i = 0; i < Right.Length; i++)
-            {
-                BoostRight[i].SetEmissionRate(0);
-            }
-        }
-        #endregion
     }
 }

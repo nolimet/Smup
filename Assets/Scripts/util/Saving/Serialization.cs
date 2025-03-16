@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
@@ -7,7 +6,7 @@ using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
 
-namespace Util.Serial
+namespace Util.Saving
 {
     /// <summary>
     /// class that handels serialization and writing to disk
@@ -21,42 +20,44 @@ namespace Util.Serial
         private static extern void WindowAlert(string message);
 
         #region fileSaveSettings
+
         /// <summary>
         /// File types that are defined.
         /// </summary>
-        public enum fileTypes
+        public enum FileTypes
         {
-            binary,
-            text,
-            saveHead,
-            gameState,
-            wave = 4
+            Binary,
+            Text,
+            SaveHead,
+            GameState,
+            Wave = 4
         }
 
         /// <summary>
         /// Location of the save data
         /// </summary>
-        public static string saveFolderName = "GameData";
+        public static string SaveFolderName = "GameData";
+
         /// <summary>
         /// A dictonary contain information related to a filetype
         /// </summary>
-        readonly public static Dictionary<fileTypes, string> fileExstentions = new Dictionary<fileTypes, string>
-        {
-            { fileTypes.binary,     ".bin"      },
-            { fileTypes.text,       ".txt"      },
-            { fileTypes.saveHead,   ".sav"      },
-            { fileTypes.gameState,  ".sav"      },
-            { fileTypes.wave,       ".wva"      },
-        },
+        public static readonly Dictionary<FileTypes, string> FileExstentions = new()
+            {
+                { FileTypes.Binary, ".bin" },
+                { FileTypes.Text, ".txt" },
+                { FileTypes.SaveHead, ".sav" },
+                { FileTypes.GameState, ".sav" },
+                { FileTypes.Wave, ".wva" },
+            },
+            FileLocations = new()
+            {
+                { FileTypes.Binary, "Data" },
+                { FileTypes.Text, "Data" },
+                { FileTypes.SaveHead, "Saves\\" + "Head" },
+                { FileTypes.GameState, "Saves\\" + "GameState" },
+                { FileTypes.Wave, "Waves" },
+            };
 
-        FileLocations = new Dictionary<fileTypes, string>
-        {
-            { fileTypes.binary,     "Data"              },
-            { fileTypes.text,       "Data"              },
-            { fileTypes.saveHead,   "Saves\\"+"Head"        },
-            { fileTypes.gameState,  "Saves\\"+"GameState"   },
-            { fileTypes.wave,       "Waves"     },
-        };
         #endregion
 
         /// <summary>
@@ -64,20 +65,16 @@ namespace Util.Serial
         /// </summary>
         /// <param name="fileType">The type of file can matter for directory</param>
         /// <returns></returns>
-        public static string SaveLocation(fileTypes fileType)
+        public static string SaveLocation(FileTypes fileType)
         {
-            
-            string saveLocation = Application.dataPath;
+            var saveLocation = Application.dataPath;
             if (!Application.isEditor)
                 saveLocation += "/..";
             if (Application.platform == RuntimePlatform.WebGLPlayer)
                 saveLocation = Application.persistentDataPath;
 
-            saveLocation += "/" + saveFolderName + "/" + FileLocations[fileType] + "/";
-            if (!Directory.Exists(saveLocation))
-            {
-                Directory.CreateDirectory(saveLocation);
-            }
+            saveLocation += "/" + SaveFolderName + "/" + FileLocations[fileType] + "/";
+            if (!Directory.Exists(saveLocation)) Directory.CreateDirectory(saveLocation);
             return saveLocation;
         }
 
@@ -87,11 +84,11 @@ namespace Util.Serial
         /// <param name="fileName">The name of the file</param>
         /// <param name="fileType">The type of file</param>
         /// <returns>Name + Type </returns>
-        private static string GetFileType(string fileName, fileTypes fileType)
+        private static string GetFileType(string fileName, FileTypes fileType)
         {
-            return fileName + fileExstentions[fileType];
+            return fileName + FileExstentions[fileType];
         }
-        
+
         /// <summary>
         /// Save file to disk
         /// </summary>
@@ -99,13 +96,13 @@ namespace Util.Serial
         /// <param name="fileName">File name with out exstentions</param>
         /// <param name="fileType">The type of file</param>
         /// <param name="data">The actual data fo the file</param>
-        public static void Save<T>(string fileName, fileTypes fileType, T data)
+        public static void Save<T>(string fileName, FileTypes fileType, T data)
         {
             fileName = fileName.Replace('/', '#').Replace("\\\"", "#").Replace(':', '#')
-            .Replace('?', '#').Replace('"', '#').Replace('|', '#').Replace('*', '#').Replace('>', '#')
-            .Replace('<', '#');
+                .Replace('?', '#').Replace('"', '#').Replace('|', '#').Replace('*', '#').Replace('>', '#')
+                .Replace('<', '#');
 
-            string saveFile = SaveLocation(fileType);
+            var saveFile = SaveLocation(fileType);
             saveFile += GetFileType(fileName, fileType);
 
             try
@@ -117,16 +114,13 @@ namespace Util.Serial
             }
             catch (Exception e)
             {
-
                 PlatformSafeMessage("Failed to Save: " + e.Message);
             }
-
 
             if (Application.platform == RuntimePlatform.WebGLPlayer)
                 SyncFiles();
 
-            Debug.Log(System.DateTime.Now + " Saved file: " + saveFile);
-
+            Debug.Log(DateTime.Now + " Saved file: " + saveFile);
         }
 
         /// <summary>
@@ -137,36 +131,39 @@ namespace Util.Serial
         /// <param name="fileType">The file exstention Type</param>
         /// <param name="outputData">A ref for the file that will be loaded</param>
         /// <returns>if the loading was succesfull. Needed because a save file can be non existant</returns>
-        public static bool Load<T>(string fileName, fileTypes fileType, ref T outputData)
+        public static bool Load<T>(string fileName, FileTypes fileType, ref T outputData)
         {
-            string saveFile = SaveLocation(fileType);
+            var saveFile = SaveLocation(fileType);
             saveFile += GetFileType(fileName, fileType);
-            bool returnval = false;
-
-
-            if (!File.Exists(saveFile))
+            try
             {
-                outputData = default(T);
-                returnval = false;
-            }
-            else
-            {
+                if (!File.Exists(saveFile))
+                {
+                    outputData = default;
+                    return false;
+                }
+
                 IFormatter formatter = new BinaryFormatter();
-                FileStream stream = new FileStream(saveFile, FileMode.Open);
+                var stream = new FileStream(saveFile, FileMode.Open);
 
-                T data = (T)formatter.Deserialize(stream);
+                var data = (T)formatter.Deserialize(stream);
                 outputData = data;
-                returnval = true;
                 stream.Close();
+                return true;
             }
-            return returnval;
+            catch (Exception)
+            {
+                Debug.LogError($"Failed to load config at {SaveLocation(fileType)}");
+                throw;
+            }
         }
 
-        public static T Load<T> (string fileName, fileTypes fileType = 0, bool fileNameHasPointer = false){
+        public static T Load<T>(string fileName, FileTypes fileType = 0, bool fileNameHasPointer = false)
+        {
             string saveFile;
             if (!fileNameHasPointer)
             {
-                 saveFile = SaveLocation(fileType);
+                saveFile = SaveLocation(fileType);
                 saveFile += GetFileType(fileName, fileType);
             }
             else
@@ -180,17 +177,18 @@ namespace Util.Serial
             {
                 Debug.Log("failed to find File");
                 Debug.Log(saveFile);
-                outputData = default(T);
+                outputData = default;
             }
             else
             {
                 IFormatter formatter = new BinaryFormatter();
-                FileStream stream = new FileStream(saveFile, FileMode.Open);
-                T data = (T)formatter.Deserialize(stream);
+                var stream = new FileStream(saveFile, FileMode.Open);
+                var data = (T)formatter.Deserialize(stream);
                 outputData = data;
-                
+
                 stream.Close();
             }
+
             return outputData;
         }
 
@@ -201,14 +199,9 @@ namespace Util.Serial
         private static void PlatformSafeMessage(string message)
         {
             if (Application.platform == RuntimePlatform.WebGLPlayer)
-            {
                 WindowAlert(message);
-            }
             else
-            {
                 Debug.Log(message);
-            }
         }
-
     }
 }

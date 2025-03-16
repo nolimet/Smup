@@ -1,53 +1,49 @@
-﻿using UnityEngine;
-using SerizableClasses;
+﻿using System;
 using System.Collections.Generic;
+using UnityEngine;
 
-[System.Serializable]
+[Serializable]
+// ReSharper disable once CheckNamespace
 public class WaveClass
 {
-    public char[,,] waves = new char[0,0,0];
+    // ReSharper disable once InconsistentNaming
+    public readonly char[,,] waves; //TODO remake data
 
     public WaveClass()
     {
         waves = new char[0, 0, 0];
     }
 
-    public WaveClass(Dictionary<Vector3,char> points, Vector3 arraySize)
+    public WaveClass(char[,,] waves)
     {
-        waves = new char[(int)arraySize.z, (int)arraySize.y + 1, (int)arraySize.x + 1];
-        setToNull();
-
-        foreach(Vector3 v in points.Keys)
-        {
-            waves[(int)v.z, (int)v.y, (int)v.x] = points[v];
-        }
-
-        
+        this.waves = waves;
     }
 
-    public Dictionary<Vector3,char> Convert()
+    public WaveClass(Dictionary<Vector3, char> points, Vector3 arraySize)
     {
-      Dictionary<Vector3, char> output = new Dictionary<Vector3, char>();
-        for (int z = 0; z < waves.GetLength(0); z++)
-        {
-            for (int y = 0; y < waves.GetLength(1); y++)
-            {
-                for (int x = 0; x < waves.GetLength(2); x++)
-                {
-                    if(waves[z, y, x]!= '\0')
-                    output.Add(new Vector3(x, y, z), waves[z, y, x]);
-                }
-            }
-        }
+        waves = new char[(int)arraySize.z, (int)arraySize.y + 1, (int)arraySize.x + 1];
+        SetToNull();
+
+        foreach (var v in points.Keys) waves[(int)v.z, (int)v.y, (int)v.x] = points[v];
+    }
+
+    public Dictionary<Vector3, char> Convert()
+    {
+        var output = new Dictionary<Vector3, char>();
+        for (var z = 0; z < waves.GetLength(0); z++)
+        for (var y = 0; y < waves.GetLength(1); y++)
+        for (var x = 0; x < waves.GetLength(2); x++)
+            if (waves[z, y, x] != '\0')
+                output.Add(new Vector3(x, y, z), waves[z, y, x]);
 
         return output;
     }
 
-    void setToNull()
+    private void SetToNull()
     {
-        for (int z = 0; z < waves.GetLength(0); z++)
-            for (int y = 0; y < waves.GetLength(1); y++)
-                for (int x = 0; x < waves.GetLength(2); x++)
-                    waves[z, y, x] = '\0';
+        for (var z = 0; z < waves.GetLength(0); z++)
+        for (var y = 0; y < waves.GetLength(1); y++)
+        for (var x = 0; x < waves.GetLength(2); x++)
+            waves[z, y, x] = '\0';
     }
 }

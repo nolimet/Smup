@@ -1,160 +1,158 @@
-﻿using UnityEngine;
-using System.Collections;
-using System;
+﻿using System.Collections;
+using ObjectPools;
+using UnityEngine;
+using UnityEngine.Serialization;
+using Util;
 
-[RequireComponent(typeof(Rigidbody2D), typeof(PolygonCollider2D))]
-public class BulletGeneric : MonoBehaviour
+namespace Generic_Objects
 {
-    public enum Type
+    [RequireComponent(typeof(Rigidbody2D), typeof(PolygonCollider2D))]
+    public class BulletGeneric : MonoBehaviour
     {
-        Fragment,
-        Bullet
-    }
-
-    public Type WeaponType;
-
-    new public Rigidbody2D rigidbody;
-
-    int fragmentsExplosion;
-    float detonationTime;
-    bool canExplode;
-    float damage;
-    float speed;
-
-    public float Damage
-    {
-        get { return damage; }
-    }
-
-    protected bool markedForRemove;
-
-    void Awake()
-    {
-        rigidbody = GetComponent<Rigidbody2D>();
-    }
-
-    private void Update()
-    {
-        if (canExplode)
+        public enum Type
         {
-            detonationTime -= Time.deltaTime;
-            if (detonationTime <= 0)
+            Fragment,
+            Bullet
+        }
+
+        [FormerlySerializedAs("WeaponType")] public Type weaponType;
+
+        private Rigidbody2D _rigidbody;
+        private SpriteRenderer _renderer;
+        private PolygonCollider2D _collider;
+
+        private int _fragmentsExplosion;
+        private float _detonationTime;
+        private bool _canExplode;
+        private float _damage;
+        private float _speed;
+
+        public float Damage => _damage;
+
+        protected bool MarkedForRemove;
+
+        private void Awake()
+        {
+            _rigidbody = GetComponent<Rigidbody2D>();
+            _renderer = GetComponent<SpriteRenderer>();
+            _collider = GetComponent<PolygonCollider2D>();
+        }
+
+        private void Update()
+        {
+            if (_canExplode)
             {
-                Explode();
+                _detonationTime -= Time.deltaTime;
+                if (_detonationTime <= 0)
+                {
+                    Explode();
+                    StartCoroutine(Remove(0f));
+                    _canExplode = false;
+                }
+            }
+        }
+
+        public void OnEnable()
+        {
+            _collider.enabled = true;
+            _renderer.color = Color.white;
+            MarkedForRemove = false;
+        }
+
+        public void OnCollisionEnter2D(Collision2D coll)
+        {
+            if (!MarkedForRemove)
+            {
+                StartCoroutine(Remove(0.5f));
+                coll.gameObject.SendMessage("hit", _damage, SendMessageOptions.DontRequireReceiver);
+
+                if (_canExplode)
+                    Explode();
+            }
+        }
+
+        public void OnTriggerEnter2D(Collider2D other)
+        {
+            if (!MarkedForRemove)
                 StartCoroutine(Remove(0f));
-                canExplode = false;
-            }
         }
-    }
 
-    public void OnEnable()
-    {
-        GetComponent<PolygonCollider2D>().enabled = true;
-        GetComponent<SpriteRenderer>().color = Color.white;
-        markedForRemove = false;
-    }
-
-    public void OnCollisionEnter2D(Collision2D coll)
-    {
-        if (!markedForRemove)
+        public void Init(float damage, float direction, float speed)
         {
-            //  rigi.AddTorque(Random.Range(-10, 10));
-            StartCoroutine(Remove(0.5f));
-            coll.gameObject.SendMessage("hit", damage, SendMessageOptions.DontRequireReceiver);
+            _damage = damage;
 
-            if (canExplode)
-                Explode();
+            transform.rotation = Quaternion.Euler(0, 0, direction);
+
+            _rigidbody.linearVelocity = Common.AngleToVector(direction) * speed;
+
+            _fragmentsExplosion = 0;
+
+            _speed = speed;
         }
-    }
 
-    public void OnTriggerEnter2D(Collider2D other)
-    {
-        if (!markedForRemove)
-            StartCoroutine(Remove(0f));
-
-    }
-
-    public void Init(float damage, float direction, float speed)
-    {
-        this.damage = damage;
-
-        transform.rotation = Quaternion.Euler(0, 0, direction);
-
-        rigidbody.velocity = Util.Common.AngleToVector(direction) * speed;
-
-        fragmentsExplosion = 0;
-
-        this.speed = speed;
-    }
-
-    public void Init(float damage, float direction, float speed, int fragmentsExplosion)
-    {
-        Init(damage, direction, speed);
-
-        this.fragmentsExplosion = fragmentsExplosion;
-    }
-
-    public void Init(float damage, float direction, float speed, int fragmentsExplosion, float explosionDelayTime , bool isTimeDelayed)
-    {
-        Init(damage, direction, speed, fragmentsExplosion);
-        if (isTimeDelayed)
+        public void Init(float damage, float direction, float speed, int fragmentsExplosion)
         {
-            detonationTime = explosionDelayTime;
+            Init(damage, direction, speed);
+
+            _fragmentsExplosion = fragmentsExplosion;
         }
-        else
+
+        public void Init(float damage, float direction, float speed, int fragmentsExplosion, float explosionDelayTime, bool isTimeDelayed)
         {
-            detonationTime = explosionDelayTime / speed;
+            Init(damage, direction, speed, fragmentsExplosion);
+            if (isTimeDelayed)
+                _detonationTime = explosionDelayTime;
+            else
+                _detonationTime = explosionDelayTime / speed;
+            _canExplode = true;
         }
-        canExplode = true;
-    }
 
-    void Explode()
-    {
-        if (fragmentsExplosion <= 0)
-            return;
-
-        BulletGeneric b;
-        float l = fragmentsExplosion;
-        float r = 360f / fragmentsExplosion;
-        while (fragmentsExplosion > 0)
+        private void Explode()
         {
-            fragmentsExplosion--;
+            if (_fragmentsExplosion <= 0)
+                return;
 
-            //TODO: Make Edicated Explosive bullet
-
-            b = BulletPool.GetBullet(Type.Bullet);
-            b.WeaponType = Type.Fragment;
-            Debug.Log(fragmentsExplosion);
-            b.transform.position = transform.position;
-            b.Init(damage, (r*fragmentsExplosion) + UnityEngine.Random.Range(-r/2f,r/2f), speed);
-        }
-    }
-
-    IEnumerator Remove(float delay)
-    {
-        if (!markedForRemove)
-        {
-            const float frag = 1f / 30;
-            SpriteRenderer r = GetComponent<SpriteRenderer>();
-            Color StartColor = r.color;
-            Color TargetColor = r.color;
-
-            TargetColor.a = 0;
-            markedForRemove = true;
-
-            yield return new WaitForSeconds(delay);
-            GetComponent<PolygonCollider2D>().enabled = false;
-
-            for (int i = 0; i < 30; i++)
+            BulletGeneric b;
+            float l = _fragmentsExplosion;
+            var r = 360f / _fragmentsExplosion;
+            while (_fragmentsExplosion > 0)
             {
-                r.color = Color.Lerp(StartColor, TargetColor, frag * i);
-                yield return new WaitForEndOfFrame();
+                _fragmentsExplosion--;
+
+                //TODO: Make Edicated Explosive bullet
+
+                b = BulletPool.GetBullet(Type.Bullet);
+                b.weaponType = Type.Fragment;
+                Debug.Log(_fragmentsExplosion);
+                b.transform.position = transform.position;
+                b.Init(_damage, r * _fragmentsExplosion + Random.Range(-r / 2f, r / 2f), _speed);
             }
+        }
 
-            WeaponType = Type.Bullet;
+        private IEnumerator Remove(float delay)
+        {
+            if (!MarkedForRemove)
+            {
+                const float frag = 1f / 30;
+                var startColor = _renderer.color;
+                var targetColor = _renderer.color;
 
-            BulletPool.RemoveBullet(this);
+                targetColor.a = 0;
+                MarkedForRemove = true;
 
+                yield return new WaitForSeconds(delay);
+                _collider.enabled = false;
+
+                for (var i = 0; i < 30; i++)
+                {
+                    _renderer.color = Color.Lerp(startColor, targetColor, frag * i);
+                    yield return new WaitForEndOfFrame();
+                }
+
+                weaponType = Type.Bullet;
+
+                BulletPool.RemoveBullet(this);
+            }
         }
     }
 }

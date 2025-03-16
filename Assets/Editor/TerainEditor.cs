@@ -1,39 +1,47 @@
-﻿using UnityEngine;
-using UnityEditor;
-using Util;
-using Util.Serial;
-using System.Linq;
-using System.Collections;
+﻿using System;
 using System.Collections.Generic;
+using Enemies_old;
+using UnityEditor;
+using UnityEngine;
+using Util.Saving;
+using Vector3 = UnityEngine.Vector3;
 
 public class TerainEditor : EditorWindow
 {
     #region Statics
+
     [MenuItem("GameEdit/Formation Editor")]
     public static void ShowWindow()
     {
         //Show existing window instance. If one doesn't exist, make one.
-        TerainEditor thisWindow = GetWindow(typeof(TerainEditor)) as TerainEditor;
+        var thisWindow = GetWindow(typeof(TerainEditor)) as TerainEditor;
         thisWindow.Show();
         thisWindow.minSize = new Vector2(1280, 720);
         thisWindow.Init();
     }
+
     #endregion
+
     #region local
-    Texture2D backgroundTexture = null;
-    Vector2 viewPosition = Vector2.zero;
+
+    private Texture2D backgroundTexture = null;
+
+    private Vector2 viewPosition = Vector2.zero;
+
 //    Color seeThrough = new Color(0, 0, 0, 0);
-    Dictionary<Vector3,char> currentLevel;
-    EnemyStats.Type selectedType = EnemyStats.Type.shooter;
-    float viewAspect { get { return 1f / zoomSize; } }
+    private Dictionary<Vector3, char> currentLevel;
+    private EnemyStats.Type selectedType = EnemyStats.Type.Shooter;
+    private float viewAspect => 1f / zoomSize;
 
     //editor defined varibles
-    float sideBarWidth = 250f;
-    int sizeX = 30, sizeY = 20, zIndex = 0;
-    int zoomSize = 15 ;
-    string WaveName;
+    private float sideBarWidth = 250f;
+    private int sizeX = 30, sizeY = 20, zIndex = 0;
+    private int zoomSize = 15;
+
+    private string WaveName;
+
     // Update is called once per frame
-    void OnGUI()
+    private void OnGUI()
     {
         //calculate background
         if (drawFieldSize(1))
@@ -43,6 +51,7 @@ public class TerainEditor : EditorWindow
         selectedType = (EnemyStats.Type)EditorGUI.EnumPopup(new Rect(getSideBarX(), 65, sideBarWidth, 15), "Selected Enemy", selectedType);
 
         #region save, load and reset
+
         //clear screen
         if (GUI.Button(new Rect(getSideBarX(), 85, sideBarWidth, 15), "Reset"))
         {
@@ -57,23 +66,25 @@ public class TerainEditor : EditorWindow
         //load Data
         if (GUI.Button(new Rect(getSideBarX(), 125, sideBarWidth, 15), "LOAD WAVE"))
             Load();
+
         #endregion
 
         #region Controles
-        if (Event.current.type == EventType.MouseDrag && Event.current.button == 0 || Event.current.type == EventType.MouseDown && Event.current.button == 0) 
+
+        if ((Event.current.type == EventType.MouseDrag && Event.current.button == 0) || (Event.current.type == EventType.MouseDown && Event.current.button == 0))
         {
-            addNewVoxel(Mathf.FloorToInt((Event.current.mousePosition.x * viewAspect) - viewPosition.x ), Mathf.FloorToInt(((position.height - Event.current.mousePosition.y)* viewAspect) + viewPosition.y), zIndex, selectedType);
+            addNewVoxel(Mathf.FloorToInt(Event.current.mousePosition.x * viewAspect - viewPosition.x), Mathf.FloorToInt((position.height - Event.current.mousePosition.y) * viewAspect + viewPosition.y), zIndex, selectedType);
             UpdateBackgroundTexture();
         }
-        if (Event.current.type == EventType.MouseDrag && Event.current.button == 1 || Event.current.type == EventType.MouseDown && Event.current.button == 1)
+
+        if ((Event.current.type == EventType.MouseDrag && Event.current.button == 1) || (Event.current.type == EventType.MouseDown && Event.current.button == 1))
         {
-            RemoveVoxel(Mathf.FloorToInt((Event.current.mousePosition.x * viewAspect) - viewPosition.x), Mathf.FloorToInt(((position.height - Event.current.mousePosition.y) * viewAspect) + viewPosition.y), zIndex);
+            RemoveVoxel(Mathf.FloorToInt(Event.current.mousePosition.x * viewAspect - viewPosition.x), Mathf.FloorToInt((position.height - Event.current.mousePosition.y) * viewAspect + viewPosition.y), zIndex);
             UpdateBackgroundTexture();
         }
-            if (backgroundTexture == null)
-        {
-            UpdateBackgroundTexture();
-        }
+
+        if (backgroundTexture == null) UpdateBackgroundTexture();
+
         #endregion
 
         //draws backgound texture
@@ -81,7 +92,8 @@ public class TerainEditor : EditorWindow
     }
 
     #region internalFunctions
-    void UpdateBackgroundTexture()
+
+    private void UpdateBackgroundTexture()
     {
         if (backgroundTexture == null)
         {
@@ -90,18 +102,15 @@ public class TerainEditor : EditorWindow
             backgroundTexture.anisoLevel = 0;
         }
         else
-            backgroundTexture.Resize(Mathf.FloorToInt(getSideBarX() * viewAspect), Mathf.FloorToInt(position.height * viewAspect));
-        
-        for (int x = 0; x < backgroundTexture.width; x++)
         {
-            for (int y = 0; y < backgroundTexture.height; y++)
-            {
-                if (Inview(x - (int)viewPosition.x, y - (int)viewPosition.y))
-                {
-                    backgroundTexture.SetPixel(x, y, getVoxelColor(x - (int)viewPosition.x, y + (int)viewPosition.y, zIndex));
-                }
-            }
+            backgroundTexture.Reinitialize(Mathf.FloorToInt(getSideBarX() * viewAspect), Mathf.FloorToInt(position.height * viewAspect));
         }
+
+        for (var x = 0; x < backgroundTexture.width; x++)
+        for (var y = 0; y < backgroundTexture.height; y++)
+            if (Inview(x - (int)viewPosition.x, y - (int)viewPosition.y))
+                backgroundTexture.SetPixel(x, y, getVoxelColor(x - (int)viewPosition.x, y + (int)viewPosition.y, zIndex));
+
         backgroundTexture.Apply();
         Repaint();
     }
@@ -115,80 +124,67 @@ public class TerainEditor : EditorWindow
     /// needs to bechanged
     /// </summary>
     /// <returns></returns>
-    bool mouseInMiddleWindow()
+    private bool mouseInMiddleWindow()
     {
         Vector2 mousepos = Input.mousePosition;
         if (mousepos.x < position.xMax && mousepos.x > position.xMin)
-        {
             if (mousepos.y < position.yMax && mousepos.y > position.yMin)
-            {
                 return true;
-            }
-        }
+
         return false;
     }
 
-    bool CanMoveView()
+    private bool CanMoveView()
     {
-        
         return false;
     }
 
-    bool Inview(int x, int z)
+    private bool Inview(int x, int z)
     {
-        
-        if (x > viewPosition.x + sizeX  || x < viewPosition.x)
+        if (x > viewPosition.x + sizeX || x < viewPosition.x)
             return false;
-        if (z > viewPosition.y + sizeY  || z < viewPosition.y)
+        if (z > viewPosition.y + sizeY || z < viewPosition.y)
             return false;
         return true;
     }
 
-    float getSideBarX()
+    private float getSideBarX()
     {
         return position.width - sideBarWidth;
     }
 
-    void addNewVoxel(int x, int y, int z,EnemyStats.Type Type)
+    private void addNewVoxel(int x, int y, int z, EnemyStats.Type Type)
     {
         if (currentLevel == null)
             currentLevel = new Dictionary<Vector3, char>();
         if (!Inview(x, z))
             return;
 
-        char c = System.Convert.ToChar((int)Type);
+        var c = Convert.ToChar((int)Type);
 
-        Vector3 v = new Vector3(x, y, z);
+        var v = new Vector3(x, y, z);
 
         if (!currentLevel.ContainsKey(v))
-        {
             currentLevel.Add(v, c);
-        }
-        else if (currentLevel.ContainsKey(v))
-        {
-            currentLevel[v] = c;
-        }
+        else if (currentLevel.ContainsKey(v)) currentLevel[v] = c;
     }
 
-    void RemoveVoxel(int x, int y, int z)
+    private void RemoveVoxel(int x, int y, int z)
     {
         if (currentLevel == null)
             currentLevel = new Dictionary<Vector3, char>();
         if (!Inview(x, z))
             return;
 
-        Vector3 v = new Vector3(x, y, z);
-        if (currentLevel.ContainsKey(v))
-        {
-            currentLevel.Remove(v);
-        }
+        var v = new Vector3(x, y, z);
+        if (currentLevel.ContainsKey(v)) currentLevel.Remove(v);
     }
 
     //Size is in voxels
-    bool drawFieldSize(float y)
+    private bool drawFieldSize(float y)
     {
-        Vector2 s = new Vector2(sizeX, sizeY);
-        int z = zIndex;
+        var s = new Vector2(sizeX, sizeY);
+        var z = zIndex;
         s = EditorGUI.Vector2Field(new Rect(getSideBarX(), y, sideBarWidth, 20), "Size", s);
         z = EditorGUI.IntField(new Rect(getSideBarX(), 45, sideBarWidth, 15), "zIndex", z);
 
@@ -208,18 +204,18 @@ public class TerainEditor : EditorWindow
                 zIndex = 0;
             return true;
         }
+
         return false;
     }
 
-    Color getVoxelColor(int x, int y, int z)
+    private Color getVoxelColor(int x, int y, int z)
     {
         if (currentLevel == null)
             currentLevel = new Dictionary<Vector3, char>();
 
-        Vector3 v = new Vector3(x, y, z);
-        
+        var v = new Vector3(x, y, z);
+
         if (currentLevel.ContainsKey(v))
-        {
             switch (currentLevel[v])
             {
                 case 'Y':
@@ -233,36 +229,34 @@ public class TerainEditor : EditorWindow
                 default:
                     return Color.gray;
             }
-        }
+
         return Color.gray;
     }
 
-    void Save()
+    private void Save()
     {
-        int hz = 0;
-        foreach(Vector3 v in currentLevel.Keys)
-        {
+        var hz = 0;
+        foreach (var v in currentLevel.Keys)
             if (v.z > hz)
                 hz = (int)v.z;
-        }
         Debug.Log(hz);
         hz++;
 
         float h = -1;
-        foreach (KeyValuePair<Vector3, char> k in currentLevel)
+        foreach (var k in currentLevel)
             if (k.Key.z > h)
                 h = k.Key.z;
 
-        WaveClass SaveData = new WaveClass(currentLevel, new Vector3(sizeX, sizeY, (int)h + 1));
+        var SaveData = new WaveClass(currentLevel, new Vector3(sizeX, sizeY, (int)h + 1));
 
-        Serialization.Save("Wave1", Serialization.fileTypes.wave, SaveData);
+        Serialization.Save("Wave1", Serialization.FileTypes.Wave, SaveData);
     }
 
-    void Load()
+    private void Load()
     {
-        WaveClass loadedData = new WaveClass();
-        
-        if (!Serialization.Load("Wave1", Serialization.fileTypes.wave, ref loadedData))
+        var loadedData = new WaveClass();
+
+        if (!Serialization.Load("Wave1", Serialization.FileTypes.Wave, ref loadedData))
         {
             currentLevel = new Dictionary<Vector3, char>();
             UpdateBackgroundTexture();
@@ -273,6 +267,8 @@ public class TerainEditor : EditorWindow
         currentLevel = loadedData.Convert();
         UpdateBackgroundTexture();
     }
+
     #endregion
+
     #endregion
 }

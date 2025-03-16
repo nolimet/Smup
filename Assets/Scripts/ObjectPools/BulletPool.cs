@@ -1,68 +1,74 @@
-﻿using UnityEngine;
-using System.Collections.Generic;
-using System.Collections;
+﻿using System.Collections.Generic;
 using System.Linq;
+using Generic_Objects;
+using UnityEngine;
+using UnityEngine.Serialization;
 
-public class BulletPool : MonoBehaviour {
-
-    public static BulletPool instance;
-    public delegate void RemoveObject(BulletGeneric item);
-    public event RemoveObject onRemove;
-
-    public List<BulletGeneric> ActivePool, InActivePool;
-
-    public static void RemoveBullet(BulletGeneric item)
+namespace ObjectPools
+{
+    public class BulletPool : MonoBehaviour
     {
-        if (instance && instance.ActivePool.Contains(item))
+        public static BulletPool Instance;
+
+        public delegate void RemoveObject(BulletGeneric item);
+
+        public event RemoveObject OnRemove;
+
+        [FormerlySerializedAs("ActivePool")] public List<BulletGeneric> activePool;
+        [FormerlySerializedAs("InActivePool")] public List<BulletGeneric> inActivePool;
+
+        public static void RemoveBullet(BulletGeneric item)
         {
-            instance.ActivePool.Remove(item);
-            instance.InActivePool.Add(item);
-
-            item.gameObject.SetActive(false);
-        }    
-    }
-
-    public static BulletGeneric GetBullet(BulletGeneric.Type Type)
-    {
-        if (instance)
-        {
-            BulletGeneric w;
-            if (instance.InActivePool.Any(e => e.WeaponType == Type))
+            if (Instance && Instance.activePool.Contains(item))
             {
-                 w = instance.InActivePool.First(e => e.WeaponType == Type);
+                Instance.activePool.Remove(item);
+                Instance.inActivePool.Add(item);
 
-                 instance.InActivePool.Remove(w);
-                 instance.ActivePool.Add(w);
-
-                 w.gameObject.SetActive(true);
+                item.gameObject.SetActive(false);
             }
-            else
-            {
-                GameObject g = Instantiate(Resources.Load("Weapons/" + Type.ToString()), Vector3.zero, Quaternion.identity) as GameObject;
-                w = g.GetComponent<BulletGeneric>();
-
-                instance.ActivePool.Add(w);
-                w.transform.SetParent(instance.transform);
-            }
-
-            return w;
         }
-        return null;
+
+        public static BulletGeneric GetBullet(BulletGeneric.Type type)
+        {
+            if (Instance)
+            {
+                BulletGeneric w;
+                if (Instance.inActivePool.Any(e => e.weaponType == type))
+                {
+                    w = Instance.inActivePool.First(e => e.weaponType == type);
+
+                    Instance.inActivePool.Remove(w);
+                    Instance.activePool.Add(w);
+
+                    w.gameObject.SetActive(true);
+                }
+                else
+                {
+                    var g = Instantiate(Resources.Load("Weapons/" + type.ToString()), Vector3.zero, Quaternion.identity) as GameObject;
+                    w = g.GetComponent<BulletGeneric>();
+
+                    Instance.activePool.Add(w);
+                    w.transform.SetParent(Instance.transform);
+                }
+
+                return w;
+            }
+
+            return null;
+        }
+
+        public void Awake()
+        {
+            if (Instance == null)
+                Instance = this;
+            else
+                Destroy(this);
+        }
+
+        public void Update()
+        {
+            if (Instance == null)
+                Instance = this;
+        }
     }
-
-    public void Awake()
-    {
-        if (instance == null)
-            instance = this;
-        else
-            Destroy(this);
-    }
-
-    public void Update()
-    {
-        if (instance == null)
-            instance = this;
-
-        
-    } 
 }

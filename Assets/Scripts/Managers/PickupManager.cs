@@ -1,75 +1,72 @@
-﻿using UnityEngine;
-using Util.Serial;
+﻿using ObjectPools;
+using Pickups;
+using UnityEngine;
+using UpgradeSystem;
 using Util;
-using System.Collections;
+using Util.Saving;
 
-[RequireComponent(typeof(CircleCollider2D))]
-public class PickupManager : MonoBehaviour
+namespace Managers
 {
-    public float pickedUpScrap { get { return _pickedUpScrap; } }
-    float _pickedUpScrap = 0;
-    // Use this for initialization
-    void Start()
+    [RequireComponent(typeof(CircleCollider2D))]
+    public class PickupManager : MonoBehaviour
     {
-        if (GameManager.upgrades != null)
-            GetComponent<CircleCollider2D>().radius = 7 * Mathf.Pow(1.2f, GameManager.upgrades.ScrapCollectionRange);
-    }
+        private int _pickupLayer;
+        public float PickedUpScrap { get; private set; }
 
-    void OnDestroy()
-    {
-        UpgradeData dat = new UpgradeData();
-        Serialization.Load("upgrade", Serialization.fileTypes.binary, ref dat);
-
-        dat.UpgradeCurrency += Mathf.FloorToInt(_pickedUpScrap * ((dat.ScrapConversionRate + 1) * 1.1f));
-
-        Serialization.Save("upgrade", Serialization.fileTypes.binary, dat);
-    }
-    Rigidbody2D t;
-    public void OnTriggerStay2D(Collider2D col)
-    {
-        if (col.gameObject.layer == 14)
+        // Use this for initialization
+        private void Start()
         {
-            t = col.GetComponent<Rigidbody2D>();
-            if (!t)
-                return;
+            _pickupLayer = LayerMask.NameToLayer("Pickup");
+            GetComponent<CircleCollider2D>().radius = 7 * Mathf.Pow(1.2f, GameManager.Upgrades.scrapCollectionRange);
+        }
 
-            float v = t.velocity.getLength();
-            if (v < 0) v *= -1;
+        private void OnDestroy()
+        {
+            var dat = new UpgradeData();
+            Serialization.Load("upgrade", Serialization.FileTypes.Binary, ref dat); //TODO move to saveDataManager
 
-            if (v < 20)
+            dat.upgradeCurrency += Mathf.FloorToInt(PickedUpScrap * ((dat.scrapConversionRate + 1) * 1.1f));
+
+            Serialization.Save("upgrade", Serialization.FileTypes.Binary, dat); //TODO move to saveDataManager
+        }
+
+        public void OnTriggerStay2D(Collider2D col)
+        {
+            if (col.gameObject.layer == _pickupLayer)
             {
-                Vector2 v2 = transform.position - col.transform.position;
-                v2.Normalize();
-                if (GameManager.upgrades != null)
-                    t.AddForce(v2 * (20f * Mathf.Pow(1.5f, GameManager.upgrades.ScrapCollectionSpeed)) * Time.deltaTime);
-                else
-                    t.AddForce(v2 * (20f * Mathf.Pow(1.5f, 3f)) * Time.deltaTime);
+                var rigidBody = col.GetComponent<Rigidbody2D>();
+                if (!rigidBody)
+                    return;
+
+                var speed = rigidBody.linearVelocity.GetLength();
+                if (speed < 0) speed *= -1;
+
+                if (speed < 20)
+                {
+                    Vector2 v2 = transform.position - col.transform.position;
+                    v2.Normalize();
+                    rigidBody.AddForce(v2 * (20f * Mathf.Pow(1.5f, GameManager.Upgrades.scrapCollectionSpeed)) * Time.deltaTime);
+                }
             }
         }
-    }
 
-    public void OnTriggerExit2D(Collider2D col)
-    {
-        if (col.gameObject.layer == 14)
+        public void OnTriggerExit2D(Collider2D col)
         {
-            col.GetComponent<Rigidbody2D>().drag = 5f;
+            if (col.gameObject.layer == _pickupLayer) col.GetComponent<Rigidbody2D>().linearDamping = 5f;
         }
-    }
 
-    public void OnTriggerEnter2D(Collider2D col)
-    {
-        if (col.gameObject.layer == 14)
+        public void OnTriggerEnter2D(Collider2D col)
         {
-            col.GetComponent<Rigidbody2D>().drag = 1f;
+            if (col.gameObject.layer == _pickupLayer) col.GetComponent<Rigidbody2D>().linearDamping = 1f;
         }
-    }
 
-    public void OnCollisionEnter2D(Collision2D col)
-    {
-        if (col.gameObject.layer == 14)
+        public void OnCollisionEnter2D(Collision2D col)
         {
-            PickupPool.removePickup(col.gameObject.GetComponent<ScrapPickup>());
-            _pickedUpScrap += col.gameObject.GetComponent<ScrapPickup>().scrapValue;
+            if (col.gameObject.layer == _pickupLayer)
+            {
+                ScrapPickupPool.RemovePickup(col.gameObject.GetComponent<ScrapPickup>());
+                PickedUpScrap += col.gameObject.GetComponent<ScrapPickup>().ScrapValue;
+            }
         }
     }
 }

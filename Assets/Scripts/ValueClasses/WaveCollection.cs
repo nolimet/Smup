@@ -1,15 +1,13 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿using System;
 using System.Collections.Generic;
 
-[System.Serializable]
+[Serializable]
+// ReSharper disable once CheckNamespace
 public class WaveCollection
 {
     public List<WaveClass> dataCollection;
-    public int waveFormations
-    {
-        get { return 0; }
-    }
+    public int WaveFormations => 0;
+
     public WaveCollection()
     {
         dataCollection = new List<WaveClass>();

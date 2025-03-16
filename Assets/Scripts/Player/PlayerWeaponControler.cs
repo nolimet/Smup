@@ -1,118 +1,107 @@
-﻿using UnityEngine;
+﻿using Managers;
+using Player.Weapons;
+using UnityEngine;
 using Util;
-using player.Weapon;
-using System.Collections;
 
-public class PlayerWeaponControler : MonoBehaviour
+namespace Player
 {
-    public delegate void DelegateFireWeaon(player.Weapon.WeaponType currentGun);
-    public event DelegateFireWeaon onFireWeapon;
-
-    public static bool Firing = false;
-
-    public Vector2 weaponOffset;
-
-
-    WeaponType _CurrentWeapon;
-    public WeaponType CurrentWeapon
+    public class PlayerWeaponControler : MonoBehaviour
     {
-        set
+        public delegate void DelegateFireWeaon(WeaponType currentGun);
+
+        public event DelegateFireWeaon OnFireWeapon;
+
+        public static bool Firing;
+
+        public Vector2 weaponOffset;
+
+        private WeaponType _currentWeapon;
+
+        public WeaponType CurrentWeapon
         {
-            if (value != _CurrentWeapon)
+            set
             {
-                switch (value)
-                {
-                    case WeaponType.Cannon:
-                        MainWeapon = new Cannon();
-                        break;
-                    case WeaponType.Minigun:
-                        MainWeapon = new MiniGun();
-                        break;
+                if (value != _currentWeapon)
+                    switch (value)
+                    {
+                        case WeaponType.Cannon:
+                            MainWeapon = new Cannon();
+                            break;
+                        case WeaponType.Minigun:
+                            MainWeapon = new MiniGun();
+                            break;
 
-                    case WeaponType.Shotgun:
-                        MainWeapon = new ShotGun();
-                        break;
+                        case WeaponType.Shotgun:
+                            MainWeapon = new ShotGun();
+                            break;
 
-                    case WeaponType.Granade:
-                        MainWeapon = new Granade();
-                        break;
-                }
+                        case WeaponType.Granade:
+                            MainWeapon = new Granade();
+                            break;
+                    }
+
+                _currentWeapon = value;
             }
 
-            _CurrentWeapon = value;
+            get => _currentWeapon;
         }
 
-        get
+        public IBaseWeapon MainWeapon;
+
+        private Rigidbody2D _rigi;
+        // Use this for initialization
+
+        private void Start()
         {
-            return _CurrentWeapon;
+            _rigi = GetComponent<Rigidbody2D>();
+            MainWeapon = new Cannon();
         }
-    }
-    public IBaseWeapon MainWeapon;
 
-
-    Rigidbody2D rigi;
-    // Use this for initialization
-
-    void Start()
-    {
-        rigi = GetComponent<Rigidbody2D>();
-        MainWeapon = new Cannon();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        if (Input.GetButton(Axis.Fire))
-            FireMain();
-        else
-            Firing = false;
-
-        SwitchWeapon();
-    }
-
-    void SwitchWeapon()
-    {
-        if (Input.GetKeyDown(KeyCode.Alpha1))
+        // Update is called once per frame
+        private void Update()
         {
-            CurrentWeapon = WeaponType.Cannon;
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha2))
-        {
-            if (GameManager.upgrades.MiniGun.Unlocked)
-                CurrentWeapon = WeaponType.Minigun;
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha3))
-        {
-            if (GameManager.upgrades.Shotgun.Unlocked)
-                CurrentWeapon = WeaponType.Shotgun;
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha4))
-        {
-            if (GameManager.upgrades.Granade.Unlocked)
-                CurrentWeapon = WeaponType.Granade;
-        }
-    }
+            if (Input.GetButton(Axis.Fire))
+                FireMain();
+            else
+                Firing = false;
 
-    void FireMain()
-    {
-        if (!GameManager.playerStats.canFire(MainWeapon.energyCost))
-            return;
-        if(MainWeapon.Shoot(gameObject, weaponOffset, getAddedVelocity()))
-        {
-            GameManager.playerStats.RemoveEnergy(MainWeapon.energyCost);
-            onFireWeapon?.Invoke(_CurrentWeapon);
+            SwitchWeapon();
         }
 
-    }
+        private void SwitchWeapon()
+        {
+            if (Input.GetKeyDown(KeyCode.Alpha1)) CurrentWeapon = WeaponType.Cannon;
+            if (Input.GetKeyDown(KeyCode.Alpha2))
+                if (GameManager.Upgrades.miniGun.unlocked)
+                    CurrentWeapon = WeaponType.Minigun;
+            if (Input.GetKeyDown(KeyCode.Alpha3))
+                if (GameManager.Upgrades.shotgun.unlocked)
+                    CurrentWeapon = WeaponType.Shotgun;
+            if (Input.GetKeyDown(KeyCode.Alpha4))
+                if (GameManager.Upgrades.grenade.unlocked)
+                    CurrentWeapon = WeaponType.Granade;
+        }
 
-    Vector2 getAddedVelocity()
-    {
-        Vector2 output;
+        private void FireMain()
+        {
+            if (!GameManager.Stats.CanFire(MainWeapon.EnergyCost))
+                return;
+            if (MainWeapon.TryShoot(gameObject, weaponOffset, GetAddedVelocity()))
+            {
+                GameManager.Stats.RemoveEnergy(MainWeapon.EnergyCost);
+                OnFireWeapon?.Invoke(_currentWeapon);
+            }
+        }
 
-        if (rigi.velocity.x > 0)
-            output = new Vector2(rigi.velocity.x, 0f);
-        else
-            output = Vector2.zero;
-        return output;
+        private Vector2 GetAddedVelocity()
+        {
+            Vector2 output;
+
+            if (_rigi.linearVelocity.x > 0)
+                output = new Vector2(_rigi.linearVelocity.x, 0f);
+            else
+                output = Vector2.zero;
+            return output;
+        }
     }
 }
