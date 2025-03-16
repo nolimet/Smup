@@ -20,15 +20,16 @@ namespace Enemies
 
         public void Attack(GameObject enity)
         {
-            if (_salvoCounter == 0 && _salvoCounter > _salvoInterval)
+            if (_salvoCounter == 0 && _salvoTimer <= 0)
             {
                 _salvoCounter = _salvoSize;
                 _shotTimer = 0;
             }
-            else if (_salvoCounter > 0 && _shotInterval <= 0)
+            else if (_salvoCounter > 0 && _shotTimer <= 0)
             {
-                _salvoTimer = _shotInterval;
+                _shotTimer = _shotInterval;
                 _salvoCounter--;
+                if (_salvoCounter == 0) _salvoTimer = _salvoInterval;
                 //TODO Implement shoot
             }
 
