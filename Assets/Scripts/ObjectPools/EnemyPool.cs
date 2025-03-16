@@ -79,7 +79,7 @@ namespace ObjectPools
                 }
                 else
                 {
-                    var g = Instantiate(Resources.Load("Enemies/" + type.ToString()), Vector3.zero, Quaternion.identity) as GameObject;
+                    var g = Instantiate(Resources.Load($"Enemies/{type}"), Vector3.zero, Quaternion.identity) as GameObject;
                     e = g.GetComponent<EnemyStats>();
 
                     Instance._activePool.Add(e);
