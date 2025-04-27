@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Enemies_old;
+using Enums;
 using ObjectPools;
 using UnityEngine;
 using Util.Saving;
@@ -14,18 +14,12 @@ namespace Managers
 
         public event WaveComplete WaveCompleted;
 
-        [SerializeField] private int enemiesLeftInWave;
-
         [SerializeField] private Vector2 waveStartOffset = Vector2.zero;
-        public List<EnemyStats> currentEnemies;
 
         private Dictionary<Vector2, char>[] _patterns;
 
         private void Start()
         {
-            EnemyPool.Instance.Removed += EnemyPoolRemoved;
-            currentEnemies = new List<EnemyStats>();
-
             var wave = Serialization.Load<WaveClass>("Wave1", Serialization.FileTypes.Wave, false);
             Debug.Log(wave);
 
@@ -49,20 +43,9 @@ namespace Managers
             CreateWave();
         }
 
-        private void OnDestroy()
-        {
-            EnemyPool.Instance.Removed -= EnemyPoolRemoved;
-        }
-
-        private void EnemyPoolRemoved(EnemyStats enemy)
-        {
-            enemiesLeftInWave--;
-            currentEnemies.Remove(enemy);
-        }
-
         private void Update()
         {
-            if (enemiesLeftInWave <= 0)
+            if (EnemyPool.ActiveEnemies <= 0)
             {
                 WaveCompleted?.Invoke();
 
@@ -72,7 +55,6 @@ namespace Managers
 
         public void CreateWave()
         {
-            enemiesLeftInWave = 0;
             if (_patterns == null)
             {
                 Debug.LogError("NO PATTERNS LOADED!");
@@ -82,18 +64,15 @@ namespace Managers
 
             var w = Random.Range(0, _patterns.Length);
 
-            foreach (var v in _patterns[w].Keys) AddEnemy(v + waveStartOffset, (EnemyStats.Type)_patterns[w][v]);
+            foreach (var v in _patterns[w].Keys) AddEnemy(v + waveStartOffset, ((EnemyType)_patterns[w][v]).ToString());
         }
 
-        public void AddEnemy(Vector3 pos, EnemyStats.Type type)
+        public void AddEnemy(Vector3 pos, string type)
         {
-            enemiesLeftInWave++;
             var e = EnemyPool.GetEnemy(type);
 
             e.transform.position = pos;
             e.transform.rotation = Quaternion.identity;
-
-            currentEnemies.Add(e);
         }
     }
 }

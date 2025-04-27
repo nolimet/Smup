@@ -1,96 +1,79 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
-using Enemies_old;
+using Enemies;
 using UnityEngine;
+using UnityEngine.Pool;
 
 namespace ObjectPools
 {
-    public class EnemyPool : MonoBehaviour
+    public static class EnemyPool
     {
-        public static EnemyPool Instance;
+        private static readonly Dictionary<string, PoolContainer> _pools = new();
 
-        public delegate void EnemyActivty(EnemyStats enemy);
-
-        public event EnemyActivty Removed;
-
-        private List<EnemyStats> _activePool, _inActivePool;
-
-        private bool _autoCollectEnemiesOnStart = true;
-
-        private void Awake()
+        public static int ActiveEnemies
         {
-            if (Instance == null)
-                Instance = this;
-            else
-                Destroy(this);
-
-            _activePool = new List<EnemyStats>();
-            _inActivePool = new List<EnemyStats>();
-        }
-
-        private void Start()
-        {
-            if (_autoCollectEnemiesOnStart)
+            get
             {
-                var pl = FindObjectsOfType<EnemyStats>();
-                foreach (var p in pl)
-                {
-                    if (p.gameObject.activeSelf)
-                        _activePool.Add(p);
-                    else
-                        _inActivePool.Add(p);
-
-                    p.transform.SetParent(transform);
-                }
+                var count = 0;
+                foreach (var container in _pools.Values) count += container.ActiveCount;
+                return count;
             }
         }
 
-        private void Update()
+        public static EnemyBase GetEnemy(string type)
         {
-            if (Instance == null)
-                Instance = this;
+            if (!_pools.TryGetValue(type, out var pool)) _pools.Add(type, pool = new PoolContainer(type));
+            return pool.Get();
         }
 
-        public static void RemoveEnemy(EnemyStats e)
+        public static void ReleaseEnemy(EnemyBase obj)
         {
-            if (Instance)
-            {
-                if (Instance._activePool.Contains(e))
-                    Instance._activePool.Remove(e);
-                if (!Instance._inActivePool.Contains(e))
-                    Instance._inActivePool.Add(e);
-                e.gameObject.SetActive(false);
-
-                Instance.Removed(e);
-            }
+            _pools[obj.TypeName].Release(obj);
         }
 
-        public static EnemyStats GetEnemy(EnemyStats.Type type)
+        private class PoolContainer
         {
-            if (Instance)
+            private readonly GameObject _prefab;
+            private readonly ObjectPool<EnemyBase> _pool;
+            private readonly string type;
+
+            public int ActiveCount => _pool.CountActive;
+
+            public PoolContainer(string type)
             {
-                EnemyStats e;
-                if (Instance._inActivePool.Any(i => i.type == type))
-                {
-                    e = Instance._inActivePool.First(i => i.type == type);
-                    Instance._inActivePool.Remove(e);
-                    Instance._activePool.Add(e);
-                    e.gameObject.SetActive(true);
-                }
-                else
-                {
-                    var g = Instantiate(Resources.Load($"Enemies/{type}"), Vector3.zero, Quaternion.identity) as GameObject;
-                    e = g.GetComponent<EnemyStats>();
-
-                    Instance._activePool.Add(e);
-                    e.transform.SetParent(Instance.transform, false);
-                }
-
-                e.gameObject.SendMessage("StartBehaviours");
-                return e;
+                _pool = new ObjectPool<EnemyBase>(CreateElement, GetPrefab, OnRelease, OnDestroy, maxSize: 20);
             }
 
-            return null;
+            public EnemyBase Get()
+            {
+                return _pool.Get();
+            }
+
+            public void Release(EnemyBase obj)
+            {
+                _pool.Release(obj);
+            }
+
+            private void OnDestroy(EnemyBase obj)
+            {
+                Object.Destroy(obj.gameObject);
+            }
+
+            private void GetPrefab(EnemyBase obj)
+            {
+                obj.gameObject.SetActive(true);
+                obj.OnSpawn();
+            }
+
+            private void OnRelease(EnemyBase obj)
+            {
+                obj.gameObject.SetActive(false);
+            }
+
+            private EnemyBase CreateElement()
+            {
+                var newInstance = Object.Instantiate(_prefab);
+                return newInstance.GetComponent<EnemyBase>();
+            }
         }
     }
 }
