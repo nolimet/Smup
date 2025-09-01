@@ -1,9 +1,8 @@
 ﻿using Player;
+using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.Serialization;
 using UpgradeSystem;
-using Util;
 using Util.DebugHelpers;
 using Util.Saving;
 
@@ -11,27 +10,24 @@ namespace Managers
 {
     public class GameManager : MonoBehaviour
     {
-        [FormerlySerializedAs("_screen")] [SerializeField] private MoveBoxScaler screen;
-        [FormerlySerializedAs("_playerStats")] [SerializeField] private PlayerStats playerStats;
-        [FormerlySerializedAs("_playerWeaponControler")] [SerializeField] private PlayerWeaponControler playerWeaponControler;
-        [FormerlySerializedAs("_upgrades")] [SerializeField] private UpgradeData upgrades;
-        [FormerlySerializedAs("_pickupManager")] [SerializeField] private PickupManager pickupManager;
+        [SerializeField] private PlayerStats playerStats;
+        [SerializeField] private PlayerWeaponControler playerWeaponControler;
+        [SerializeField] private PickupManager pickupManager;
+        [ShowInInspector] private UpgradeData _upgrades;
 
-        public static MoveBoxScaler Screen;
-        public static PlayerStats Stats;
-        public static PlayerWeaponControler WeaponController;
+        public static PlayerStats Stats => _instance.playerStats;
+        public static PlayerWeaponControler WeaponController => _instance.playerWeaponControler;
+        public static PickupManager PickupManager => _instance.pickupManager;
 
         public static UpgradeData Upgrades
         {
             get
             {
-                if (Instance.upgrades == null) Serialization.Load("upgrade", Serialization.FileTypes.Binary, ref Instance.upgrades);
+                if (Instance._upgrades == null) Serialization.Load("upgrade", Serialization.FileTypes.Binary, ref Instance._upgrades);
 
-                return Instance.upgrades;
+                return Instance._upgrades;
             }
         }
-
-        public static PickupManager PickupManager;
 
         public static GameManager Instance
         {
@@ -60,22 +56,13 @@ namespace Managers
 
             _instance = this;
 
-            Screen = screen;
-            Stats = playerStats;
-            WeaponController = playerWeaponControler;
-            PickupManager = pickupManager;
-
-            Serialization.Load("upgrade", Serialization.FileTypes.Binary, ref upgrades); //TODO move to a playerSaveData manager of some sort
+            Serialization.Load("upgrade", Serialization.FileTypes.Binary, ref _upgrades); //TODO move to a playerSaveData manager of some sort
 
             Debugger.DebugEnabled = true;
         }
 
         public void OnDestroy()
         {
-            Screen = null;
-            Stats = null;
-            WeaponController = null;
-            PickupManager = null;
             _instance = null;
         }
 
