@@ -1,5 +1,6 @@
 ﻿using System;
 using Pickups;
+using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Pool;
 using Random = UnityEngine.Random;
@@ -9,6 +10,11 @@ namespace ObjectPools
     public class ScrapPickupPool : MonoBehaviour
     {
         public static ScrapPickupPool Instance;
+
+#if UNITY_EDITOR
+        [ShowInInspector]
+        private int Count => _pool?.CountActive ?? -1;
+#endif
 
         private ObjectPool<ScrapPickup> _pool;
 
