@@ -59,7 +59,7 @@ namespace Player.Weapons
                 _lastShot = DateTime.Now;
                 for (var i = 0; i < _bulletsPerShot; i++)
                 {
-                    var bullet = BulletPool.GetBullet(BulletGeneric.Type.Bullet);
+                    var bullet = BulletPool.Instance.GetObject(BulletGeneric.Type.Bullet);
                     var angle = Random.Range(-0.5f, 0.5f) * _accuracy;
 
                     bullet.transform.position = entiy.transform.position + weaponOffSet;

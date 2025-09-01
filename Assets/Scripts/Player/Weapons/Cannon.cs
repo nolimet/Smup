@@ -59,7 +59,7 @@ namespace Player.Weapons
                 float angle;
                 for (var i = 0; i < _bulletsPerShot; i++)
                 {
-                    _w = BulletPool.GetBullet(BulletGeneric.Type.Bullet);
+                    _w = BulletPool.Instance.GetObject(BulletGeneric.Type.Bullet);
 
                     angle = Random.Range(-0.5f, 0.5f) * _accuracy;
 

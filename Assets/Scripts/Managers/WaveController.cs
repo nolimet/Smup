@@ -45,7 +45,7 @@ namespace Managers
 
         private void Update()
         {
-            if (EnemyPool.ActiveEnemies <= 0)
+            if (EnemyPool.Instance.ActiveItems <= 0)
             {
                 WaveCompleted?.Invoke();
 
@@ -69,7 +69,7 @@ namespace Managers
 
         public void AddEnemy(Vector3 pos, string type)
         {
-            var e = EnemyPool.GetEnemy(type);
+            var e = EnemyPool.Instance.GetObject(type);
 
             e.transform.position = pos;
             e.transform.rotation = Quaternion.identity;

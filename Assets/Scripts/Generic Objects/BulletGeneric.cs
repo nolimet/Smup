@@ -3,11 +3,12 @@ using ObjectPools;
 using UnityEngine;
 using UnityEngine.Serialization;
 using Util;
+using Random = UnityEngine.Random;
 
 namespace Generic_Objects
 {
     [RequireComponent(typeof(Rigidbody2D), typeof(PolygonCollider2D))]
-    public class BulletGeneric : MonoBehaviour
+    public class BulletGeneric : MonoBehaviour, IPoolElement
     {
         public enum Type
         {
@@ -16,7 +17,7 @@ namespace Generic_Objects
         }
 
         [FormerlySerializedAs("WeaponType")] public Type weaponType;
-
+        public string PoolId { get; private set; }
         private Rigidbody2D _rigidbody;
         private SpriteRenderer _renderer;
         private PolygonCollider2D _collider;
@@ -36,6 +37,8 @@ namespace Generic_Objects
             _rigidbody = GetComponent<Rigidbody2D>();
             _renderer = GetComponent<SpriteRenderer>();
             _collider = GetComponent<PolygonCollider2D>();
+
+            PoolId = weaponType.ToString();
         }
 
         private void Update()
@@ -52,12 +55,14 @@ namespace Generic_Objects
             }
         }
 
-        public void OnEnable()
+        public void OnSpawn()
         {
             _collider.enabled = true;
             _renderer.color = Color.white;
             MarkedForRemove = false;
         }
+
+        public void OnDespawn() { }
 
         public void OnCollisionEnter2D(Collision2D coll)
         {
@@ -121,7 +126,7 @@ namespace Generic_Objects
 
                 //TODO: Make Edicated Explosive bullet
 
-                b = BulletPool.GetBullet(Type.Bullet);
+                b = BulletPool.Instance.GetObject(Type.Bullet);
                 b.weaponType = Type.Fragment;
                 Debug.Log(_fragmentsExplosion);
                 b.transform.position = transform.position;
@@ -151,7 +156,7 @@ namespace Generic_Objects
 
                 weaponType = Type.Bullet;
 
-                BulletPool.RemoveBullet(this);
+                BulletPool.Instance.ReleaseObject(this);
             }
         }
     }
