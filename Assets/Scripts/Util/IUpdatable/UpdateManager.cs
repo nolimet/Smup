@@ -12,7 +12,7 @@ namespace Util.IUpdatable
             {
                 if (_instance)
                     return _instance;
-                _instance = FindObjectOfType<UpdateManager>();
+                _instance = FindAnyObjectByType<UpdateManager>();
                 if (_instance)
                     return _instance;
                 var g = new GameObject("Update Manager");

@@ -25,11 +25,11 @@ namespace Util.DebugHelpers
         {
             if (_instance == null)
                 // if it just lost it's instance
-                _instance = FindObjectOfType<ValueDebugger>();
+                _instance = FindAnyObjectByType<ValueDebugger>();
 
             if (_instance == null)
             {
-                ///Make object if it does not exist
+                //Make object if it does not exist
                 //Canvas 
                 var g = new GameObject();
 
