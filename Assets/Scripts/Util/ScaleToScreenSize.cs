@@ -13,7 +13,6 @@ namespace Util
 
         private void Awake()
         {
-            Debug.Log("setting screen size");
             var p1 = camera.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, 0));
 
             transform.localScale = new Vector3(p1.x, p1.y, 1) * 2f;
