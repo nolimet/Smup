@@ -19,7 +19,7 @@ MonoBehaviour:
   OnPlayModeFlashScreen: 0
   OnPlayModeSetup:
     Profile: 0
-    ProfileAsset: {fileID: 11400000, guid: 4d3f7b902beed7d4297322311bb0c17b, type: 2}
+    ProfileAsset: {fileID: 11400000, guid: 49adb536c58978346a613aae4faa9f25, type: 2}
   OnBuild: 1
   OnBuildIfWarnings: 0
   OnBuildIfErrors: 3
@@ -27,7 +27,7 @@ MonoBehaviour:
   OnBuildFlashScreen: 0
   OnBuildSetup:
     Profile: 0
-    ProfileAsset: {fileID: 11400000, guid: 4d3f7b902beed7d4297322311bb0c17b, type: 2}
+    ProfileAsset: {fileID: 11400000, guid: 0277b9f671a2657468a928a016594298, type: 2}
   OnProjectStartup: 1
   OnProjectStartupIfWarnings: 0
   OnProjectStartupIfErrors: 1
