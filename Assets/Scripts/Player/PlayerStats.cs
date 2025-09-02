@@ -1,4 +1,5 @@
-﻿using Managers;
+﻿using Interfaces;
+using Managers;
 using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
@@ -12,14 +13,14 @@ namespace Player
         [FormerlySerializedAs("Health")] [SerializeField] private Bar health;
         [FormerlySerializedAs("CollectedScrapDisplay")] [SerializeField] private Text collectedScrapDisplay;
 
-        public float currentEnergy;
-        public float maxEnergy = 200;
+        public double currentEnergy;
+        public double maxEnergy = 200;
 
-        public float currentHealth;
-        public float maxHealth = 100;
+        public double currentHealth;
+        public double maxHealth = 100;
 
-        public float currentShield;
-        public float maxShield;
+        public double currentShield;
+        public double maxShield;
 
         private void Start()
         {
