@@ -8,19 +8,24 @@ namespace ValueClasses
     public class Bar
     {
         public RectTransform bar1, bar2;
+        private Image _bar1Img, _bar2Img;
+
         public Text valueText;
         public Color[] barColours;
         private Vector2 _startSize;
-        private float _maxValue, _overloadFactor, _frac, _maxBarValue;
+        private double _maxValue, _overloadFactor, _frac, _maxBarValue;
         private bool _useMutlibars;
 
         /// <summary>
         /// Start function for A bar
         /// </summary>
         /// <param name="maxNormal">Used to draw the overload at the right moment</param>
-        /// <param name="maxOverloadFactor">How many times more can the overload hold than the Normal</param>
-        public void Init(float maxNormal, float overloadFactor)
+        /// <param name="overloadFactor">How many times more can the overload hold than the Normal</param>
+        public void Init(double maxNormal, float overloadFactor)
         {
+            _bar1Img = bar1.GetComponent<Image>();
+            _bar2Img = bar2.GetComponent<Image>();
+
             _overloadFactor = overloadFactor;
             _maxValue = maxNormal;
 
@@ -45,9 +50,9 @@ namespace ValueClasses
 
             _startSize = bar1.sizeDelta;
             if (maxValue > _maxBarValue)
-                _frac = 1f / _maxBarValue;
+                _frac = 1d / _maxBarValue;
             else
-                _frac = 1f / maxValue;
+                _frac = 1d / maxValue;
 
             _useMutlibars = true;
         }
@@ -56,10 +61,10 @@ namespace ValueClasses
         /// Input the noneClamped value
         /// </summary>
         /// <param name="value">the level it should display</param>
-        public void UpdateSize(float value)
+        public void UpdateSize(double value)
         {
             if (valueText)
-                valueText.text = Mathf.Floor(value).ToString() + " / " + Mathf.Floor(_maxValue).ToString();
+                valueText.text = $"{Math.Floor(value)} / {Math.Floor(_maxValue)}";
 
             if (_useMutlibars)
                 MultiBarSystem(value);
@@ -67,34 +72,34 @@ namespace ValueClasses
                 OverloadSystem(value);
         }
 
-        private void MultiBarSystem(float value)
+        private void MultiBarSystem(double value)
         {
-            var index = Mathf.FloorToInt(value / _maxBarValue);
+            var index = (int)Math.Floor(value / _maxBarValue);
             if (index == barColours.Length)
                 index--;
 
-            var calc = _frac * value;
+            var calc = (float)(_frac * value);
 
             if (index > 0)
             {
-                bar1.GetComponent<Image>().color = barColours[index - 1];
-                bar2.GetComponent<Image>().color = barColours[index];
+                _bar1Img.color = barColours[index - 1];
+                _bar2Img.color = barColours[index];
 
                 bar1.sizeDelta = _startSize;
                 bar2.sizeDelta = new Vector2(_startSize.x * (calc - index), _startSize.y);
             }
             else
             {
-                bar1.GetComponent<Image>().color = barColours[index];
+                _bar1Img.color = barColours[index];
 
                 bar1.sizeDelta = new Vector2(_startSize.x * calc, _startSize.y);
                 bar2.sizeDelta = new Vector2(0.01f, _startSize.y);
             }
         }
 
-        private void OverloadSystem(float value)
+        private void OverloadSystem(double value)
         {
-            var calc = _frac * value;
+            var calc = (float)(_frac * value);
             if (value < _maxValue)
             {
                 bar1.sizeDelta = new Vector2(_startSize.x * calc, _startSize.y);
@@ -103,7 +108,7 @@ namespace ValueClasses
             else if (value - _maxValue <= _maxValue * _overloadFactor)
             {
                 bar1.sizeDelta = _startSize;
-                bar2.sizeDelta = new Vector2(_startSize.x * ((calc - 1f) / _overloadFactor), _startSize.y);
+                bar2.sizeDelta = new Vector2(_startSize.x * ((calc - 1f) / (float)_overloadFactor), _startSize.y);
             }
         }
     }
