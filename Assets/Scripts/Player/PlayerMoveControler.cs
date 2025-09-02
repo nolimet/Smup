@@ -31,7 +31,7 @@ namespace Player
             if (Input.GetAxis(Axis.Vertical) != 0)
                 dir.y = Speed * 0.75f * Input.GetAxis(Axis.Vertical);
 
-            if (Input.GetAxis(Axis.Boost) != 0)
+            if (Input.GetAxis(Axis.Boost) != 0 && dir.magnitude > float.Epsilon)
                 if (GameManager.Stats.CanFire(_boostCost * Time.deltaTime))
                 {
                     GameManager.Stats.RemoveEnergy(_boostCost * Time.deltaTime);
