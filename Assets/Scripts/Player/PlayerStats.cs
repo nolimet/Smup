@@ -6,7 +6,7 @@ using ValueClasses;
 
 namespace Player
 {
-    public class PlayerStats : MonoBehaviour
+    public class PlayerStats : MonoBehaviour, IDamageAble
     {
         [FormerlySerializedAs("Energy")] [SerializeField] private Bar energy;
         [FormerlySerializedAs("Health")] [SerializeField] private Bar health;
@@ -52,9 +52,21 @@ namespace Player
             return false;
         }
 
-        public void Hit(float value)
+        public void ReceiveDamage(double damage)
         {
-            currentHealth -= value;
+            if (currentShield > 0)
+            {
+                currentShield -= damage;
+                if (currentShield < 0)
+                {
+                    damage = -currentShield;
+                    currentHealth -= damage;
+                    currentShield = 0;
+                }
+            }
+
+            currentHealth -= damage;
+            if (currentShield < 0) Debug.Log("TODO: Implement game-over!"); //TODO implement game over
         }
 
         public void RemoveEnergy(float amount)

@@ -12,7 +12,7 @@ using Random = UnityEngine.Random;
 namespace Enemies
 {
     [RequireComponent(typeof(Rigidbody2D), typeof(SpriteRenderer))]
-    public class EnemyBase : MonoBehaviour, IPoolElement
+    public sealed class Enemy : MonoBehaviour, IPoolElement, IDamageAble
     {
         public string PoolId => TypeName;
 
@@ -86,7 +86,23 @@ namespace Enemies
             movementPattern.Move(transform.position, moveSpeed, Time.deltaTime);
         }
 
-        public void DoDamage(double damage)
+        private void OnCollisionEnter2D(Collision2D other)
+        {
+            if (Health <= double.Epsilon) return;
+
+            if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
+            {
+                var damageAble = other.gameObject.GetComponent<IDamageAble>();
+                if (damageAble != null)
+                {
+                    damageAble.ReceiveDamage(contactDamage);
+                    DestroyLoop().Forget();
+                    Health = 0;
+                }
+            }
+        }
+
+        public void ReceiveDamage(double damage)
         {
             if (Health <= 0)
                 return;
