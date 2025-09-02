@@ -2,7 +2,7 @@
 
 namespace ObjectPools
 {
-    public class EnemyPool : BasePool<EnemyBase, EnemyPool>
+    public class EnemyPool : BasePool<Enemy, EnemyPool>
     {
         protected override string BasePath => "Enemies";
     }
