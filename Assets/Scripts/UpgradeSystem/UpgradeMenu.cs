@@ -34,7 +34,7 @@ namespace UpgradeSystem
         {
             if (!_instance) _instance = this;
 
-            Serialization.Load("upgrade", Serialization.FileTypes.Binary, ref upgrades);
+            Serialization.Load("upgrade", Serialization.FileTypes.Binary, out upgrades);
 
             if (upgrades == null)
             {
@@ -52,7 +52,7 @@ namespace UpgradeSystem
             if (!_instance)
                 _instance = this;
 
-            upgradeCurrency.text = upgrades.upgradeCurrency.ToString() + "$";
+            upgradeCurrency.text = $"{upgrades.upgradeCurrency}$";
         }
 
         private void OnDestroy()
@@ -152,15 +152,15 @@ namespace UpgradeSystem
         [Serializable]
         public class UpgradeObject
         {
-            private UpgradeItem _visual;
+            private readonly UpgradeItem _visual;
 
             private Func<int, bool, bool> _upgradeFunc;
 
-            private float _startCost, _mult;
+            private readonly float _startCost, _mult;
 
-            private int _level, _maxLevel;
-            private string _fieldName;
-            private string _groupName;
+            private int _level;
+            private readonly int _maxLevel;
+            private readonly string _fieldName, _groupName;
 
             public bool Enabled
             {
@@ -182,12 +182,14 @@ namespace UpgradeSystem
                 if (!string.IsNullOrEmpty(groupName))
                 {
                     groupValue = Data.GetType().GetField(groupName).GetValue(Data);
-                    Assert.NotNull(groupValue, $"The group {groupName} was not found");
+                    Debug.Assert(groupValue!= null,  $"The group {groupName} was not found");
+                    return;
                 }
 
                 var fieldValue = groupValue.GetType().GetField(fieldName).GetValue(groupValue);
-                Assert.NotNull(fieldValue, $"failed to find {fieldName} for {groupName}");
-
+                if (fieldValue == null)
+                    throw new NullReferenceException($"failed to find {fieldName} for {groupName}");
+                
                 if (mult > 0)
                 {
                     _level = (int)fieldValue;

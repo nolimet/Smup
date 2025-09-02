@@ -131,7 +131,7 @@ namespace Util.Saving
         /// <param name="fileType">The file exstention Type</param>
         /// <param name="outputData">A ref for the file that will be loaded</param>
         /// <returns>if the loading was succesfull. Needed because a save file can be non existant</returns>
-        public static bool Load<T>(string fileName, FileTypes fileType, ref T outputData)
+        public static bool Load<T>(string fileName, FileTypes fileType, out T outputData)
         {
             var saveFile = SaveLocation(fileType);
             saveFile += GetFileType(fileName, fileType);

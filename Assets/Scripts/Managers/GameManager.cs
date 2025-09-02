@@ -23,7 +23,7 @@ namespace Managers
         {
             get
             {
-                if (Instance._upgrades == null) Serialization.Load("upgrade", Serialization.FileTypes.Binary, ref Instance._upgrades);
+                if (Instance._upgrades == null) Serialization.Load("upgrade", Serialization.FileTypes.Binary, out Instance._upgrades);
 
                 return Instance._upgrades;
             }
@@ -56,7 +56,7 @@ namespace Managers
 
             _instance = this;
 
-            Serialization.Load("upgrade", Serialization.FileTypes.Binary, ref _upgrades); //TODO move to a playerSaveData manager of some sort
+            Serialization.Load("upgrade", Serialization.FileTypes.Binary, out _upgrades); //TODO move to a playerSaveData manager of some sort
 
             Debugger.DebugEnabled = true;
         }

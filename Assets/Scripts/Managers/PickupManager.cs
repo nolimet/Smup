@@ -22,8 +22,7 @@ namespace Managers
 
         private void OnDestroy()
         {
-            var dat = new UpgradeData();
-            Serialization.Load("upgrade", Serialization.FileTypes.Binary, ref dat); //TODO move to saveDataManager
+            Serialization.Load("upgrade", Serialization.FileTypes.Binary, out UpgradeData dat); //TODO move to saveDataManager
 
             dat.upgradeCurrency += Mathf.FloorToInt(PickedUpScrap * ((dat.scrapConversionRate + 1) * 1.1f));
 
