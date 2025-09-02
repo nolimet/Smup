@@ -4,7 +4,7 @@ using Util;
 
 namespace Player
 {
-    [RequireComponent(typeof(Rigidbody2D), typeof(BoxCollider2D))]
+    [RequireComponent(typeof(Rigidbody2D))]
     public class PlayerMoveControler : MonoBehaviour
     {
         private const float Speed = 6f;
