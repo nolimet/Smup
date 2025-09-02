@@ -21,9 +21,6 @@ namespace ValueClasses
             z = v3.z;
         }
 
-        public UnityEngine.Vector3 GetVector3()
-        {
-            return new UnityEngine.Vector3(x, y, z);
-        }
+        public UnityEngine.Vector3 GetVector3() => new(x, y, z);
     }
 }

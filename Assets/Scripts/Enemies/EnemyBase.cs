@@ -1,5 +1,8 @@
 ﻿using System;
 using Cysharp.Threading.Tasks;
+using Data;
+using Enemies.Attack;
+using Enemies.Movement;
 using ObjectPools;
 using Sirenix.OdinInspector;
 using Sirenix.Serialization;
@@ -17,10 +20,10 @@ namespace Enemies
         private Collider2D _collider2D;
         private SpriteRenderer _spriteRenderer;
 
-        [SerializeField] private float moveSpeed = 1f;
-        [SerializeField] private float fadeDuration = 1f;
-        [SerializeField] private int scrapValue;
-        [SerializeField] private Vector2 scrapCloudSize = Vector2.one * 7;
+        [SerializeField] private Overrideable<float> moveSpeed = 1f;
+        [SerializeField] private Overrideable<float> fadeDuration = 1f;
+        [SerializeField] private Overrideable<int> scrapValue;
+        [SerializeField] private Overrideable<Vector2> scrapCloudSize = Vector2.one * 7;
 
         [field: SerializeField] public double Health { get; private set; }
         [field: SerializeField] public double MaxHealth { get; private set; }

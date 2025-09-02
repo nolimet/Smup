@@ -49,10 +49,7 @@ namespace ObjectPools
             return gameObject.GetComponent<ScrapPickup>();
         }
 
-        public static ScrapPickup GetPickup()
-        {
-            return Instance._pool.Get();
-        }
+        public static ScrapPickup GetPickup() => Instance._pool.Get();
 
         /// <summary>
         /// Create a collection of scrap

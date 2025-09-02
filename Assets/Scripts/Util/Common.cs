@@ -32,10 +32,7 @@ namespace Util
         /// </summary>
         /// <param name="v2">A Vector to of which you want to know the direction in Degrees</param>
         /// <returns>Angle in degrees</returns>
-        public static float VectorToAngle(Vector2 v2)
-        {
-            return Mathf.Atan2(v2.y, v2.x) * 180f / Mathf.PI;
-        }
+        public static float VectorToAngle(Vector2 v2) => Mathf.Atan2(v2.y, v2.x) * 180f / Mathf.PI;
 
         /// <summary>
         /// Coverts bool into a int
@@ -54,10 +51,7 @@ namespace Util
         /// </summary>
         /// <param name="obj">Vector of wich you want to know the length</param>
         /// <returns>Length of the vector</returns>
-        public static float GetLength(this Vector2 obj)
-        {
-            return Mathf.Sqrt(Mathf.Pow(obj.x, 2) + Mathf.Pow(obj.y, 2));
-        }
+        public static float GetLength(this Vector2 obj) => Mathf.Sqrt(Mathf.Pow(obj.x, 2) + Mathf.Pow(obj.y, 2));
 
         /// <summary>
         /// Gets the bounds of a object including it's childeren
@@ -195,10 +189,7 @@ namespace Util
             return bounds;
         }
 
-        public static Bounds GetBounds(this Transform obj)
-        {
-            return obj.gameObject.GetComponent<SpriteRenderer>().bounds;
-        }
+        public static Bounds GetBounds(this Transform obj) => obj.gameObject.GetComponent<SpriteRenderer>().bounds;
 
         /// <summary>
         /// Draw the bounds of a object
@@ -220,10 +211,7 @@ namespace Util
         /// <param name="bounds"></param>
         /// <param name="target">Object contained in other bound</param>
         /// <returns></returns>
-        public static bool ContainBounds(this Bounds bounds, Bounds target)
-        {
-            return bounds.Contains(target.min) && bounds.Contains(target.max);
-        }
+        public static bool ContainBounds(this Bounds bounds, Bounds target) => bounds.Contains(target.min) && bounds.Contains(target.max);
 
         public static float CalculateJumpVerticalSpeed(float targetJumpHeight)
         {
@@ -239,10 +227,7 @@ namespace Util
         /// <param name="number">should not be seen. The number to exstract from</param>
         /// <param name="power">wat what point do i need to take the return number. In powers of 10( 3, 2 ,1 ,0 )</param>
         /// <returns>a number from 0-9</returns>
-        public static int GetNumbAt(this int number, int power)
-        {
-            return number / (int)Mathf.Pow(10, power) % 10;
-        }
+        public static int GetNumbAt(this int number, int power) => number / (int)Mathf.Pow(10, power) % 10;
 
         /// <summary>
         /// Resizes an array to new size.
@@ -263,10 +248,7 @@ namespace Util
             return temp;
         }
 
-        public static Vector2 GetSize(this Texture2D obj)
-        {
-            return new Vector2(obj.width, obj.height);
-        }
+        public static Vector2 GetSize(this Texture2D obj) => new(obj.width, obj.height);
 
         public static void ScaleSpriteToFitScreen(SpriteRenderer spriteRenderer, bool preserveAspect)
         {
@@ -298,8 +280,7 @@ namespace Util
         /// <param name="v"></param>
         /// <param name="degrees">The angle to rotate it to</param>
         /// <returns>Rotated Vector2</returns>
-        public static Vector2 Rotate(this Vector2 v, float degrees)
-        {
+        public static Vector2 Rotate(this Vector2 v, float degrees) =>
             /*
             Actual Calculation
 
@@ -312,8 +293,7 @@ namespace Util
 
              return new Vector2(cos * tx - sin * ty, sin * tx + cos * ty);
             */
-            return Quaternion.Euler(0, 0, degrees) * v;
-        }
+            Quaternion.Euler(0, 0, degrees) * v;
 
         /// <summary>
         /// Rotates a Vector2 to a Quaternion
@@ -321,10 +301,7 @@ namespace Util
         /// <param name="v"></param>
         /// <param name="rotation">The rotation used to to calculate the new vector</param>
         /// <returns>Rotated Vector2</returns>
-        public static Vector2 Rotate(this Vector2 v, Quaternion rotation)
-        {
-            return new Quaternion(0, 0, rotation.z, rotation.w) * v;
-        }
+        public static Vector2 Rotate(this Vector2 v, Quaternion rotation) => new Quaternion(0, 0, rotation.z, rotation.w) * v;
 
         public static Vector2 Round(this Vector2 v)
         {

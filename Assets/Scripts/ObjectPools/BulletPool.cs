@@ -6,9 +6,6 @@ namespace ObjectPools
     {
         protected override string BasePath => "Weapons";
 
-        public BulletGeneric GetObject(BulletGeneric.Type poolId)
-        {
-            return GetObject(poolId.ToString());
-        }
+        public BulletGeneric GetObject(BulletGeneric.Type poolId) => GetObject(poolId.ToString());
     }
 }

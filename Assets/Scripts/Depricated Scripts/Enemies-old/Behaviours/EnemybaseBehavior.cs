@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using UnityEngine;
 
-namespace Enemies_old.Behaviours
+namespace Depricated_Scripts.Enemies_old.Behaviours
 {
     [RequireComponent(typeof(PolygonCollider2D))]
     [RequireComponent(typeof(Rigidbody2D))]

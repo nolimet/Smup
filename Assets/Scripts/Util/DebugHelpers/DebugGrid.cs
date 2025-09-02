@@ -134,15 +134,9 @@ namespace Util.DebugHelpers
             return output;
         }
 
-        private float LineY(float x)
-        {
-            return (j - k * x) / l;
-        }
+        private float LineY(float x) => (j - k * x) / l;
 
-        private float LineX(float x)
-        {
-            return (j - l * x) / k;
-        }
+        private float LineX(float x) => (j - l * x) / k;
 
         private void OnGUI() { }
     }

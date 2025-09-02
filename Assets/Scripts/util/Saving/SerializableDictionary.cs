@@ -7,7 +7,7 @@ using System.Xml.Serialization;
 
 namespace Util.Saving
 {
-    [Serializable()]
+    [Serializable]
     public class SerializableDictionary<TKey, TVal> : Dictionary<TKey, TVal>, IXmlSerializable, ISerializable
     {
         #region Constants
@@ -110,10 +110,7 @@ namespace Util.Saving
             reader.ReadEndElement(); // Read End Element to close Read of containing node
         }
 
-        XmlSchema IXmlSerializable.GetSchema()
-        {
-            return null;
-        }
+        XmlSchema IXmlSerializable.GetSchema() => null;
 
         #endregion
 

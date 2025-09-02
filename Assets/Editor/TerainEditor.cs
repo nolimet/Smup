@@ -4,6 +4,7 @@ using Enums;
 using UnityEditor;
 using UnityEngine;
 using Util.Saving;
+using ValueClasses;
 using Vector3 = UnityEngine.Vector3;
 
 public class TerainEditor : EditorWindow
@@ -251,7 +252,6 @@ public class TerainEditor : EditorWindow
 
     private void Load()
     {
-
         if (!Serialization.Load("Wave1", Serialization.FileTypes.Wave, out WaveClass loadedData))
         {
             _currentLevel = new Dictionary<Vector3, char>();

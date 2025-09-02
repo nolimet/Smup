@@ -65,10 +65,7 @@ namespace ObjectPools
                 _pool = new ObjectPool<TPoolElement>(CreateElement, OnGet, OnRelease, OnDestroy, maxSize: 20);
             }
 
-            public TPoolElement Get()
-            {
-                return _pool.Get();
-            }
+            public TPoolElement Get() => _pool.Get();
 
             public void Release(TPoolElement obj)
             {

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Menus.MenuParts;
-using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
@@ -182,14 +181,14 @@ namespace UpgradeSystem
                 if (!string.IsNullOrEmpty(groupName))
                 {
                     groupValue = Data.GetType().GetField(groupName).GetValue(Data);
-                    Debug.Assert(groupValue!= null,  $"The group {groupName} was not found");
+                    Debug.Assert(groupValue != null, $"The group {groupName} was not found");
                     return;
                 }
 
                 var fieldValue = groupValue.GetType().GetField(fieldName).GetValue(groupValue);
                 if (fieldValue == null)
                     throw new NullReferenceException($"failed to find {fieldName} for {groupName}");
-                
+
                 if (mult > 0)
                 {
                     _level = (int)fieldValue;
@@ -229,10 +228,7 @@ namespace UpgradeSystem
                 return (int)_startCost;
             }
 
-            private bool CanAfford()
-            {
-                return Data.upgradeCurrency >= GetPrice();
-            }
+            private bool CanAfford() => Data.upgradeCurrency >= GetPrice();
 
             private void UpdateColour()
             {

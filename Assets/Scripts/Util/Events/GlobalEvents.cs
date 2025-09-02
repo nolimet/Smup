@@ -9,10 +9,7 @@ namespace Util.Events
     {
         private static IEventDispatcher _eventDispatcher;
 
-        static GlobalEvents()
-        {
-            _eventDispatcher = new EventDispatcher();
-        }
+        static GlobalEvents() => _eventDispatcher = new EventDispatcher();
 
         /// <summary>
         /// Static implementation of <see cref="EventDispatcher.AddEventListener(Type, Action)"/>.

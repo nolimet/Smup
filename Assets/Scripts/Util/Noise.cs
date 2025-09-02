@@ -115,20 +115,11 @@ namespace Util
 
         private const int GradientsMask3D = 15;
 
-        private static float Dot(Vector2 g, float x, float y)
-        {
-            return g.x * x + g.y * y;
-        }
+        private static float Dot(Vector2 g, float x, float y) => g.x * x + g.y * y;
 
-        private static float Dot(Vector3 g, float x, float y, float z)
-        {
-            return g.x * x + g.y * y + g.z * z;
-        }
+        private static float Dot(Vector3 g, float x, float y, float z) => g.x * x + g.y * y + g.z * z;
 
-        private static float Smooth(float t)
-        {
-            return t * t * t * (t * (t * 6f - 15f) + 10f);
-        }
+        private static float Smooth(float t) => t * t * t * (t * (t * 6f - 15f) + 10f);
 
         private static float _sqr2 = Mathf.Sqrt(2f);
 

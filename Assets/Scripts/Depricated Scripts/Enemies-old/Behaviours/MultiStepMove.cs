@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.Serialization;
 
-namespace Enemies_old.Behaviours
+namespace Depricated_Scripts.Enemies_old.Behaviours
 {
     public class MultiStepMove : Enemybase
     {

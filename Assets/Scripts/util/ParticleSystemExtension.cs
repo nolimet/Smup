@@ -10,10 +10,7 @@ namespace Util
             emission.enabled = enabled;
         }
 
-        public static float GetEmissionRate(this ParticleSystem particleSystem)
-        {
-            return particleSystem.emission.rateOverTime.constantMax;
-        }
+        public static float GetEmissionRate(this ParticleSystem particleSystem) => particleSystem.emission.rateOverTime.constantMax;
 
         public static void SetEmissionRate(this ParticleSystem particleSystem, float emissionRate)
         {

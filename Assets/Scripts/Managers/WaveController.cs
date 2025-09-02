@@ -4,6 +4,7 @@ using Enums;
 using ObjectPools;
 using UnityEngine;
 using Util.Saving;
+using ValueClasses;
 using Vector3 = UnityEngine.Vector3;
 
 namespace Managers

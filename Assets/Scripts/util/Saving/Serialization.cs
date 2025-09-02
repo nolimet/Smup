@@ -84,10 +84,7 @@ namespace Util.Saving
         /// <param name="fileName">The name of the file</param>
         /// <param name="fileType">The type of file</param>
         /// <returns>Name + Type </returns>
-        private static string GetFileType(string fileName, FileTypes fileType)
-        {
-            return fileName + FileExstentions[fileType];
-        }
+        private static string GetFileType(string fileName, FileTypes fileType) => fileName + FileExstentions[fileType];
 
         /// <summary>
         /// Save file to disk
