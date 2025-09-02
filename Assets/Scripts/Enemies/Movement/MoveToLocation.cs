@@ -13,7 +13,7 @@ namespace Enemies.Movement
             _rigidbody = entity.GetComponent<Rigidbody2D>();
         }
 
-        public void Move(Vector2? currentPosition = null, float speed = 1f, float deltaTime = 0f)
+        public void Move(Vector2 currentPosition, float speed, float deltaTime)
         {
             throw new NotImplementedException();
         }
