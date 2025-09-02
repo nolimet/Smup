@@ -4,6 +4,6 @@ namespace Enemies
 {
     public interface IAttack
     {
-        void Attack(GameObject entity);
+        void Attack(Vector2 position, Vector2 motionVector);
     }
 }

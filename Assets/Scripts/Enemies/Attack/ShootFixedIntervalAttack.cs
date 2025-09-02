@@ -1,39 +1,50 @@
-﻿using Data;
+﻿using System;
+using Data;
+using Generic_Objects;
+using ObjectPools;
 using UnityEngine;
 
 namespace Enemies.Attack
 {
+    [Serializable]
     public class ShootFixedIntervalAttack : IAttack
     {
-        private Overrideable<float> _salvoInterval;
-        private Overrideable<float> _shotInterval;
-        private Overrideable<int> _salvoSize;
+        [SerializeField] private Overrideable<float> salvoInterval = 0.5f;
+        [SerializeField] private Overrideable<float> shotInterval = 0.1f;
+        [SerializeField] private Overrideable<int> salvoSize = 3;
 
-        private Overrideable<float> _damagePerShot;
+        [SerializeField] private Overrideable<float> damagePerShot = 5;
+        [SerializeField] private Overrideable<float> shotSpeed = 5;
 
         private int _shotsLeft;
         private float _timer;
 
-        public void Attack(GameObject entity)
+        public void Attack(Vector2 position, Vector2 motionVector)
         {
             if (_shotsLeft > 0 && _timer <= 0)
             {
-                Shoot();
+                Shoot(position, motionVector);
                 _shotsLeft--;
 
                 if (_shotsLeft > 0)
-                    _timer = _shotInterval;
+                    _timer = shotInterval;
                 else
-                    _timer = _salvoInterval;
+                    _timer = salvoInterval;
             }
             else if (_shotsLeft == 0 && _timer <= 0)
             {
-                _shotsLeft = _salvoSize;
+                _shotsLeft = salvoSize;
             }
 
             _timer -= Time.deltaTime;
         }
 
-        private void Shoot() { }
+        private void Shoot(Vector2 position, Vector2 motionVector)
+        {
+            var bullet = BulletPool.Instance.GetObject(BulletGeneric.Type.Bullet);
+            bullet.transform.position = position;
+            bullet.Init(damagePerShot, -180, motionVector.x + shotSpeed, LayerMask.NameToLayer("Player"));
+            bullet.gameObject.layer = LayerMask.NameToLayer("EnemyBullets");
+        }
     }
 }
