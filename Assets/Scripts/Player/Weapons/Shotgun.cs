@@ -63,7 +63,8 @@ namespace Player.Weapons
                     var angle = Random.Range(-0.5f, 0.5f) * _accuracy;
 
                     bullet.transform.position = entiy.transform.position + weaponOffSet;
-                    bullet.Init(_bulletDamage, angle, _bulletSpeed);
+                    bullet.Init(_bulletDamage, angle, _bulletSpeed, LayerMask.NameToLayer("Enemy"));
+                    bullet.gameObject.layer = LayerMask.NameToLayer("PlayerBullets");
                 }
 
                 return true;

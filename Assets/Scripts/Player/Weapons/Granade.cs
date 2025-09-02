@@ -19,7 +19,6 @@ namespace Player.Weapons
         private readonly float _bulletSpeed;
         private readonly float _bulletDamage;
         private readonly int _fragments;
-        private BulletGeneric _w;
         private readonly int _energyCost;
         public float EnergyCost => _energyCost;
 
@@ -65,12 +64,13 @@ namespace Player.Weapons
                 float angle;
                 for (var i = 0; i < _bulletsPerShot; i++)
                 {
-                    _w = BulletPool.Instance.GetObject(BulletGeneric.Type.Bullet);
+                    var bullet = BulletPool.Instance.GetObject(BulletGeneric.Type.Bullet);
 
                     angle = Random.Range(-0.5f, 0.5f) * _accuracy;
 
-                    _w.transform.position = entiy.transform.position + weaponOffSet;
-                    _w.Init(_bulletDamage, angle, _bulletSpeed, _fragments, 6f, false);
+                    bullet.transform.position = entiy.transform.position + weaponOffSet;
+                    bullet.Init(_bulletDamage, angle, _bulletSpeed, LayerMask.NameToLayer("Enemy"), _fragments, 6f, false);
+                    bullet.gameObject.layer = LayerMask.NameToLayer("PlayerBullets");
                 }
 
                 return true;
