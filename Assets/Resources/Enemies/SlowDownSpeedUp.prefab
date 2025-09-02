@@ -47,15 +47,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9773ef5e816b9c14882be1e7f7069282, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Enemies.EnemyBase
-  moveSpeed: 1
-  fadeDuration: 1
-  scrapValue: 200
-  scrapCloudSize: {x: 7, y: 7}
-  <Health>k__BackingField: 10
-  <MaxHealth>k__BackingField: 10
-  <TypeName>k__BackingField: SlowDownMoveUp
+  <TypeName>k__BackingField: SlowDownSpeedUp
+  moveSpeed:
+    defaultValue: 5
+  fadeDuration:
+    defaultValue: 1
+  scrapValue:
+    defaultValue: 0
+  scrapCloudSize:
+    defaultValue: {x: 7, y: 7}
+  contactDamage:
+    defaultValue: 20
+  <MaxHealth>k__BackingField:
+    defaultValue: 1
   movementPattern:
-    rid: 1722504863925927980
+    rid: 1194487505303371820
   attackPattern:
     rid: -2
   references:
@@ -63,11 +69,14 @@ MonoBehaviour:
     RefIds:
     - rid: -2
       type: {class: , ns: , asm: }
-    - rid: 1722504863925927980
-      type: {class: SpeedUpSlowDown, ns: Enemies, asm: Assembly-CSharp}
+    - rid: 1194487505303371820
+      type: {class: SpeedUpSlowDown, ns: Enemies.Movement, asm: Assembly-CSharp}
       data:
-        speedFactor: []
-        intervalRange: {x: 0, y: 0}
+        speedFactor:
+        - 0
+        - 1
+        - 5
+        intervalRange: {x: 0.5, y: 2}
 --- !u!212 &21268512
 SpriteRenderer:
   m_ObjectHideFlags: 0

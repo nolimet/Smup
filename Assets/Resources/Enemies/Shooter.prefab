@@ -48,13 +48,42 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9773ef5e816b9c14882be1e7f7069282, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Enemies.EnemyBase
-  moveSpeed: 1
-  fadeDuration: 1
-  scrapValue: 200
-  scrapCloudSize: {x: 7, y: 7}
-  <Health>k__BackingField: 10
-  <MaxHealth>k__BackingField: 10
   <TypeName>k__BackingField: Shooter
+  moveSpeed:
+    defaultValue: 5
+  fadeDuration:
+    defaultValue: 1
+  scrapValue:
+    defaultValue: 0
+  scrapCloudSize:
+    defaultValue: {x: 7, y: 7}
+  contactDamage:
+    defaultValue: 5
+  <MaxHealth>k__BackingField:
+    defaultValue: 1
+  movementPattern:
+    rid: 1194487505303371821
+  attackPattern:
+    rid: 1194487505303371823
+  references:
+    version: 2
+    RefIds:
+    - rid: 1194487505303371821
+      type: {class: LinearMovement, ns: Enemies.Movement, asm: Assembly-CSharp}
+      data: 
+    - rid: 1194487505303371823
+      type: {class: ShootFixedIntervalAttack, ns: Enemies.Attack, asm: Assembly-CSharp}
+      data:
+        salvoInterval:
+          defaultValue: 0.5
+        shotInterval:
+          defaultValue: 0.1
+        salvoSize:
+          defaultValue: 3
+        damagePerShot:
+          defaultValue: 5
+        shotSpeed:
+          defaultValue: 5
 --- !u!212 &21268758
 SpriteRenderer:
   m_ObjectHideFlags: 0

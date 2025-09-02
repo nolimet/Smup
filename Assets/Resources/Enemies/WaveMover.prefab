@@ -47,15 +47,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9773ef5e816b9c14882be1e7f7069282, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Enemies.EnemyBase
-  moveSpeed: 1
-  fadeDuration: 1
-  scrapValue: 300
-  scrapCloudSize: {x: 7, y: 7}
-  <Health>k__BackingField: 10
-  <MaxHealth>k__BackingField: 10
   <TypeName>k__BackingField: WaveMover
+  moveSpeed:
+    defaultValue: 5
+  fadeDuration:
+    defaultValue: 1
+  scrapValue:
+    defaultValue: 0
+  scrapCloudSize:
+    defaultValue: {x: 7, y: 7}
+  contactDamage:
+    defaultValue: 40
+  <MaxHealth>k__BackingField:
+    defaultValue: 1
   movementPattern:
-    rid: 1194487483635335372
+    rid: 1194487505303371819
   attackPattern:
     rid: -2
   references:
@@ -63,8 +69,8 @@ MonoBehaviour:
     RefIds:
     - rid: -2
       type: {class: , ns: , asm: }
-    - rid: 1194487483635335372
-      type: {class: UpDownWaveMove, ns: Enemies, asm: Assembly-CSharp}
+    - rid: 1194487505303371819
+      type: {class: UpDownWaveMove, ns: Enemies.Movement, asm: Assembly-CSharp}
       data:
         amplitude: 1
         frequency: 2
