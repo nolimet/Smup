@@ -251,9 +251,8 @@ public class TerainEditor : EditorWindow
 
     private void Load()
     {
-        var loadedData = new WaveClass();
 
-        if (!Serialization.Load("Wave1", Serialization.FileTypes.Wave, ref loadedData))
+        if (!Serialization.Load("Wave1", Serialization.FileTypes.Wave, out WaveClass loadedData))
         {
             _currentLevel = new Dictionary<Vector3, char>();
             UpdateBackgroundTexture();
