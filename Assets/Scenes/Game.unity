@@ -218,6 +218,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 0}
     - target: {fileID: 11404262, guid: 42742daa4e221cd44a74857facc9cf07, type: 3}
+      propertyPath: playerStats
+      value: 
+      objectReference: {fileID: 2064760423}
+    - target: {fileID: 11404262, guid: 42742daa4e221cd44a74857facc9cf07, type: 3}
       propertyPath: pickupManager
       value: 
       objectReference: {fileID: 2064760420}
@@ -225,6 +229,10 @@ PrefabInstance:
       propertyPath: playerWeaponControler
       value: 
       objectReference: {fileID: 2064760418}
+    - target: {fileID: 11463972, guid: 42742daa4e221cd44a74857facc9cf07, type: 3}
+      propertyPath: m_BlockingMask.m_Bits
+      value: 65335
+      objectReference: {fileID: 0}
     - target: {fileID: 11491046, guid: 42742daa4e221cd44a74857facc9cf07, type: 3}
       propertyPath: camera
       value: 
@@ -234,6 +242,66 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 42742daa4e221cd44a74857facc9cf07, type: 3}
+--- !u!114 &126250327 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 11422262, guid: 42742daa4e221cd44a74857facc9cf07,
+    type: 3}
+  m_PrefabInstance: {fileID: 126250326}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &126250328 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 11439626, guid: 42742daa4e221cd44a74857facc9cf07,
+    type: 3}
+  m_PrefabInstance: {fileID: 126250326}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!224 &126250329 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 22420602, guid: 42742daa4e221cd44a74857facc9cf07,
+    type: 3}
+  m_PrefabInstance: {fileID: 126250326}
+  m_PrefabAsset: {fileID: 0}
+--- !u!224 &126250330 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 22450816, guid: 42742daa4e221cd44a74857facc9cf07,
+    type: 3}
+  m_PrefabInstance: {fileID: 126250326}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &126250331 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 11474060, guid: 42742daa4e221cd44a74857facc9cf07,
+    type: 3}
+  m_PrefabInstance: {fileID: 126250326}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!224 &126250332 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 22460562, guid: 42742daa4e221cd44a74857facc9cf07,
+    type: 3}
+  m_PrefabInstance: {fileID: 126250326}
+  m_PrefabAsset: {fileID: 0}
+--- !u!224 &126250333 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 22437774, guid: 42742daa4e221cd44a74857facc9cf07,
+    type: 3}
+  m_PrefabInstance: {fileID: 126250326}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &172430569
 GameObject:
   m_ObjectHideFlags: 0
@@ -24726,7 +24794,7 @@ Camera:
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 27447
+    m_Bits: 60215
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -68411,6 +68479,7 @@ GameObject:
   - component: {fileID: 2064760420}
   - component: {fileID: 2064760421}
   - component: {fileID: 2064760422}
+  - component: {fileID: 2064760423}
   m_Layer: 8
   m_Name: Player
   m_TagString: Untagged
@@ -68706,6 +68775,42 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 0.0001, y: 0.0001}
   m_EdgeRadius: 0
+--- !u!114 &2064760423
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2064760413}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 91be1ee2de0a4984486875a0c8744448, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  energy:
+    bar1: {fileID: 126250333}
+    bar2: {fileID: 126250332}
+    valueText: {fileID: 126250331}
+    barColours: []
+  health:
+    bar1: {fileID: 126250330}
+    bar2: {fileID: 126250329}
+    valueText: {fileID: 126250328}
+    barColours:
+    - {r: 1, g: 0, b: 0, a: 1}
+    - {r: 1, g: 0.303, b: 0, a: 1}
+    - {r: 1, g: 0.784, b: 0, a: 1}
+    - {r: 1, g: 1, b: 0, a: 1}
+    - {r: 0.59, g: 1, b: 0, a: 1}
+    - {r: 0.334, g: 0.891, b: 0, a: 1}
+    - {r: 0, g: 0.703, b: 0, a: 1}
+  collectedScrapDisplay: {fileID: 126250327}
+  currentEnergy: 0
+  maxEnergy: 200
+  currentHealth: 0
+  maxHealth: 100
+  currentShield: 0
+  maxShield: 0
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

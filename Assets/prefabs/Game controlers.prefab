@@ -991,7 +991,6 @@ GameObject:
   m_Component:
   - component: {fileID: 467888}
   - component: {fileID: 11404262}
-  - component: {fileID: 11441036}
   - component: {fileID: 11449098}
   m_Layer: 0
   m_Name: Game controlers
@@ -1032,45 +1031,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a15222c25d43ec4c9a5ac9dad09925b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerStats: {fileID: 11441036}
+  playerStats: {fileID: 0}
   playerWeaponControler: {fileID: 0}
   pickupManager: {fileID: 0}
---- !u!114 &11441036
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 137858}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 91be1ee2de0a4984486875a0c8744448, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  energy:
-    bar1: {fileID: 22437774}
-    bar2: {fileID: 22460562}
-    valueText: {fileID: 11474060}
-    barColours: []
-  health:
-    bar1: {fileID: 22450816}
-    bar2: {fileID: 22420602}
-    valueText: {fileID: 11439626}
-    barColours:
-    - {r: 1, g: 0, b: 0, a: 1}
-    - {r: 1, g: 0.303, b: 0, a: 1}
-    - {r: 1, g: 0.784, b: 0, a: 1}
-    - {r: 1, g: 1, b: 0, a: 1}
-    - {r: 0.59, g: 1, b: 0, a: 1}
-    - {r: 0.334, g: 0.891, b: 0, a: 1}
-    - {r: 0, g: 0.703, b: 0, a: 1}
-  collectedScrapDisplay: {fileID: 11422262}
-  currentEnergy: 0
-  maxEnergy: 200
-  currentHealth: 0
-  maxHealth: 100
-  currentShield: 0
-  maxShield: 0
 --- !u!114 &11449098
 MonoBehaviour:
   m_ObjectHideFlags: 0
