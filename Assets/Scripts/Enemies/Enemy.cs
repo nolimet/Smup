@@ -1,8 +1,8 @@
 ﻿using System;
 using Cysharp.Threading.Tasks;
 using Data;
-using Enemies.Attack;
 using Enemies.Movement;
+using Interfaces;
 using ObjectPools;
 using Sirenix.OdinInspector;
 using Sirenix.Serialization;
@@ -20,14 +20,16 @@ namespace Enemies
         private Collider2D _collider2D;
         private SpriteRenderer _spriteRenderer;
 
+        [field: SerializeField] public string TypeName { get; private set; }
+
         [SerializeField] private Overrideable<float> moveSpeed = 1f;
         [SerializeField] private Overrideable<float> fadeDuration = 1f;
         [SerializeField] private Overrideable<int> scrapValue;
         [SerializeField] private Overrideable<Vector2> scrapCloudSize = Vector2.one * 7;
+        [SerializeField] private Overrideable<double> contactDamage;
 
-        [field: SerializeField] public double Health { get; private set; }
-        [field: SerializeField] public double MaxHealth { get; private set; }
-        [field: SerializeField] public string TypeName { get; private set; }
+        [field: ReadOnly] [field: ShowInInspector] public double Health { get; private set; }
+        [field: SerializeField] public Overrideable<double> MaxHealth { get; private set; }
 
         [OdinSerialize] [TypeDrawerSettings(BaseType = typeof(IMovement))]
         private Type MovementType
@@ -66,14 +68,13 @@ namespace Enemies
 
         private void Start()
         {
-            attackPattern = new ShootFixedIntervalAttack();
             movementPattern ??= new LinearMovement();
 
             movementPattern.SetTarget(gameObject);
             //attackPattern.Weapon = new WeaponInterfaces.MiniGun();
         }
 
-        public virtual void OnSpawn()
+        public void OnSpawn()
         {
             Health = MaxHealth;
         }
@@ -82,8 +83,8 @@ namespace Enemies
 
         private void Update()
         {
-            attackPattern.Attack(gameObject);
             movementPattern.Move(transform.position, moveSpeed, Time.deltaTime);
+            attackPattern?.Attack(transform.position, _rigidBody2D.linearVelocity);
         }
 
         private void OnCollisionEnter2D(Collision2D other)
