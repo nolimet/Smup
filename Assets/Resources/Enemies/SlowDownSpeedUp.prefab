@@ -9,11 +9,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 476924}
+  - component: {fileID: 8549123257417572798}
   - component: {fileID: 21268512}
   - component: {fileID: 5065084}
   - component: {fileID: 6012366}
-  - component: {fileID: 8549123257417572798}
-  - component: {fileID: 11453074}
   m_Layer: 9
   m_Name: SlowDownSpeedUp
   m_TagString: Untagged
@@ -36,6 +35,39 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8549123257417572798
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 155304}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9773ef5e816b9c14882be1e7f7069282, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Enemies.EnemyBase
+  moveSpeed: 1
+  fadeDuration: 1
+  scrapValue: 200
+  scrapCloudSize: {x: 7, y: 7}
+  <Health>k__BackingField: 10
+  <MaxHealth>k__BackingField: 10
+  <TypeName>k__BackingField: SlowDownMoveUp
+  movementPattern:
+    rid: 1722504863925927980
+  attackPattern:
+    rid: -2
+  references:
+    version: 2
+    RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }
+    - rid: 1722504863925927980
+      type: {class: SpeedUpSlowDown, ns: Enemies, asm: Assembly-CSharp}
+      data:
+        speedFactor: []
+        intervalRange: {x: 0, y: 0}
 --- !u!212 &21268512
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -174,60 +206,3 @@ PolygonCollider2D:
       - {x: 0.235, y: -0.08}
       - {x: 0.235, y: 0.08}
   m_UseDelaunayMesh: 0
---- !u!114 &8549123257417572798
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 155304}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9773ef5e816b9c14882be1e7f7069282, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Enemies.EnemyBase
-  moveSpeed: 1
-  fadeDuration: 1
-  scrapValue: 200
-  scrapCloudSize: {x: 7, y: 7}
-  <Health>k__BackingField: 10
-  <MaxHealth>k__BackingField: 10
-  <TypeName>k__BackingField: SlowDownMoveUp
-  movementPattern:
-    rid: 1194487483635335371
-  attackPattern:
-    rid: -2
-  references:
-    version: 2
-    RefIds:
-    - rid: -2
-      type: {class: , ns: , asm: }
-    - rid: 1194487483635335371
-      type: {class: SpeedUpSlowDown, ns: Enemies, asm: Assembly-CSharp}
-      data:
-        speedFactor:
-        - 1
-        - 1.5
-        - 2
-        intervalRange: {x: 1, y: 3}
---- !u!114 &11453074
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 155304}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7254280413f3a434f976ba3aa6225bdf, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  movePatern:
-  - {x: -5, y: 0}
-  - {x: -2, y: 0}
-  - {x: -7, y: 0}
-  duration:
-  - 5
-  - 1
-  - 2
-  waitBetweenPatern: 0.5
