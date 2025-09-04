@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 3
   tags:
   - backbullet Remover
+  - Enemy Kill Plane
   layers:
   - Default
   - TransparentFX

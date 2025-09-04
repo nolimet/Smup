@@ -97,9 +97,14 @@ namespace Enemies
                 if (damageAble != null)
                 {
                     damageAble.ReceiveDamage(contactDamage);
-                    DestroyLoop().Forget();
+                    DestroyLoop(true).Forget();
                     Health = 0;
                 }
+            }
+            
+            if (other.collider.CompareTag("Enemy Kill Plane"))
+            {
+                DestroyLoop(true).Forget();
             }
         }
 
@@ -109,10 +114,10 @@ namespace Enemies
                 return;
 
             Health -= damage;
-            if (Health <= 0) DestroyLoop().Forget();
+            if (Health <= 0) DestroyLoop(false).Forget();
         }
 
-        private async UniTaskVoid DestroyLoop()
+        private async UniTaskVoid DestroyLoop(bool skipReward)
         {
             while (_spriteRenderer.color.a > 0.01f)
             {
@@ -124,7 +129,7 @@ namespace Enemies
 
             EnemyPool.Instance.ReleaseObject(this);
 
-            if (scrapValue > 0)
+            if (!skipReward && scrapValue > 0)
             {
                 var cloudSize = Random.Range(4, 20);
                 ScrapPickupPool.CreateScrapCloud(transform.position, scrapCloudSize, cloudSize, scrapValue);
