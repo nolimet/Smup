@@ -22,7 +22,7 @@ namespace Player.Weapons
         private readonly int _energyCost;
         public float EnergyCost => _energyCost;
 
-        public float DelayDelta => (float)(DateTime.Now - _lastShot).TotalMilliseconds / _fireDelay;
+        public float DelayDelta => (float) (DateTime.Now - _lastShot).TotalMilliseconds / _fireDelay;
 
         public ShotGun()
         {
@@ -59,7 +59,7 @@ namespace Player.Weapons
                 _lastShot = DateTime.Now;
                 for (var i = 0; i < _bulletsPerShot; i++)
                 {
-                    var bullet = BulletPool.Instance.GetObject(BulletGeneric.Type.Bullet);
+                    var bullet = BulletPool.Instance.GetObject(BulletGeneric.BulletType.Bullet);
                     var angle = Random.Range(-0.5f, 0.5f) * _accuracy;
 
                     bullet.transform.position = entiy.transform.position + weaponOffSet;

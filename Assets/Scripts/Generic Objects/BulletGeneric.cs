@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using Interfaces;
 using ObjectPools;
+using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Serialization;
 using Util;
@@ -11,28 +12,28 @@ namespace Generic_Objects
     [RequireComponent(typeof(Rigidbody2D), typeof(PolygonCollider2D))]
     public class BulletGeneric : MonoBehaviour, IPoolElement
     {
-        public enum Type
+        public enum BulletType
         {
             Fragment,
             Bullet
         }
 
-        [FormerlySerializedAs("WeaponType")] public Type weaponType;
+        [FormerlySerializedAs("WeaponType")] public BulletType weaponType;
         public string PoolId { get; private set; }
         private Rigidbody2D _rigidbody;
         private SpriteRenderer _renderer;
         private PolygonCollider2D _collider;
 
-        private int _targetLayer;
-        private int _fragmentsExplosion;
-        private float _detonationTime;
-        private bool _canExplode;
-        private float _damage;
-        private float _speed;
+        [ShowInInspector] [Sirenix.OdinInspector.ReadOnly] private int _targetLayer;
+        [ShowInInspector] [Sirenix.OdinInspector.ReadOnly] private int _fragmentsExplosion;
+        [ShowInInspector] [Sirenix.OdinInspector.ReadOnly] private float _detonationTime;
+        [ShowInInspector] [Sirenix.OdinInspector.ReadOnly] private bool _canExplode;
+        [ShowInInspector] [Sirenix.OdinInspector.ReadOnly] private float _damage;
+        [ShowInInspector] [Sirenix.OdinInspector.ReadOnly] private float _speed;
 
         public float Damage => _damage;
 
-        protected bool MarkedForRemove;
+        [ShowInInspector] [Sirenix.OdinInspector.ReadOnly] protected bool MarkedForRemove;
 
         private void Awake()
         {
@@ -74,7 +75,10 @@ namespace Generic_Objects
 
         public void OnCollisionEnter2D(Collision2D coll)
         {
-            if (MarkedForRemove || coll.gameObject.layer != _targetLayer) return;
+            if (MarkedForRemove || coll.gameObject.layer != _targetLayer || coll.collider.isTrigger)
+            {
+                return;
+            }
             var damageAble = coll.gameObject.GetComponent<IDamageAble>();
             if (damageAble != null)
             {
@@ -82,15 +86,22 @@ namespace Generic_Objects
                 StartCoroutine(Remove(0.5f));
 
                 if (_canExplode)
+                {
                     Explode();
+                }
             }
         }
 
         public void OnTriggerEnter2D(Collider2D other)
         {
+            Debug.Log("HIT");
             if (other.gameObject.layer == LayerMask.NameToLayer("Wall"))
+            {
                 if (!MarkedForRemove)
+                {
                     StartCoroutine(Remove(0f));
+                }
+            }
         }
 
         public void Init(float damage, float direction, float speed, int targetLayer, int? fragmentsExplosion = null, float? explosionDelayTime = null, bool? isTimeDelayed = null)
@@ -105,9 +116,13 @@ namespace Generic_Objects
             if (explosionDelayTime is not null && isTimeDelayed is not null)
             {
                 if (isTimeDelayed.Value)
+                {
                     _detonationTime = explosionDelayTime.Value;
+                }
                 else
+                {
                     _detonationTime = explosionDelayTime.Value / speed;
+                }
                 _canExplode = true;
             }
         }
@@ -115,7 +130,9 @@ namespace Generic_Objects
         private void Explode()
         {
             if (_fragmentsExplosion <= 0)
+            {
                 return;
+            }
 
             var radiusStep = 360f / _fragmentsExplosion;
             while (_fragmentsExplosion > 0)
@@ -124,8 +141,7 @@ namespace Generic_Objects
 
                 //TODO: Make Dedicated Explosive bullet
 
-                var fragment = BulletPool.Instance.GetObject(Type.Fragment);
-                fragment.weaponType = Type.Fragment;
+                var fragment = BulletPool.Instance.GetObject(BulletType.Fragment);
                 fragment.transform.position = transform.position;
                 fragment.Init(_damage, radiusStep * _fragmentsExplosion + Random.Range(-radiusStep / 2f, radiusStep / 2f), _speed, _targetLayer);
             }
@@ -133,7 +149,10 @@ namespace Generic_Objects
 
         private IEnumerator Remove(float delay)
         {
-            if (MarkedForRemove) yield break;
+            if (MarkedForRemove)
+            {
+                yield break;
+            }
 
             const float frag = 1f / 30;
             var startColor = _renderer.color;
@@ -150,8 +169,6 @@ namespace Generic_Objects
                 _renderer.color = Color.Lerp(startColor, targetColor, frag * i);
                 yield return new WaitForEndOfFrame();
             }
-
-            weaponType = Type.Bullet;
 
             BulletPool.Instance.ReleaseObject(this);
         }

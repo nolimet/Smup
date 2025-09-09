@@ -23,7 +23,15 @@ namespace Managers
         {
             get
             {
-                if (Instance._upgrades == null) Serialization.Load("upgrade", Serialization.FileTypes.Binary, out Instance._upgrades);
+                if (!Instance)
+                {
+                    return new UpgradeData();
+                }
+
+                if (Instance._upgrades == null)
+                {
+                    Serialization.Load("upgrade", Serialization.FileTypes.Binary, out Instance._upgrades);
+                }
 
                 return Instance._upgrades;
             }
@@ -34,10 +42,14 @@ namespace Managers
             get
             {
                 if (_instance == null || !_instance)
+                {
                     FindAnyObjectByType<GameManager>();
+                }
 
                 if (_instance == null || !_instance)
-                    Debug.Log("INSTANCE NOT FOUND");
+                {
+                    Debug.LogWarning("No GameManager object found");
+                }
 
                 return _instance;
             }
@@ -69,7 +81,9 @@ namespace Managers
         private void Update()
         {
             if (Input.GetKeyDown(KeyCode.Escape)) //TODO refactor to use a asset refrence. To make sure we returned to the menu
+            {
                 SceneManager.LoadScene(0, LoadSceneMode.Single);
+            }
         }
     }
 }

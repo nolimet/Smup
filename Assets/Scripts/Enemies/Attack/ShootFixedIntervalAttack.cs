@@ -27,9 +27,13 @@ namespace Enemies.Attack
                 _shotsLeft--;
 
                 if (_shotsLeft > 0)
+                {
                     _timer = shotInterval;
+                }
                 else
+                {
                     _timer = salvoInterval;
+                }
             }
             else if (_shotsLeft == 0 && _timer <= 0)
             {
@@ -41,7 +45,7 @@ namespace Enemies.Attack
 
         private void Shoot(Vector2 position, Vector2 motionVector)
         {
-            var bullet = BulletPool.Instance.GetObject(BulletGeneric.Type.Bullet);
+            var bullet = BulletPool.Instance.GetObject(BulletGeneric.BulletType.Bullet);
             bullet.transform.position = position;
             bullet.Init(damagePerShot, -180, motionVector.x + shotSpeed, LayerMask.NameToLayer("Player"));
             bullet.gameObject.layer = LayerMask.NameToLayer("EnemyBullets");

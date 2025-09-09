@@ -22,11 +22,11 @@ namespace Enemies
 
         [field: SerializeField] public string TypeName { get; private set; }
 
-        [SerializeField] private Overrideable<float> moveSpeed = 1f;
-        [SerializeField] private Overrideable<float> fadeDuration = 1f;
-        [SerializeField] private Overrideable<int> scrapValue;
-        [SerializeField] private Overrideable<Vector2> scrapCloudSize = Vector2.one * 7;
-        [SerializeField] private Overrideable<double> contactDamage;
+        public Overrideable<float> moveSpeed = 1f;
+        public Overrideable<float> fadeDuration = 1f;
+        public Overrideable<int> scrapValue;
+        public Overrideable<Vector2> scrapCloudSize = Vector2.one * 7;
+        public Overrideable<double> contactDamage;
 
         [field: ReadOnly] [field: ShowInInspector] public double Health { get; private set; }
         [field: SerializeField] public Overrideable<double> MaxHealth { get; private set; }
@@ -38,8 +38,13 @@ namespace Enemies
             set
             {
                 if (movementPattern?.GetType() != value && value != null)
-                    movementPattern = (IMovement)Activator.CreateInstance(value);
-                else movementPattern = null;
+                {
+                    movementPattern = (IMovement) Activator.CreateInstance(value);
+                }
+                else
+                {
+                    movementPattern = null;
+                }
             }
         }
 
@@ -52,8 +57,13 @@ namespace Enemies
             set
             {
                 if (attackPattern?.GetType() != value && value != null)
-                    attackPattern = (IAttack)Activator.CreateInstance(value);
-                else attackPattern = null;
+                {
+                    attackPattern = (IAttack) Activator.CreateInstance(value);
+                }
+                else
+                {
+                    attackPattern = null;
+                }
             }
         }
 
@@ -89,7 +99,10 @@ namespace Enemies
 
         private void OnCollisionEnter2D(Collision2D other)
         {
-            if (Health <= double.Epsilon) return;
+            if (Health <= double.Epsilon)
+            {
+                return;
+            }
 
             if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
             {
@@ -101,7 +114,7 @@ namespace Enemies
                     Health = 0;
                 }
             }
-            
+
             if (other.collider.CompareTag("Enemy Kill Plane"))
             {
                 DestroyLoop(true).Forget();
@@ -111,10 +124,15 @@ namespace Enemies
         public void ReceiveDamage(double damage)
         {
             if (Health <= 0)
+            {
                 return;
+            }
 
             Health -= damage;
-            if (Health <= 0) DestroyLoop(false).Forget();
+            if (Health <= 0)
+            {
+                DestroyLoop(false).Forget();
+            }
         }
 
         private async UniTaskVoid DestroyLoop(bool skipReward)
