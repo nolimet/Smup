@@ -94,13 +94,9 @@ namespace Generic_Objects
 
         public void OnTriggerEnter2D(Collider2D other)
         {
-            Debug.Log("HIT");
             if (other.gameObject.layer == LayerMask.NameToLayer("Wall"))
             {
-                if (!MarkedForRemove)
-                {
-                    StartCoroutine(Remove(0f));
-                }
+                BulletPool.Instance.ReleaseObject(this);
             }
         }
 
