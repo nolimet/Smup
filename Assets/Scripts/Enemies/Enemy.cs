@@ -87,6 +87,10 @@ namespace Enemies
         public void OnSpawn()
         {
             Health = MaxHealth;
+            _collider2D.enabled = true;
+            var color = _spriteRenderer.color;
+            color.a = 1;
+            _spriteRenderer.color = color;
         }
 
         public void OnDespawn() { }
@@ -137,6 +141,8 @@ namespace Enemies
 
         private async UniTaskVoid DestroyLoop(bool skipReward)
         {
+            _collider2D.enabled = false;
+
             while (_spriteRenderer.color.a > 0.01f)
             {
                 var color = _spriteRenderer.color;
