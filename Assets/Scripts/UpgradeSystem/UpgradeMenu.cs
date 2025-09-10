@@ -44,9 +44,11 @@ namespace UpgradeSystem
                 Serialization.Save("upgrade", Serialization.FileTypes.Binary, upgrades);
             }
 
+            Debug.Log("Upgrade menu disabled pending rework");
+
             parentUpgrade.gameObject.SetActive(false);
             parentCategory.gameObject.SetActive(false);
-            InitUpgradeFunctions();
+            //InitUpgradeFunctions();
         }
 
         private void Update()
