@@ -53,7 +53,7 @@ MonoBehaviour:
   fadeDuration:
     defaultValue: 1
   scrapValue:
-    defaultValue: 0
+    defaultValue: 20
   scrapCloudSize:
     defaultValue: {x: 7, y: 7}
   contactDamage:
