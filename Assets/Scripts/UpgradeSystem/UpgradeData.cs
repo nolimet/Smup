@@ -8,25 +8,25 @@ namespace UpgradeSystem
         public long upgradeCurrency;
 
         //ScrapGetting
-        public int scrapCollectionRange;
-        public int scrapCollectionSpeed;
-        public int scrapConversionRate;
+        public readonly Upgradable<int> scrapCollectionRange = new(-1, l => l, l => 900 * 1.3f);
+        public readonly Upgradable<int> scrapCollectionSpeed = new(10, l => l, l => 650 * 1.3f);
+        public readonly Upgradable<int> scrapConversionRate = new(-1, l => l, l => 650 * 1.5f);
 
         //Shield
-        public bool unlockedShield;
-        public int shieldGeneratorLevel;
-        public int shieldCapacitorLevel;
-        public bool unlockedShieldTweaker;
+        public readonly bool unlockedShield;
+        public readonly int shieldGeneratorLevel;
+        public readonly int shieldCapacitorLevel;
+        public readonly bool unlockedShieldTweaker;
 
         //Hull
-        public int hullUpgradeLevel;
-        public int armorUpgradeLevel;
+        public readonly int hullUpgradeLevel;
+        public readonly int armorUpgradeLevel;
 
         //weaponUpgrades
-        public CommonWeaponUpgrade cannon;
-        public CommonWeaponUpgrade miniGun;
-        public CommonWeaponUpgrade shotgun;
-        public CommonWeaponUpgrade grenade;
+        public readonly CommonWeaponUpgrade cannon;
+        public readonly CommonWeaponUpgrade miniGun;
+        public readonly CommonWeaponUpgrade shotgun;
+        public readonly CommonWeaponUpgrade grenade;
     }
 
     [Serializable]

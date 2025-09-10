@@ -31,7 +31,10 @@ namespace UpgradeSystem
 
         private void Awake()
         {
-            if (!_instance) _instance = this;
+            if (!_instance)
+            {
+                _instance = this;
+            }
 
             Serialization.Load("upgrade", Serialization.FileTypes.Binary, out upgrades);
 
@@ -49,7 +52,9 @@ namespace UpgradeSystem
         private void Update()
         {
             if (!_instance)
+            {
                 _instance = this;
+            }
 
             upgradeCurrency.text = $"{upgrades.upgradeCurrency}$";
         }
@@ -131,21 +136,21 @@ namespace UpgradeSystem
             element.DisplayName = displayName;
             element.Description = description;
 
-            var u = new UpgradeObject(groupName, fieldName, startCost, maxLevel, mult, element);
-            _currentCategory.AddNew(u);
-            _upgrades.Add(u);
+            var upgradeObject = new UpgradeObject(groupName, fieldName, startCost, maxLevel, mult, element);
+            _currentCategory.AddNew(upgradeObject);
+            _upgrades.Add(upgradeObject);
         }
 
         private void AddCategory(string displayName, string discription)
         {
-            var newCategory = Instantiate(parentCategory, contentParent, false);
-            newCategory.gameObject.SetActive(true);
+            var upgradeCategory = Instantiate(parentCategory, contentParent, false);
+            upgradeCategory.gameObject.SetActive(true);
 
-            var o = new CategoryObject(newCategory, displayName, discription);
+            var newcategoryObject = new CategoryObject(upgradeCategory, displayName, discription);
 
-            _currentCategory = o;
-            o.ToggleAll();
-            _cats.Add(o);
+            _currentCategory = newcategoryObject;
+            newcategoryObject.ToggleAll();
+            _cats.Add(newcategoryObject);
         }
 
         [Serializable]
@@ -187,15 +192,22 @@ namespace UpgradeSystem
 
                 var fieldValue = groupValue.GetType().GetField(fieldName).GetValue(groupValue);
                 if (fieldValue == null)
+                {
                     throw new NullReferenceException($"failed to find {fieldName} for {groupName}");
+                }
+
+                if (!visual)
+                {
+                    throw new NullReferenceException($"Missing visual element. This should be set! {groupName}/{fieldName}");
+                }
 
                 if (mult > 0)
                 {
-                    _level = (int)fieldValue;
+                    _level = (int) fieldValue;
                 }
                 else
                 {
-                    var b = (bool)fieldValue;
+                    var b = (bool) fieldValue;
                     _level = b.ToInt();
                 }
 
@@ -224,8 +236,10 @@ namespace UpgradeSystem
             private int GetPrice()
             {
                 if (_mult > 0)
-                    return (int)(_startCost * Mathf.Pow(_mult, _level));
-                return (int)_startCost;
+                {
+                    return (int) (_startCost * Mathf.Pow(_mult, _level));
+                }
+                return (int) _startCost;
             }
 
             private bool CanAfford() => Data.upgradeCurrency >= GetPrice();
@@ -254,15 +268,21 @@ namespace UpgradeSystem
                 {
                     _visual.CurrentLevel = $"Level \n{_level}";
                     if (_maxLevel > 0)
+                    {
                         _visual.CurrentLevel += $"/{_maxLevel}";
+                    }
                 }
                 else
                 {
                     _visual.CurrentLevel = "Unlocked \n";
                     if (_level == 0)
+                    {
                         _visual.CurrentLevel += "NO";
+                    }
                     else
+                    {
                         _visual.CurrentLevel += "YES";
+                    }
                 }
             }
 
@@ -272,7 +292,7 @@ namespace UpgradeSystem
             /// <returns>True if it was maxed out, false if it was not</returns>
             private bool UpgradeMaxed()
             {
-                var groupValue = Data.GetType().GetField(_groupName).GetValue(Data) ?? Data;
+                var groupValue = !string.IsNullOrEmpty(_groupName) ? Data.GetType().GetField(_groupName)?.GetValue(Data) ?? Data : Data;
                 var fieldValue = groupValue.GetType().GetField(_fieldName).GetValue(groupValue);
 
                 return fieldValue switch
@@ -285,9 +305,12 @@ namespace UpgradeSystem
 
             private bool Buy()
             {
-                if (!CanAfford() || UpgradeMaxed()) return false;
+                if (!CanAfford() || UpgradeMaxed())
+                {
+                    return false;
+                }
 
-                var groupValue = Data.GetType().GetField(_groupName).GetValue(Data) ?? Data;
+                var groupValue = Data.GetType().GetField(_groupName)?.GetValue(Data) ?? Data;
                 var fieldValue = groupValue.GetType().GetField(_fieldName).GetValue(groupValue);
 
                 switch (fieldValue)
@@ -295,14 +318,14 @@ namespace UpgradeSystem
                     case int level:
                         Data.upgradeCurrency -= GetPrice();
                         _level = ++level;
-                        Data.GetType().GetField(_fieldName).SetValue(Data, level);
+                        groupValue.GetType().GetField(_fieldName).SetValue(Data, level);
                         break;
 
                     case bool:
                         Data.upgradeCurrency -= GetPrice();
 
                         _level = 1;
-                        Data.GetType().GetField(_fieldName).SetValue(Data, true);
+                        groupValue.GetType().GetField(_fieldName).SetValue(Data, true);
                         break;
                 }
 
@@ -311,7 +334,7 @@ namespace UpgradeSystem
 
             public void Move(Vector2 newpos)
             {
-                ((RectTransform)_visual.transform).anchoredPosition = newpos;
+                ((RectTransform) _visual.transform).anchoredPosition = newpos;
             }
         }
 
@@ -339,7 +362,7 @@ namespace UpgradeSystem
             public void ToggleAll()
             {
                 _active = !_active;
-                Vector3 anchoredPosition = ((RectTransform)_visual.transform).anchoredPosition;
+                Vector3 anchoredPosition = ((RectTransform) _visual.transform).anchoredPosition;
                 foreach (var upgradeObject in _subObjs)
                 {
                     upgradeObject.Enabled = _active;
