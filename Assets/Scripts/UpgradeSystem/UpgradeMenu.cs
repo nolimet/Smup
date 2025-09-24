@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using Menus.MenuParts;
+using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
@@ -11,7 +13,7 @@ namespace UpgradeSystem
 {
     public class UpgradeMenu : MonoBehaviour
     {
-        [SerializeField] private UpgradeData upgrades;
+        [ShowInInspector] private readonly UpgradeData _upgrades = new();
 
         [FormerlySerializedAs("UpgradeCurrency")] [SerializeField] private Text upgradeCurrency;
         [FormerlySerializedAs("ParentUpgrade")] [SerializeField] private UpgradeItem parentUpgrade;
@@ -19,7 +21,7 @@ namespace UpgradeSystem
         [FormerlySerializedAs("ContentParent")] [SerializeField] private Transform contentParent;
 
         // ReSharper disable once CollectionNeverQueried.Local
-        private readonly List<UpgradeObject> _upgrades = new(); //used to keep some data alive and in memory
+        private readonly List<UpgradeObject> _upgradesObjects = new(); //used to keep some data alive and in memory
 
         // ReSharper disable once CollectionNeverQueried.Local
         private readonly List<CategoryObject> _cats = new(); //used to keep some data alive and in memory
@@ -27,7 +29,7 @@ namespace UpgradeSystem
         private CategoryObject _currentCategory;
 
         private static UpgradeMenu _instance;
-        private static UpgradeData Data => _instance.upgrades;
+        private static UpgradeData Data => _instance._upgrades;
 
         private void Awake()
         {
@@ -36,12 +38,16 @@ namespace UpgradeSystem
                 _instance = this;
             }
 
-            Serialization.Load("upgrade", Serialization.FileTypes.Binary, out upgrades);
-
-            if (upgrades == null)
+            var directory = Serialization.SaveLocation(Serialization.FileTypes.Binary);
+            var filePath = Path.Combine(directory, "upgrade.bin");
+            if (File.Exists(filePath))
             {
-                upgrades = new UpgradeData();
-                Serialization.Save("upgrade", Serialization.FileTypes.Binary, upgrades);
+                var bytes = File.ReadAllBytes(filePath);
+                _upgrades.ApplyBytes(bytes);
+            }
+            else
+            {
+                Save();
             }
 
             Debug.Log("Upgrade menu disabled pending rework");
@@ -58,17 +64,30 @@ namespace UpgradeSystem
                 _instance = this;
             }
 
-            upgradeCurrency.text = $"{upgrades.upgradeCurrency}$";
+            upgradeCurrency.text = $"{_upgrades.upgradeCurrency}$";
+        }
+
+        private void Save()
+        {
+            var directory = Serialization.SaveLocation(Serialization.FileTypes.Binary);
+            var filePath = Path.Combine(directory, "upgrade.bin");
+            var bytes = _upgrades.GetBytes();
+            if (Directory.Exists(directory))
+            {
+                Directory.CreateDirectory(directory);
+            }
+
+            File.WriteAllBytes(filePath, bytes);
         }
 
         private void OnDestroy()
         {
-            Serialization.Save("upgrade", Serialization.FileTypes.Binary, upgrades);
+            Save();
         }
 
         public void OnDisable()
         {
-            Serialization.Save("upgrade", Serialization.FileTypes.Binary, upgrades);
+            Save();
         }
 
         /// <summary>
@@ -78,46 +97,46 @@ namespace UpgradeSystem
         {
             //scrapCollection
             AddCategory("Scrap Collection", "Improve your scrap collection ability");
-            AddUpgrade(string.Empty, nameof(UpgradeData.scrapConversionRate), 900, 1.3f, "Scrap sell rate", "Improves for how much you sell each piece of scrap");
-            AddUpgrade(string.Empty, nameof(UpgradeData.scrapCollectionRange), 650, 1.3f, "Scrap Collection Range", "Makes the collection range bigger", 10);
-            AddUpgrade(string.Empty, nameof(UpgradeData.scrapCollectionSpeed), 650, 1.5f, "Scrap Collection Speed", "Improves how fast the scrap moves towards you", 5);
+            AddUpgrade(string.Empty, nameof(UpgradeData.ScrapConversionRate), 900, 1.3f, "Scrap sell rate", "Improves for how much you sell each piece of scrap");
+            AddUpgrade(string.Empty, nameof(UpgradeData.ScrapCollectionRange), 650, 1.3f, "Scrap Collection Range", "Makes the collection range bigger", 10);
+            AddUpgrade(string.Empty, nameof(UpgradeData.ScrapCollectionSpeed), 650, 1.5f, "Scrap Collection Speed", "Improves how fast the scrap moves towards you", 5);
 
             //Hull
             AddCategory("Ship Upgrades", "Upgrades that make your ship strong, faster and generally better");
-            AddUpgrade(string.Empty, nameof(UpgradeData.hullUpgradeLevel), 50, 2f, "Hull Upgrade", "Upgrading the hull allows the ship to take more hits", 10);
-            AddUpgrade(string.Empty, nameof(UpgradeData.armorUpgradeLevel), 100, 1.4f, "Armor Upgrade", "Upgrades the amount of armor the ship has");
+            AddUpgrade(string.Empty, nameof(UpgradeData.HullUpgradeLevel), 50, 2f, "Hull Upgrade", "Upgrading the hull allows the ship to take more hits", 10);
+            AddUpgrade(string.Empty, nameof(UpgradeData.ArmorUpgradeLevel), 100, 1.4f, "Armor Upgrade", "Upgrades the amount of armor the ship has");
 
             //Shield
-            AddUpgrade(string.Empty, nameof(UpgradeData.unlockedShield), 1200, 0, "Unlock Shield", "Unlocks the shield");
-            AddUpgrade(string.Empty, nameof(UpgradeData.shieldGeneratorLevel), 1300, 1.2f, "Shield Regeneration Speed", "Increases the regeneration speed of the shield");
-            AddUpgrade(string.Empty, nameof(UpgradeData.shieldCapacitorLevel), 1800, 1.2f, "Shield capacity upgrade", "Increases the capacity of the shield");
+            AddUpgrade(string.Empty, nameof(UpgradeData.UnlockedShield), 1200, 0, "Unlock Shield", "Unlocks the shield");
+            AddUpgrade(string.Empty, nameof(UpgradeData.ShieldGeneratorLevel), 1300, 1.2f, "Shield Regeneration Speed", "Increases the regeneration speed of the shield");
+            AddUpgrade(string.Empty, nameof(UpgradeData.ShieldCapacitorLevel), 1800, 1.2f, "Shield capacity upgrade", "Increases the capacity of the shield");
 
             //shotgun
             AddCategory("Shotgun Upgrades", " Upgrades for your shotgun");
-            AddUpgrade(nameof(UpgradeData.shotgun), nameof(CommonWeaponUpgrade.unlocked), 750, 0, "Unlocks Shotgun", "Unlocks the Shotgun");
-            AddUpgrade(nameof(UpgradeData.shotgun), nameof(CommonWeaponUpgrade.accuracy), 1425, 1.8f, "Increase Accuracy", "Decreases the spread of the shotgun", 10);
-            AddUpgrade(nameof(UpgradeData.shotgun), nameof(CommonWeaponUpgrade.damage), 1250, 1.3f, "Damage per fragment", "Increases the damage each fragment does");
-            AddUpgrade(nameof(UpgradeData.shotgun), nameof(CommonWeaponUpgrade.fireRate), 750, 1.3f, "Fragments per Shotgun shot", "Increases the number of fragments shot out per shot", 6);
+            AddUpgrade(nameof(UpgradeData.Shotgun), nameof(CommonWeaponUpgrade.Unlocked), 750, 0, "Unlocks Shotgun", "Unlocks the Shotgun");
+            AddUpgrade(nameof(UpgradeData.Shotgun), nameof(CommonWeaponUpgrade.Accuracy), 1425, 1.8f, "Increase Accuracy", "Decreases the spread of the shotgun", 10);
+            AddUpgrade(nameof(UpgradeData.Shotgun), nameof(CommonWeaponUpgrade.Damage), 1250, 1.3f, "Damage per fragment", "Increases the damage each fragment does");
+            AddUpgrade(nameof(UpgradeData.Shotgun), nameof(CommonWeaponUpgrade.FireRate), 750, 1.3f, "Fragments per Shotgun shot", "Increases the number of fragments shot out per shot", 6);
 
             //machineGun
             AddCategory("Machine-gun Upgrades", "Upgrades for your machine-gun");
-            AddUpgrade(nameof(UpgradeData.miniGun), nameof(CommonWeaponUpgrade.unlocked), 700, 0, "Unlock Machine-gun", "Unlocks the Machine-gun");
-            AddUpgrade(nameof(UpgradeData.miniGun), nameof(CommonWeaponUpgrade.accuracy), 3000, 1.3f, "Increase Accuracy", "Increases Accuracy of the Machine-gun", 10);
-            AddUpgrade(nameof(UpgradeData.miniGun), nameof(CommonWeaponUpgrade.damage), 4000, 1.1f, "Increase Damage", "Increases the damage each bullet of the machine gun does");
-            AddUpgrade(nameof(UpgradeData.miniGun), nameof(CommonWeaponUpgrade.fireRate), 2500, 1.2f, "Increase Fire-rate", "Increases number of bullets shot out by the machine gun every second", 20);
+            AddUpgrade(nameof(UpgradeData.MiniGun), nameof(CommonWeaponUpgrade.Unlocked), 700, 0, "Unlock Machine-gun", "Unlocks the Machine-gun");
+            AddUpgrade(nameof(UpgradeData.MiniGun), nameof(CommonWeaponUpgrade.Accuracy), 3000, 1.3f, "Increase Accuracy", "Increases Accuracy of the Machine-gun", 10);
+            AddUpgrade(nameof(UpgradeData.MiniGun), nameof(CommonWeaponUpgrade.Damage), 4000, 1.1f, "Increase Damage", "Increases the damage each bullet of the machine gun does");
+            AddUpgrade(nameof(UpgradeData.MiniGun), nameof(CommonWeaponUpgrade.FireRate), 2500, 1.2f, "Increase Fire-rate", "Increases number of bullets shot out by the machine gun every second", 20);
 
             //Cannon
             AddCategory("Cannon Upgrades", "Upgrades for your main Cannon");
-            AddUpgrade(nameof(UpgradeData.cannon), nameof(CommonWeaponUpgrade.accuracy), 200, 1.2f, "Cannon Accuracy", "Increases the accuracy of the cannon", 5);
-            AddUpgrade(nameof(UpgradeData.cannon), nameof(CommonWeaponUpgrade.damage), 350, 1.4f, "Cannon Damage", "Increases the amount of damage dealt with each shot");
-            AddUpgrade(nameof(UpgradeData.cannon), nameof(CommonWeaponUpgrade.fireRate), 475, 1.7f, "Cannon Fire-rate", "Increases the amount of bullets shot by the Cannon", 20);
+            AddUpgrade(nameof(UpgradeData.Cannon), nameof(CommonWeaponUpgrade.Accuracy), 200, 1.2f, "Cannon Accuracy", "Increases the accuracy of the cannon", 5);
+            AddUpgrade(nameof(UpgradeData.Cannon), nameof(CommonWeaponUpgrade.Damage), 350, 1.4f, "Cannon Damage", "Increases the amount of damage dealt with each shot");
+            AddUpgrade(nameof(UpgradeData.Cannon), nameof(CommonWeaponUpgrade.FireRate), 475, 1.7f, "Cannon Fire-rate", "Increases the amount of bullets shot by the Cannon", 20);
 
             //Granade
             AddCategory("Grenade Upgrades", "Upgrades for a Explosive helper!");
-            AddUpgrade(nameof(UpgradeData.grenade), nameof(CommonWeaponUpgrade.unlocked), 5000, 0, "Unlock Grenade", "Unlocks the Grenade");
-            AddUpgrade(nameof(UpgradeData.grenade), nameof(CommonWeaponUpgrade.damage), 2000, 1.3f, " Increased Damage", "Increases the damage each piece of shrapnel does");
-            AddUpgrade(nameof(UpgradeData.grenade), nameof(CommonWeaponUpgrade.fragments), 1500, 1.7f, "More Shrapnel!", "Increases the number of pieces the grenade explodes into", 30);
-            AddUpgrade(nameof(UpgradeData.grenade), nameof(CommonWeaponUpgrade.fireRate), 4000, 2f, "Increased Fire rate", "Increases the rate of firing the grenade", 20);
+            AddUpgrade(nameof(UpgradeData.Grenade), nameof(CommonWeaponUpgrade.Unlocked), 5000, 0, "Unlock Grenade", "Unlocks the Grenade");
+            AddUpgrade(nameof(UpgradeData.Grenade), nameof(CommonWeaponUpgrade.Damage), 2000, 1.3f, " Increased Damage", "Increases the damage each piece of shrapnel does");
+            AddUpgrade(nameof(UpgradeData.Grenade), nameof(CommonWeaponUpgrade.Fragments), 1500, 1.7f, "More Shrapnel!", "Increases the number of pieces the grenade explodes into", 30);
+            AddUpgrade(nameof(UpgradeData.Grenade), nameof(CommonWeaponUpgrade.FireRate), 4000, 2f, "Increased Fire rate", "Increases the rate of firing the grenade", 20);
         }
 
         /// <summary>
@@ -140,7 +159,7 @@ namespace UpgradeSystem
 
             var upgradeObject = new UpgradeObject(groupName, fieldName, startCost, maxLevel, mult, element);
             _currentCategory.AddNew(upgradeObject);
-            _upgrades.Add(upgradeObject);
+            _upgradesObjects.Add(upgradeObject);
         }
 
         private void AddCategory(string displayName, string discription)

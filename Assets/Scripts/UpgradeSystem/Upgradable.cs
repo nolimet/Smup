@@ -4,36 +4,42 @@ using Sirenix.OdinInspector;
 namespace UpgradeSystem
 {
     [Serializable]
-    public class Upgradable<TValueType>
+    public abstract class Upgradable
     {
         public const int ByteSize = 4;
-
-        public delegate TValueType GetValueDelegate(int level);
+        public static readonly byte[] Empty = new byte[ByteSize];
 
         public delegate double GetCostDelegate(int level);
 
-        [ShowInInspector] private int _currentLevel;
-        [ShowInInspector] [ReadOnly] private readonly int _maxLevel;
-
-        private readonly GetValueDelegate _getValueFunc;
-        [ShowInInspector] [ReadOnly] public TValueType Value => _getValueFunc(_currentLevel);
-
         private readonly GetCostDelegate _getCostFunc;
-        public double Cost => _getCostFunc(_currentLevel);
+        public double Cost => _getCostFunc(CurrentLevel);
 
-        public Upgradable(int maxLevel, GetValueDelegate getValueFunc, GetCostDelegate getCostFunc)
+        [ShowInInspector] protected int CurrentLevel;
+        [ShowInInspector] [ReadOnly] protected readonly int MaxLevel;
+
+        protected Upgradable(int maxLevel, GetCostDelegate getCostFunc)
         {
-            _maxLevel = maxLevel;
-            _getValueFunc = getValueFunc;
             _getCostFunc = getCostFunc;
+            MaxLevel = maxLevel;
         }
 
-        public byte[] ToBytes() => BitConverter.GetBytes(_currentLevel);
+        public byte[] ToBytes() => BitConverter.GetBytes(CurrentLevel);
 
         public void ApplyBytes(ReadOnlySpan<byte> bytes)
         {
-            _currentLevel = BitConverter.ToInt32(bytes);
+            CurrentLevel = BitConverter.ToInt32(bytes);
         }
+    }
+
+    [Serializable]
+    public class Upgradable<TValueType> : Upgradable
+    {
+        public delegate TValueType GetValueDelegate(int level);
+
+        private readonly GetValueDelegate _getValueFunc;
+        [ShowInInspector] [ReadOnly] public TValueType Value => _getValueFunc(CurrentLevel);
+
+        public Upgradable(int maxLevel, GetValueDelegate getValueFunc, GetCostDelegate getCostFunc) : base(maxLevel, getCostFunc) => _getValueFunc = getValueFunc;
 
         public static implicit operator TValueType(Upgradable<TValueType> value) => value.Value;
     }

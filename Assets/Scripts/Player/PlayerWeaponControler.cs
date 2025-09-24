@@ -22,6 +22,7 @@ namespace Player
             set
             {
                 if (value != _currentWeapon)
+                {
                     switch (value)
                     {
                         case WeaponType.Cannon:
@@ -39,6 +40,7 @@ namespace Player
                             MainWeapon = new Granade();
                             break;
                     }
+                }
 
                 _currentWeapon = value;
             }
@@ -61,31 +63,52 @@ namespace Player
         private void Update()
         {
             if (Input.GetButton(Axis.Fire))
+            {
                 FireMain();
+            }
             else
+            {
                 Firing = false;
+            }
 
             SwitchWeapon();
         }
 
         private void SwitchWeapon()
         {
-            if (Input.GetKeyDown(KeyCode.Alpha1)) CurrentWeapon = WeaponType.Cannon;
+            if (Input.GetKeyDown(KeyCode.Alpha1))
+            {
+                CurrentWeapon = WeaponType.Cannon;
+            }
             if (Input.GetKeyDown(KeyCode.Alpha2))
-                if (GameManager.Upgrades.miniGun.unlocked)
+            {
+                if (GameManager.Upgrades.MiniGun.Unlocked)
+                {
                     CurrentWeapon = WeaponType.Minigun;
+                }
+            }
             if (Input.GetKeyDown(KeyCode.Alpha3))
-                if (GameManager.Upgrades.shotgun.unlocked)
+            {
+                if (GameManager.Upgrades.Shotgun.Unlocked)
+                {
                     CurrentWeapon = WeaponType.Shotgun;
+                }
+            }
             if (Input.GetKeyDown(KeyCode.Alpha4))
-                if (GameManager.Upgrades.grenade.unlocked)
+            {
+                if (GameManager.Upgrades.Grenade.Unlocked)
+                {
                     CurrentWeapon = WeaponType.Granade;
+                }
+            }
         }
 
         private void FireMain()
         {
             if (!GameManager.Stats.CanFire(MainWeapon.EnergyCost))
+            {
                 return;
+            }
             if (MainWeapon.TryShoot(gameObject, weaponOffset, GetAddedVelocity()))
             {
                 GameManager.Stats.RemoveEnergy(MainWeapon.EnergyCost);
@@ -98,9 +121,13 @@ namespace Player
             Vector2 output;
 
             if (_rigi.linearVelocity.x > 0)
+            {
                 output = new Vector2(_rigi.linearVelocity.x, 0f);
+            }
             else
+            {
                 output = Vector2.zero;
+            }
             return output;
         }
     }

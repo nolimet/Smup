@@ -26,13 +26,13 @@ namespace Player.Weapons
 
         public Granade()
         {
-            var fireRate = Mathf.RoundToInt(10 * Mathf.Pow(1.3f, GameManager.Upgrades.grenade.fireRate));
+            var fireRate = Mathf.RoundToInt(10 * Mathf.Pow(1.3f, GameManager.Upgrades.Grenade.FireRate));
 
-            _bulletDamage = 7f * Mathf.Pow(1.3f, GameManager.Upgrades.grenade.damage);
-            _accuracy = 4 * Mathf.Pow(0.9f, GameManager.Upgrades.grenade.accuracy);
+            _bulletDamage = 7f * Mathf.Pow(1.3f, GameManager.Upgrades.Grenade.Damage);
+            _accuracy = 4 * Mathf.Pow(0.9f, GameManager.Upgrades.Grenade.Accuracy);
             _bulletSpeed = 9f * Mathf.Pow(1.1f, 1);
 
-            _fragments = GameManager.Upgrades.grenade.fragments + 20;
+            _fragments = GameManager.Upgrades.Grenade.Fragments + 20;
 
             _fireDelay = 60000f / fireRate;
 

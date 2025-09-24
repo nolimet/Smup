@@ -27,8 +27,8 @@ namespace Player.Weapons
         public ShotGun()
         {
             const int fireRate = 24;
-            _bulletDamage = 0.5f * Mathf.Pow(1.3f, GameManager.Upgrades.shotgun.damage);
-            _accuracy = 45 * Mathf.Pow(0.9f, GameManager.Upgrades.shotgun.accuracy);
+            _bulletDamage = 0.5f * Mathf.Pow(1.3f, GameManager.Upgrades.Shotgun.Damage);
+            _accuracy = 45 * Mathf.Pow(0.9f, GameManager.Upgrades.Shotgun.Accuracy);
             _bulletSpeed = 7f * Mathf.Pow(1.1f, 1);
 
             _fireDelay = 60000f / fireRate;
@@ -49,7 +49,7 @@ namespace Player.Weapons
             }
 
             _energyCost = 30;
-            _bulletsPerShot *= Mathf.RoundToInt(5 * Mathf.Pow(1.2f, GameManager.Upgrades.shotgun.fireRate));
+            _bulletsPerShot *= Mathf.RoundToInt(5 * Mathf.Pow(1.2f, GameManager.Upgrades.Shotgun.FireRate));
         }
 
         public bool TryShoot(GameObject entiy, Vector3 weaponOffSet, Vector2 inherentVelocity)
