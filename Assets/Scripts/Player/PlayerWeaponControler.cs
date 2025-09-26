@@ -82,7 +82,7 @@ namespace Player
             }
             if (Input.GetKeyDown(KeyCode.Alpha2))
             {
-                if (GameManager.Upgrades.MiniGun.Unlocked)
+                if (GameManager.Upgrades.Minigun.Unlocked)
                 {
                     CurrentWeapon = WeaponType.Minigun;
                 }

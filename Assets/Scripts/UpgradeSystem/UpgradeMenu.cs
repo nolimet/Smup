@@ -120,10 +120,10 @@ namespace UpgradeSystem
 
             //machineGun
             AddCategory("Machine-gun Upgrades", "Upgrades for your machine-gun");
-            AddUpgrade(nameof(UpgradeData.MiniGun), nameof(CommonWeaponUpgrade.Unlocked), 700, 0, "Unlock Machine-gun", "Unlocks the Machine-gun");
-            AddUpgrade(nameof(UpgradeData.MiniGun), nameof(CommonWeaponUpgrade.Accuracy), 3000, 1.3f, "Increase Accuracy", "Increases Accuracy of the Machine-gun", 10);
-            AddUpgrade(nameof(UpgradeData.MiniGun), nameof(CommonWeaponUpgrade.Damage), 4000, 1.1f, "Increase Damage", "Increases the damage each bullet of the machine gun does");
-            AddUpgrade(nameof(UpgradeData.MiniGun), nameof(CommonWeaponUpgrade.FireRate), 2500, 1.2f, "Increase Fire-rate", "Increases number of bullets shot out by the machine gun every second", 20);
+            AddUpgrade(nameof(UpgradeData.Minigun), nameof(CommonWeaponUpgrade.Unlocked), 700, 0, "Unlock Machine-gun", "Unlocks the Machine-gun");
+            AddUpgrade(nameof(UpgradeData.Minigun), nameof(CommonWeaponUpgrade.Accuracy), 3000, 1.3f, "Increase Accuracy", "Increases Accuracy of the Machine-gun", 10);
+            AddUpgrade(nameof(UpgradeData.Minigun), nameof(CommonWeaponUpgrade.Damage), 4000, 1.1f, "Increase Damage", "Increases the damage each bullet of the machine gun does");
+            AddUpgrade(nameof(UpgradeData.Minigun), nameof(CommonWeaponUpgrade.FireRate), 2500, 1.2f, "Increase Fire-rate", "Increases number of bullets shot out by the machine gun every second", 20);
 
             //Cannon
             AddCategory("Cannon Upgrades", "Upgrades for your main Cannon");

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 using Sirenix.OdinInspector;
+using UpgradeSystem.Attributes;
 
 namespace UpgradeSystem
 {
@@ -11,20 +12,32 @@ namespace UpgradeSystem
         public long upgradeCurrency;
 
         //ScrapGetting
+        [Category("Scrap")]
+        [Element("Range", "Improves the distance scrap is collected from")]
         [ShowInInspector] public readonly Upgradable<int> ScrapCollectionRange = new(-1, l => l, l => 900 * Math.Pow(1.3, l));
+        [Element("Speed", "Speed at which scrap is pulled towards your ship")]
         [ShowInInspector] public readonly Upgradable<int> ScrapCollectionSpeed = new(10, l => l, l => 650 * Math.Pow(1.3, l));
+        [Element("Conversion Rate", "Conversion rate of your scrap")]
         [ShowInInspector] public readonly Upgradable<int> ScrapConversionRate = new(-1, l => l, l => 650 * Math.Pow(1.5, l));
 
         //Hull
+        [Category("Hull")]
+        [Element("Health", "The amount of total health your ship has")]
         [ShowInInspector] public readonly Upgradable<int> HullUpgradeLevel = new(10, l => l, l => 50 * Math.Pow(2, l));
+        [Element("Armor", "Level of damage negation done by your ship")]
         [ShowInInspector] public readonly Upgradable<int> ArmorUpgradeLevel = new(-1, l => l, l => 100 * Math.Pow(1.4, l));
 
         //Shield
+        [Category("Shield")]
+        [Element("Unlocked")]
         [ShowInInspector] public readonly Upgradable<bool> UnlockedShield = new(1, l => l > 0, _ => 1200);
+        [Element("Regeneration", "How fast you shield will regenerate")]
         [ShowInInspector] public readonly Upgradable<int> ShieldGeneratorLevel = new(-1, l => l, l => 1300 * Math.Pow(1.2, l));
+        [Element("Capacity", "How much shield you can have at one time")]
         [ShowInInspector] public readonly Upgradable<int> ShieldCapacitorLevel = new(-1, l => l, l => 1800 * Math.Pow(1.2f, l));
 
         //weaponUpgrades
+        [Category("Cannon")]
         [ShowInInspector] public readonly CommonWeaponUpgrade Cannon = new
         (
             null,
@@ -33,7 +46,9 @@ namespace UpgradeSystem
             new Upgradable<int>(20, l => l, l => 475 * Math.Pow(1.7, l)),
             null
         );
-        [ShowInInspector] public readonly CommonWeaponUpgrade MiniGun = new
+
+        [Category("Minigun")]
+        [ShowInInspector] public readonly CommonWeaponUpgrade Minigun = new
         (
             new Upgradable<bool>(1, l => l == 1, _ => 700),
             new Upgradable<int>(-1, l => l, l => 4000 * Math.Pow(1.1, l)),
@@ -41,6 +56,8 @@ namespace UpgradeSystem
             new Upgradable<int>(20, l => l, l => 2500 * Math.Pow(1.2, l)),
             null
         );
+
+        [Category("Shotgun")]
         [ShowInInspector] public readonly CommonWeaponUpgrade Shotgun = new
         (
             new Upgradable<bool>(1, l => l == 1, l => 750),
@@ -49,6 +66,8 @@ namespace UpgradeSystem
             new Upgradable<int>(6, l => l, l => 750 * Math.Pow(1.3, l)),
             null
         );
+
+        [Category("Grenade")]
         [ShowInInspector] public readonly CommonWeaponUpgrade Grenade = new
         (
             new Upgradable<bool>(1, l => l == 1, l => 5000),
@@ -110,10 +129,15 @@ namespace UpgradeSystem
     {
         public const int ByteSize = 5 * Upgradable.ByteSize;
 
+        [Element("Unlocked")]
         [ShowInInspector] public readonly Upgradable<bool> Unlocked;
+        [Element("Damage", "Damage done each projectile")]
         [ShowInInspector] public readonly Upgradable<int> Damage;
+        [Element("Accuracy", "The discrepancy between each shot's angle")]
         [ShowInInspector] public readonly Upgradable<int> Accuracy;
+        [Element("FireRate", "Pew pew speed")]
         [ShowInInspector] public readonly Upgradable<int> FireRate;
+        [Element("Fragments", "Effects how many fragments are create if applicable")]
         [ShowInInspector] public readonly Upgradable<int> Fragments;
 
         public CommonWeaponUpgrade(Upgradable<bool> unlocked, Upgradable<int> damage, Upgradable<int> accuracy, Upgradable<int> fireRate, Upgradable<int> fragments)
