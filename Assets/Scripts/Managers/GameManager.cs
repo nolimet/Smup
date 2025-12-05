@@ -12,7 +12,9 @@ namespace Managers
 		[SerializeField] private PlayerStats playerStats;
 		[SerializeField] private PlayerWeaponControler playerWeaponControler;
 		[SerializeField] private PickupManager pickupManager;
-		[ShowInInspector] private UpgradeData _upgrades;
+
+		// ReSharper disable once InconsistentNaming
+		[ShowInInspector] private UpgradeData _upgrades => Application.isPlaying ? SaveDataManager.Upgrades : null;
 
 		public static PlayerStats Stats => Instance.playerStats;
 		public static PlayerWeaponControler WeaponController => Instance.playerWeaponControler;
