@@ -12,8 +12,11 @@ namespace UpgradeSystem.UI.Elements
         private const string ussNameElementClassName = ussClassName + "__name";
         private const string ussDescriptionElementClassName = ussClassName + "__description";
         private const string ussCurrentLevelElementClassName = ussClassName + "__current-level";
-        private const string ussUpgradeCostClassName = ussClassName + "__upgrade-cost";
-        private const string ussUpgradeButtonClassName = ussClassName + "__upgrade-button";
+        private const string ussUpgradeCostClassName = ussClassName + "__cost";
+        private const string ussUpgradeButtonClassName = ussClassName + "__button";
+
+        public const string ussLeftContainerClassName = ussClassName + "__left-container";
+        public const string ussRightContainerClassName = ussClassName + "__right-container";
 
         private readonly Label _currentLevelElement;
         private readonly Label _upgradeCostElement;
@@ -29,26 +32,37 @@ namespace UpgradeSystem.UI.Elements
         {
             _upgradable = upgradable;
 
-            var nameElement = new Label(elementAttr.Name);
-            nameElement.AddToClassList(ussNameElementClassName);
-            Add(nameElement);
+            var leftContainer = new VisualElement();
+            leftContainer.AddToClassList(ussLeftContainerClassName);
+            Add(leftContainer);
+            {
+                var nameElement = new Label(elementAttr.Name);
+                nameElement.AddToClassList(ussNameElementClassName);
+                leftContainer.Add(nameElement);
 
-            var descriptionElement = new Label(elementAttr.Description);
-            descriptionElement.AddToClassList(ussDescriptionElementClassName);
-            Add(descriptionElement);
+                var descriptionElement = new Label(elementAttr.Description);
+                descriptionElement.AddToClassList(ussDescriptionElementClassName);
+                leftContainer.Add(descriptionElement);
+            }
 
-            _currentLevelElement = new Label();
-            _currentLevelElement.AddToClassList(ussCurrentLevelElementClassName);
-            UpdateCurrentLevel();
+            var rightContainer = new VisualElement();
+            rightContainer.AddToClassList(ussRightContainerClassName);
+            Add(rightContainer);
+            {
+                _currentLevelElement = new Label();
+                _currentLevelElement.AddToClassList(ussCurrentLevelElementClassName);
+                rightContainer.Add(_currentLevelElement);
+                UpdateCurrentLevel();
 
-            _upgradeCostElement = new Label();
-            _upgradeCostElement.AddToClassList(ussUpgradeButtonClassName);
-            Add(_upgradeCostElement);
+                _upgradeCostElement = new Label();
+                _upgradeCostElement.AddToClassList(ussUpgradeCostClassName);
+                rightContainer.Add(_upgradeCostElement);
+                UpdateCost();
 
-            var upgradeButton = new Button(OnUpgradeClicked);
-            upgradeButton.AddToClassList(ussUpgradeButtonClassName);
-
-            Add(upgradeButton);
+                var upgradeButton = new Button(OnUpgradeClicked) { text = "Upgrade" };
+                upgradeButton.AddToClassList(ussUpgradeButtonClassName);
+                rightContainer.Add(upgradeButton);
+            }
         }
 
         private void OnUpgradeClicked()
@@ -65,7 +79,7 @@ namespace UpgradeSystem.UI.Elements
         {
             var (current, max) = _upgradable.GetLevels();
             if (max == 1)
-                _currentLevelElement.text = current == max ? "Locked" : "Unlocked";
+                _currentLevelElement.text = current != max ? "Locked" : "Unlocked";
             else
                 _currentLevelElement.text = current == max ? $"{max}" : $"{current}/{max}";
         }

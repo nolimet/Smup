@@ -90,7 +90,7 @@ namespace UpgradeSystem
         {
             return typeof(UpgradeData)
                 .GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.FlattenHierarchy)
-                .Where(x => x.FieldType == typeof(Upgradable) || x.FieldType == typeof(CommonWeaponUpgrade))
+                .Where(x => typeof(Upgradable).IsAssignableFrom(x.FieldType) || x.FieldType == typeof(CommonWeaponUpgrade))
                 .OrderBy(x => x.MetadataToken)
                 .ToArray();
         }
@@ -201,9 +201,9 @@ namespace UpgradeSystem
 
         public static FieldInfo[] GetFields()
         {
-            return typeof(UpgradeData)
+            return typeof(CommonWeaponUpgrade)
                 .GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.FlattenHierarchy)
-                .Where(x => x.FieldType == typeof(Upgradable))
+                .Where(x => typeof(Upgradable).IsAssignableFrom(x.FieldType))
                 .OrderBy(x => x.MetadataToken)
                 .ToArray();
         }
