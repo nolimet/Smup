@@ -57,6 +57,7 @@ namespace Managers
 		public void OnDestroy()
 		{
 			_instance = null;
+			SaveDataManager.SaveAll();
 		}
 
 		private void Update()

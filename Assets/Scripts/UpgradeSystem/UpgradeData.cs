@@ -13,7 +13,7 @@ namespace UpgradeSystem
 	{
 		public string FileName { get; } = "UpgradeData";
 
-		public long upgradeCurrency;
+		public double upgradeCurrency;
 
 		//ScrapGetting
 		[Category("Scrap")]
@@ -81,23 +81,31 @@ namespace UpgradeSystem
 			new Upgradable<int>(30, l => l, l => 1500 * Math.Pow(1.7, l))
 		);
 
+		public static FieldInfo[] GetFields()
+		{
+			return typeof(UpgradeData)
+				.GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.FlattenHierarchy)
+				.Where(x => x.FieldType == typeof(Upgradable) || x.FieldType == typeof(CommonWeaponUpgrade))
+				.OrderBy(x => x.MetadataToken)
+				.ToArray();
+		}
+
 		public byte[] GetBytes()
 		{
 			var bytes = new List<byte>();
-			var unfilteredFields = GetType().GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.FlattenHierarchy).OrderBy(x => x.MetadataToken);
-
 			bytes.AddRange(BitConverter.GetBytes(upgradeCurrency));
 
-			foreach (var fieldInfo in unfilteredFields)
+			foreach (var fieldInfo in GetFields())
 			{
 				var value = fieldInfo.GetValue(this);
-				if (value is Upgradable upgradable)
+				switch (value)
 				{
-					bytes.AddRange(upgradable.ToBytes());
-				}
-				else if (value is CommonWeaponUpgrade weaponUpgrade)
-				{
-					bytes.AddRange(weaponUpgrade.GetBytes());
+					case Upgradable upgradable:
+						bytes.AddRange(upgradable.ToBytes());
+						break;
+					case CommonWeaponUpgrade weaponUpgrade:
+						bytes.AddRange(weaponUpgrade.GetBytes());
+						break;
 				}
 			}
 
@@ -108,28 +116,38 @@ namespace UpgradeSystem
 		{
 			var byteSpan = bytes.AsSpan();
 			var offset = 8;
-			var unfilteredFields = GetType().GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.FlattenHierarchy).OrderBy(x => x.MetadataToken);
-			upgradeCurrency = BitConverter.ToInt64(byteSpan.Slice(0, 8));
+			upgradeCurrency = BitConverter.ToInt64(byteSpan[..8]);
 
-			foreach (var fieldInfo in unfilteredFields)
+			foreach (var fieldInfo in GetFields())
 			{
 				var value = fieldInfo.GetValue(this);
-				if (value is Upgradable upgradable)
+				switch (value)
 				{
-					upgradable.ApplyBytes(byteSpan.Slice(offset, Upgradable.ByteSize));
-					offset += Upgradable.ByteSize;
+					case Upgradable upgradable:
+						upgradable.ApplyBytes(byteSpan.Slice(offset, Upgradable.ByteSize));
+						offset += Upgradable.ByteSize;
+						break;
+					case CommonWeaponUpgrade weaponUpgrade:
+						weaponUpgrade.ApplyBytes(byteSpan.Slice(offset, CommonWeaponUpgrade.ByteSize));
+						offset += CommonWeaponUpgrade.ByteSize;
+						break;
 				}
-				else if (value is CommonWeaponUpgrade weaponUpgrade)
-				{
-					weaponUpgrade.ApplyBytes(byteSpan.Slice(offset, CommonWeaponUpgrade.ByteSize));
-					offset += CommonWeaponUpgrade.ByteSize;
-				}
+			}
+		}
+
+		public bool CanAfford(double amount) => upgradeCurrency >= amount;
+
+		public void SubtractCurrency(double amount)
+		{
+			if (CanAfford(amount))
+			{
+				upgradeCurrency = Math.Max(0, upgradeCurrency - amount);
 			}
 		}
 	}
 
 	[Serializable]
-	public struct CommonWeaponUpgrade
+	public class CommonWeaponUpgrade
 	{
 		public const int ByteSize = 5 * Upgradable.ByteSize;
 

@@ -1,14 +1,16 @@
 ﻿using UnityEngine.UIElements;
+using UpgradeSystem.Attributes;
 
 namespace UpgradeSystem.UI.Elements
 {
-	public class CategoryElement : VisualElement
+	public class CategoryElement : Foldout
 	{
-		public const string ussClassName = "category";
+		public new const string ussClassName = "category";
 
-		public CategoryElement()
+		public CategoryElement(CategoryAttribute categoryAttribute)
 		{
 			AddToClassList(ussClassName);
+			text = categoryAttribute.Name;
 		}
 	}
 }

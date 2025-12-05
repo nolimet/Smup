@@ -1,4 +1,5 @@
-﻿using UpgradeSystem;
+﻿using JetBrains.Annotations;
+using UpgradeSystem;
 using Util.Saving;
 
 namespace Managers
@@ -6,6 +7,8 @@ namespace Managers
 	public static class SaveDataManager
 	{
 		private static UpgradeData _upgradeData;
+
+		[NotNull]
 		public static UpgradeData Upgrades
 		{
 			get
