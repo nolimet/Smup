@@ -867,7 +867,7 @@ RectTransform:
   m_Father: {fileID: 369791034}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -1512,7 +1512,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1147218347
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1548,57 +1548,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81bbab107dc447e49884d7b803bcd880, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  upgrades:
-    upgradeCurrency: 0
-    scrapCollectionRange: 0
-    scrapCollectionSpeed: 0
-    scrapConversionRate: 0
-    unlockedShield: 0
-    shieldGeneratorLevel: 0
-    shieldCapacitorLevel: 0
-    unlockedShieldTweaker: 0
-    hullUpgradeLevel: 0
-    armorUpgradeLevel: 0
-    cannon:
-      unlocked: 0
-      damage: 0
-      accuracy: 0
-      fireRate: 0
-      fragments: 0
-      unlockedTweaker: 0
-      accuracyAdjustment: 0
-      speedAdjustment: 0
-      fireRateAdjustment: 0
-    miniGun:
-      unlocked: 0
-      damage: 0
-      accuracy: 0
-      fireRate: 0
-      fragments: 0
-      unlockedTweaker: 0
-      accuracyAdjustment: 0
-      speedAdjustment: 0
-      fireRateAdjustment: 0
-    shotgun:
-      unlocked: 0
-      damage: 0
-      accuracy: 0
-      fireRate: 0
-      fragments: 0
-      unlockedTweaker: 0
-      accuracyAdjustment: 0
-      speedAdjustment: 0
-      fireRateAdjustment: 0
-    grenade:
-      unlocked: 0
-      damage: 0
-      accuracy: 0
-      fireRate: 0
-      fragments: 0
-      unlockedTweaker: 0
-      accuracyAdjustment: 0
-      speedAdjustment: 0
-      fireRateAdjustment: 0
   upgradeCurrency: {fileID: 190481617}
   parentUpgrade: {fileID: 1758867079}
   parentCategory: {fileID: 872875816}
@@ -2907,6 +2856,62 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1914799068}
   m_CullTransparentMesh: 1
+--- !u!1 &2005144917
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2005144919}
+  - component: {fileID: 2005144918}
+  m_Layer: 5
+  m_Name: UIDocument
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &2005144918
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2005144917}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 19102, guid: 0000000000000000e000000000000000, type: 0}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.dll::UnityEngine.UIElements.UIDocument
+  m_PanelSettings: {fileID: 11400000, guid: ce3b70e340627184d92db05decf5eb69, type: 2}
+  m_ParentUI: {fileID: 0}
+  sourceAsset: {fileID: 9197481963319205126, guid: 1cfe6ed1806bacc4984a2fd5a7efca81,
+    type: 3}
+  m_SortingOrder: 0
+  m_Position: 0
+  m_WorldSpaceSizeMode: 1
+  m_WorldSpaceWidth: 1920
+  m_WorldSpaceHeight: 1080
+  m_PivotReferenceSize: 0
+  m_Pivot: 0
+  m_WorldSpaceCollider: {fileID: 0}
+--- !u!4 &2005144919
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2005144917}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2014275847
 GameObject:
   m_ObjectHideFlags: 0
@@ -3318,3 +3323,4 @@ SceneRoots:
   - {fileID: 2014340256}
   - {fileID: 1288251258}
   - {fileID: 275478664}
+  - {fileID: 2005144919}
