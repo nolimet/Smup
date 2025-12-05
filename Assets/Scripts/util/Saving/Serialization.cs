@@ -139,31 +139,30 @@ namespace Util.Saving
 			}
 		}
 
-		public static bool TryLoadBinary<T>(out T outputData) where T : IBinarySerializable, new()
+		public static bool TryLoadBinary<T>(out T data) where T : IBinarySerializable, new()
 		{
-			outputData = new T();
-			TryLoadBinaryInternal(outputData.FileName, ref outputData);
-			return true;
+			data = new T();
+			return TryLoadBinaryInternal(data.FileName, ref data);
 		}
 
-		public static bool TryLoadBinary<T>(string fileName, out T outputData) where T : IBinarySerializable, new()
+		public static bool TryLoadBinary<T>(string fileName, out T data) where T : IBinarySerializable, new()
 		{
-			outputData = new T();
-			return TryLoadBinaryInternal(fileName, ref outputData);
+			data = new T();
+			return TryLoadBinaryInternal(fileName, ref data);
 		}
 
-		private static bool TryLoadBinaryInternal<T>(string fileName, ref T outputData) where T : IBinarySerializable, new()
+		private static bool TryLoadBinaryInternal<T>(string fileName, ref T data) where T : IBinarySerializable, new()
 		{
 			var filePath = Path.Combine(SaveLocation(FileTypes.Binary), GetFileType(fileName, FileTypes.Binary));
 			if (!File.Exists(filePath))
 			{
-				outputData = default;
+				data = default;
 				return false;
 			}
 
-			outputData ??= new T();
+			data ??= new T();
 			var bytes = File.ReadAllBytes(filePath);
-			outputData.ApplyBytes(bytes);
+			data.ApplyBytes(bytes);
 			return true;
 		}
 		#endregion Binary Saving & Loading
