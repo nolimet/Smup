@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Enums;
 using ObjectPools;
@@ -20,7 +21,10 @@ namespace Managers
 
 		private void Start()
 		{
-			Serialization.TryLoadWave("Wave1", out var wave);
+			if (!Serialization.TryLoadWave("Wave1", out var wave))
+			{
+				throw new FileLoadException("Could not load wave file!");
+			}
 			Debug.Log(wave);
 
 			var waveDict = wave.Convert();

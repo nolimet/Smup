@@ -176,7 +176,7 @@ namespace Util.Saving
 
 		public static bool TryLoadWave(string fileName, out WaveClass wave)
 		{
-			var filePath = Path.Combine(SaveLocation(FileTypes.Binary), GetFileType(fileName, FileTypes.Wave));
+			var filePath = Path.Combine(SaveLocation(FileTypes.Wave), GetFileType(fileName, FileTypes.Wave));
 			if (!File.Exists(filePath))
 			{
 				wave = null;
