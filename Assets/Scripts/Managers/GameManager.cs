@@ -4,86 +4,65 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UpgradeSystem;
 using Util.DebugHelpers;
-using Util.Saving;
 
 namespace Managers
 {
-    public class GameManager : MonoBehaviour
-    {
-        [SerializeField] private PlayerStats playerStats;
-        [SerializeField] private PlayerWeaponControler playerWeaponControler;
-        [SerializeField] private PickupManager pickupManager;
-        [ShowInInspector] private UpgradeData _upgrades;
+	public class GameManager : MonoBehaviour
+	{
+		[SerializeField] private PlayerStats playerStats;
+		[SerializeField] private PlayerWeaponControler playerWeaponControler;
+		[SerializeField] private PickupManager pickupManager;
+		[ShowInInspector] private UpgradeData _upgrades;
 
-        public static PlayerStats Stats => _instance.playerStats;
-        public static PlayerWeaponControler WeaponController => _instance.playerWeaponControler;
-        public static PickupManager PickupManager => _instance.pickupManager;
+		public static PlayerStats Stats => Instance.playerStats;
+		public static PlayerWeaponControler WeaponController => Instance.playerWeaponControler;
+		public static PickupManager PickupManager => Instance.pickupManager;
 
-        public static UpgradeData Upgrades
-        {
-            get
-            {
-                if (!Instance)
-                {
-                    return new UpgradeData();
-                }
+		public static GameManager Instance
+		{
+			get
+			{
+				if (_instance == null || !_instance)
+				{
+					FindAnyObjectByType<GameManager>();
+				}
 
-                if (Instance._upgrades == null)
-                {
-                    Serialization.Load("upgrade", Serialization.FileTypes.Binary, out Instance._upgrades);
-                }
+				if (_instance == null || !_instance)
+				{
+					Debug.LogWarning("No GameManager object found");
+				}
 
-                return Instance._upgrades;
-            }
-        }
+				return _instance;
+			}
+		}
 
-        public static GameManager Instance
-        {
-            get
-            {
-                if (_instance == null || !_instance)
-                {
-                    FindAnyObjectByType<GameManager>();
-                }
+		private static GameManager _instance;
 
-                if (_instance == null || !_instance)
-                {
-                    Debug.LogWarning("No GameManager object found");
-                }
+		public void Awake()
+		{
+			if (_instance != null)
+			{
+				Debug.LogError("More than one GameManager!. Destroying duplicate GameManager");
+				Destroy(this);
+				return;
+			}
 
-                return _instance;
-            }
-        }
+			_instance = this;
 
-        private static GameManager _instance;
+			Debugger.DebugEnabled = true;
+		}
 
-        public void Awake()
-        {
-            if (_instance != null)
-            {
-                Debug.LogError("More than one GameManager!. Destroying duplicate GameManager");
-                Destroy(this);
-                return;
-            }
+		public void OnDestroy()
+		{
+			_instance = null;
+		}
 
-            _instance = this;
-
-            Serialization.Load("upgrade", Serialization.FileTypes.Binary, out _upgrades); //TODO move to a playerSaveData manager of some sort
-
-            Debugger.DebugEnabled = true;
-        }
-
-        public void OnDestroy()
-        {
-            _instance = null;
-        }
-
-        private void Update()
-        {
-            if (Input.GetKeyDown(KeyCode.Escape)) //TODO refactor to use a asset refrence. To make sure we returned to the menu
-            {
-                SceneManager.LoadScene(0, LoadSceneMode.Single);
-            }
-        }
-    }
+		private void Update()
+		{
+			if (Input.GetKeyDown(KeyCode.Escape)) //TODO refactor to use a asset refrence. To make sure we returned to the menu
+			{
+				SceneManager.LoadScene(0, LoadSceneMode.Single);
+			}
+		}
+	}
 }

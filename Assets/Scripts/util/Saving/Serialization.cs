@@ -2,203 +2,208 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
-using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
+using JetBrains.Annotations;
 using UnityEngine;
 
 namespace Util.Saving
 {
-    /// <summary>
-    /// class that handels serialization and writing to disk
-    /// </summary>
-    public static class Serialization
-    {
-        [DllImport("__Internal")]
-        private static extern void SyncFiles();
+	/// <summary>
+	/// class that handels serialization and writing to disk
+	/// </summary>
+	public static class Serialization
+	{
+		[DllImport("__Internal")]
+		private static extern void SyncFiles();
 
-        [DllImport("__Internal")]
-        private static extern void WindowAlert(string message);
+		[DllImport("__Internal")]
+		private static extern void WindowAlert(string message);
 
-        #region fileSaveSettings
+		#region fileSaveSettings
+		private static readonly BinaryFormatter _binaryFormatter = new();
 
-        /// <summary>
-        /// File types that are defined.
-        /// </summary>
-        public enum FileTypes
-        {
-            Binary,
-            Text,
-            SaveHead,
-            GameState,
-            Wave = 4
-        }
+		/// <summary>
+		/// File types that are defined.
+		/// </summary>
+		public enum FileTypes
+		{
+			Binary,
+			Wave
+		}
 
-        /// <summary>
-        /// Location of the save data
-        /// </summary>
-        public static string SaveFolderName = "GameData";
+		/// <summary>
+		/// Location of the save data
+		/// </summary>
+		public static string SaveFolderName = "GameData";
 
-        /// <summary>
-        /// A dictonary contain information related to a filetype
-        /// </summary>
-        public static readonly Dictionary<FileTypes, string> FileExstentions = new()
-            {
-                { FileTypes.Binary, ".bin" },
-                { FileTypes.Text, ".txt" },
-                { FileTypes.SaveHead, ".sav" },
-                { FileTypes.GameState, ".sav" },
-                { FileTypes.Wave, ".wva" },
-            },
-            FileLocations = new()
-            {
-                { FileTypes.Binary, "Data" },
-                { FileTypes.Text, "Data" },
-                { FileTypes.SaveHead, "Saves\\" + "Head" },
-                { FileTypes.GameState, "Saves\\" + "GameState" },
-                { FileTypes.Wave, "Waves" },
-            };
+		/// <summary>
+		/// A dictonary contain information related to a filetype
+		/// </summary>
+		public static readonly Dictionary<FileTypes, string> FileExstentions = new()
+			{
+				{
+					FileTypes.Binary, ".bin"
+				},
+				/*{
+					FileTypes.Text, ".txt"
+				},
+				{
+					FileTypes.SaveHead, ".sav"
+				},
+				{
+					FileTypes.GameState, ".sav"
+				},*/
+				{
+					FileTypes.Wave, ".wva"
+				},
+			},
+			FileLocations = new()
+			{
+				{
+					FileTypes.Binary, "Data"
+				},
+				/*{
+					FileTypes.Text, "Data"
+				},
+				{
+					FileTypes.SaveHead, "Saves\\" + "Head"
+				},
+				{
+					FileTypes.GameState, "Saves\\" + "GameState"
+				},*/
+				{
+					FileTypes.Wave, "Waves"
+				},
+			};
+		#endregion
 
-        #endregion
+		/// <summary>
+		/// Generates a string for where the file is located
+		/// </summary>
+		/// <param name="fileType">The type of file can matter for directory</param>
+		/// <returns></returns>
+		public static string SaveLocation(FileTypes fileType)
+		{
+			var saveLocation = Application.dataPath;
+			if (!Application.isEditor)
+			{
+				saveLocation += "/..";
+			}
+			if (Application.platform == RuntimePlatform.WebGLPlayer)
+			{
+				saveLocation = Application.persistentDataPath;
+			}
 
-        /// <summary>
-        /// Generates a string for where the file is located
-        /// </summary>
-        /// <param name="fileType">The type of file can matter for directory</param>
-        /// <returns></returns>
-        public static string SaveLocation(FileTypes fileType)
-        {
-            var saveLocation = Application.dataPath;
-            if (!Application.isEditor)
-                saveLocation += "/..";
-            if (Application.platform == RuntimePlatform.WebGLPlayer)
-                saveLocation = Application.persistentDataPath;
+			saveLocation += "/" + SaveFolderName + "/" + FileLocations[fileType] + "/";
+			if (!Directory.Exists(saveLocation))
+			{
+				Directory.CreateDirectory(saveLocation);
+			}
+			return saveLocation;
+		}
 
-            saveLocation += "/" + SaveFolderName + "/" + FileLocations[fileType] + "/";
-            if (!Directory.Exists(saveLocation)) Directory.CreateDirectory(saveLocation);
-            return saveLocation;
-        }
+		/// <summary>
+		/// Returns file type with name attached
+		/// </summary>
+		/// <param name="fileName">The name of the file</param>
+		/// <param name="fileType">The type of file</param>
+		/// <returns>Name + Type </returns>
+		private static string GetFileType(string fileName, FileTypes fileType) => fileName + FileExstentions[fileType];
 
-        /// <summary>
-        /// Returns file type with name attached
-        /// </summary>
-        /// <param name="fileName">The name of the file</param>
-        /// <param name="fileType">The type of file</param>
-        /// <returns>Name + Type </returns>
-        private static string GetFileType(string fileName, FileTypes fileType) => fileName + FileExstentions[fileType];
+		#region Binary Saving & Loading
+		public static void SaveBinary<T>([NotNull] T instance) where T : IBinarySerializable
+		{
+			SaveBinaryInternal(instance.FileName, instance);
+		}
 
-        /// <summary>
-        /// Save file to disk
-        /// </summary>
-        /// <typeparam name="T">Type of the file</typeparam>
-        /// <param name="fileName">File name with out exstentions</param>
-        /// <param name="fileType">The type of file</param>
-        /// <param name="data">The actual data fo the file</param>
-        public static void Save<T>(string fileName, FileTypes fileType, T data)
-        {
-            fileName = fileName.Replace('/', '#').Replace("\\\"", "#").Replace(':', '#')
-                .Replace('?', '#').Replace('"', '#').Replace('|', '#').Replace('*', '#').Replace('>', '#')
-                .Replace('<', '#');
+		public static void SaveBinary<T>(string fileName, [NotNull] T instance) where T : IBinarySerializable
+		{
+			SaveBinaryInternal(fileName, instance);
+		}
 
-            var saveFile = SaveLocation(fileType);
-            saveFile += GetFileType(fileName, fileType);
+		public static void SaveBinaryInternal<T>(string fileName, [NotNull] T instance) where T : IBinarySerializable
+		{
+			var targetDirectory = SaveLocation(FileTypes.Binary);
+			if (!Directory.Exists(targetDirectory))
+			{
+				Directory.CreateDirectory(targetDirectory);
+			}
 
-            try
-            {
-                IFormatter formatter = new BinaryFormatter();
-                Stream stream = new FileStream(saveFile, FileMode.Create, FileAccess.Write, FileShare.ReadWrite);
-                formatter.Serialize(stream, data);
-                stream.Close();
-            }
-            catch (Exception e)
-            {
-                PlatformSafeMessage("Failed to Save: " + e.Message);
-            }
+			var filePath = Path.Combine(targetDirectory, GetFileType(fileName, FileTypes.Binary));
+			var bytes = instance.GetBytes();
+			File.WriteAllBytes(filePath, bytes);
 
-            if (Application.platform == RuntimePlatform.WebGLPlayer)
-                SyncFiles();
+			if (Application.platform == RuntimePlatform.WebGLPlayer)
+			{
+				SyncFiles();
+			}
+		}
 
-            Debug.Log(DateTime.Now + " Saved file: " + saveFile);
-        }
+		public static bool TryLoadBinary<T>(out T outputData) where T : IBinarySerializable, new()
+		{
+			outputData = new T();
+			TryLoadBinaryInternal(outputData.FileName, ref outputData);
+			return true;
+		}
 
-        /// <summary>
-        /// Loads a file from disk
-        /// </summary>
-        /// <typeparam name="T">Type of the file</typeparam>
-        /// <param name="fileName"> Name of the file</param>
-        /// <param name="fileType">The file exstention Type</param>
-        /// <param name="outputData">A ref for the file that will be loaded</param>
-        /// <returns>if the loading was succesfull. Needed because a save file can be non existant</returns>
-        public static bool Load<T>(string fileName, FileTypes fileType, out T outputData)
-        {
-            var saveFile = SaveLocation(fileType);
-            saveFile += GetFileType(fileName, fileType);
-            try
-            {
-                if (!File.Exists(saveFile))
-                {
-                    outputData = default;
-                    return false;
-                }
+		public static bool TryLoadBinary<T>(string fileName, out T outputData) where T : IBinarySerializable, new()
+		{
+			outputData = new T();
+			return TryLoadBinaryInternal(fileName, ref outputData);
+		}
 
-                IFormatter formatter = new BinaryFormatter();
-                var stream = new FileStream(saveFile, FileMode.Open);
+		private static bool TryLoadBinaryInternal<T>(string fileName, ref T outputData) where T : IBinarySerializable, new()
+		{
+			var filePath = Path.Combine(SaveLocation(FileTypes.Binary), GetFileType(fileName, FileTypes.Binary));
+			if (!File.Exists(filePath))
+			{
+				outputData = default;
+				return false;
+			}
 
-                var data = (T)formatter.Deserialize(stream);
-                outputData = data;
-                stream.Close();
-                return true;
-            }
-            catch (Exception)
-            {
-                Debug.LogError($"Failed to load config at {SaveLocation(fileType)}");
-                throw;
-            }
-        }
+			outputData ??= new T();
+			var bytes = File.ReadAllBytes(filePath);
+			outputData.ApplyBytes(bytes);
+			return true;
+		}
+		#endregion Binary Saving & Loading
 
-        public static T Load<T>(string fileName, FileTypes fileType = 0, bool fileNameHasPointer = false)
-        {
-            string saveFile;
-            if (!fileNameHasPointer)
-            {
-                saveFile = SaveLocation(fileType);
-                saveFile += GetFileType(fileName, fileType);
-            }
-            else
-            {
-                saveFile = fileName;
-            }
+		#region Waves Saving & Loading
+		public static void SaveWave(string fileName, WaveClass wave)
+		{
+			throw new NotImplementedException("Currently not supported... rework wave editor");
+		}
 
-            T outputData;
+		public static bool TryLoadWave(string fileName, out WaveClass wave)
+		{
+			var filePath = Path.Combine(SaveLocation(FileTypes.Binary), GetFileType(fileName, FileTypes.Wave));
+			if (!File.Exists(filePath))
+			{
+				wave = null;
+				return false;
+			}
 
-            if (!File.Exists(saveFile))
-            {
-                Debug.Log("failed to find File");
-                Debug.Log(saveFile);
-                outputData = default;
-            }
-            else
-            {
-                IFormatter formatter = new BinaryFormatter();
-                var stream = new FileStream(saveFile, FileMode.Open);
-                var data = (T)formatter.Deserialize(stream);
-                outputData = data;
+			//TODO replace with a json or binary format
+			using var stream = new FileStream(filePath, FileMode.Open);
+			wave = (WaveClass) _binaryFormatter.Deserialize(stream);
+			return true;
+		}
+		#endregion Waves Saving & Loading
 
-                stream.Close();
-            }
-
-            return outputData;
-        }
-
-        /// <summary>
-        /// Used to generate an error when there is one while saving or loading
-        /// </summary>
-        /// <param name="message">The message that will be shown</param>
-        private static void PlatformSafeMessage(string message)
-        {
-            if (Application.platform == RuntimePlatform.WebGLPlayer)
-                WindowAlert(message);
-            else
-                Debug.Log(message);
-        }
-    }
+		/// <summary>
+		/// Used to generate an error when there is one while saving or loading
+		/// </summary>
+		/// <param name="message">The message that will be shown</param>
+		private static void PlatformSafeMessage(string message)
+		{
+			if (Application.platform == RuntimePlatform.WebGLPlayer)
+			{
+				WindowAlert(message);
+			}
+			else
+			{
+				Debug.Log(message);
+			}
+		}
+	}
 }
