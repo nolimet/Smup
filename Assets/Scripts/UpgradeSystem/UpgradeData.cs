@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using Sirenix.OdinInspector;
 using UpgradeSystem.Attributes;
@@ -83,7 +84,7 @@ namespace UpgradeSystem
 		public byte[] GetBytes()
 		{
 			var bytes = new List<byte>();
-			var unfilteredFields = GetType().GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.FlattenHierarchy);
+			var unfilteredFields = GetType().GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.FlattenHierarchy).OrderBy(x => x.MetadataToken);
 
 			bytes.AddRange(BitConverter.GetBytes(upgradeCurrency));
 
@@ -107,7 +108,7 @@ namespace UpgradeSystem
 		{
 			var byteSpan = bytes.AsSpan();
 			var offset = 8;
-			var unfilteredFields = GetType().GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.FlattenHierarchy);
+			var unfilteredFields = GetType().GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.FlattenHierarchy).OrderBy(x => x.MetadataToken);
 			upgradeCurrency = BitConverter.ToInt64(byteSpan.Slice(0, 8));
 
 			foreach (var fieldInfo in unfilteredFields)
