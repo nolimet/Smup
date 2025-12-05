@@ -3,14 +3,14 @@ using UpgradeSystem.Attributes;
 
 namespace UpgradeSystem.UI.Elements
 {
-	public class CategoryElement : Foldout
-	{
-		public new const string ussClassName = "category";
+    public class CategoryElement : Foldout
+    {
+        public new const string ussClassName = "category";
 
-		public CategoryElement(CategoryAttribute categoryAttribute)
-		{
-			AddToClassList(ussClassName);
-			text = categoryAttribute.Name;
-		}
-	}
+        public CategoryElement(CategoryAttribute categoryAttr)
+        {
+            AddToClassList(ussClassName);
+            text = categoryAttr.Name;
+        }
+    }
 }
