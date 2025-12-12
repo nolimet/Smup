@@ -62,15 +62,12 @@ MonoBehaviour:
   <MaxHealth>k__BackingField:
     defaultValue: 1
   movementPattern:
-    rid: 1194487505303371821
+    rid: 1722505068064538627
   attackPattern:
     rid: 1194487505303371823
   references:
     version: 2
     RefIds:
-    - rid: 1194487505303371821
-      type: {class: LinearMovement, ns: Enemies.Movement, asm: Assembly-CSharp}
-      data: 
     - rid: 1194487505303371823
       type: {class: ShootFixedIntervalAttack, ns: Enemies.Attack, asm: Assembly-CSharp}
       data:
@@ -84,6 +81,11 @@ MonoBehaviour:
           defaultValue: 5
         shotSpeed:
           defaultValue: 5
+    - rid: 1722505068064538627
+      type: {class: SpeedUpSlowDown, ns: Enemies.Movement, asm: Assembly-CSharp}
+      data:
+        speedFactor: []
+        intervalRange: {x: 0, y: 0}
 --- !u!212 &21268758
 SpriteRenderer:
   m_ObjectHideFlags: 0
