@@ -20,7 +20,7 @@ namespace Util.Saving
 		private static extern void WindowAlert(string message);
 
 		#region fileSaveSettings
-		private static readonly BinaryFormatter _binaryFormatter = new();
+		private static readonly BinaryFormatter BinaryFormatter = new();
 
 		/// <summary>
 		/// File types that are defined.
@@ -184,7 +184,7 @@ namespace Util.Saving
 
 			//TODO replace with a json or binary format
 			using var stream = new FileStream(filePath, FileMode.Open);
-			wave = (WaveClass) _binaryFormatter.Deserialize(stream);
+			wave = (WaveClass) BinaryFormatter.Deserialize(stream);
 			return true;
 		}
 		#endregion Waves Saving & Loading
