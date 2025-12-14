@@ -1,11 +1,9 @@
-﻿using System;
-using Cysharp.Threading.Tasks;
+﻿using Cysharp.Threading.Tasks;
 using Data;
 using Enemies.Movement;
 using Interfaces;
 using ObjectPools;
 using Sirenix.OdinInspector;
-using Sirenix.Serialization;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -31,43 +29,12 @@ namespace Enemies
         [field: ReadOnly] [field: ShowInInspector] public double Health { get; private set; }
         [field: SerializeField] public Overrideable<double> MaxHealth { get; private set; }
 
-        [OdinSerialize] [TypeDrawerSettings(BaseType = typeof(IMovement))]
-        private Type MovementType
-        {
-            get => movementPattern?.GetType();
-            set
-            {
-                if (movementPattern?.GetType() != value && value != null)
-                {
-                    movementPattern = (IMovement) Activator.CreateInstance(value);
-                }
-                else
-                {
-                    movementPattern = null;
-                }
-            }
-        }
-
         [SerializeReference] private IMovement movementPattern;
-
-        [OdinSerialize] [TypeDrawerSettings(BaseType = typeof(IAttack))]
-        private Type AttackType
-        {
-            get => attackPattern?.GetType();
-            set
-            {
-                if (attackPattern?.GetType() != value && value != null)
-                {
-                    attackPattern = (IAttack) Activator.CreateInstance(value);
-                }
-                else
-                {
-                    attackPattern = null;
-                }
-            }
-        }
-
         [SerializeReference] private IAttack attackPattern;
+
+        public IMovement MovementPattern => movementPattern;
+
+        public IAttack AttackPattern => attackPattern;
 
         private void Awake()
         {
@@ -81,7 +48,6 @@ namespace Enemies
             movementPattern ??= new LinearMovement();
 
             movementPattern.SetTarget(gameObject);
-            //attackPattern.Weapon = new WeaponInterfaces.MiniGun();
         }
 
         public void OnSpawn()
@@ -103,10 +69,7 @@ namespace Enemies
 
         private void OnCollisionEnter2D(Collision2D other)
         {
-            if (Health <= double.Epsilon)
-            {
-                return;
-            }
+            if (Health <= double.Epsilon) return;
 
             if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
             {
@@ -119,24 +82,15 @@ namespace Enemies
                 }
             }
 
-            if (other.collider.CompareTag("Enemy Kill Plane"))
-            {
-                DestroyLoop(true).Forget();
-            }
+            if (other.collider.CompareTag("Enemy Kill Plane")) DestroyLoop(true).Forget();
         }
 
         public void ReceiveDamage(double damage)
         {
-            if (Health <= 0)
-            {
-                return;
-            }
+            if (Health <= 0) return;
 
             Health -= damage;
-            if (Health <= 0)
-            {
-                DestroyLoop(false).Forget();
-            }
+            if (Health <= 0) DestroyLoop(false).Forget();
         }
 
         private async UniTaskVoid DestroyLoop(bool skipReward)
