@@ -1,4 +1,5 @@
 ﻿using System;
+using Entities.Enemies.Interfaces;
 using UnityEngine;
 
 namespace Entities.Enemies.Movement

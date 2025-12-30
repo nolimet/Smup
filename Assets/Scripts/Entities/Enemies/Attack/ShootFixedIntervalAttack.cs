@@ -1,5 +1,6 @@
 ﻿using System;
 using Data;
+using Entities.Enemies.Interfaces;
 using Entities.Generic;
 using Pools;
 using UnityEngine;

@@ -1,4 +1,5 @@
 ﻿using System;
+using Entities.Enemies.Interfaces;
 using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.Splines;

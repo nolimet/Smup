@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Entities.Enemies
+namespace Entities.Enemies.Interfaces
 {
     public interface IMovement
     {
