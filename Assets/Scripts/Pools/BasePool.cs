@@ -16,6 +16,9 @@ namespace Pools
                 Instance = (TSelf)this;
             else
                 Destroy(this);
+
+            _rootObject = new GameObject(typeof(TSelf).Name);
+            _rootObject.transform.SetParent(transform);
         }
 
         protected abstract string BasePath { get; }
@@ -34,9 +37,11 @@ namespace Pools
             }
         }
 
+        private GameObject _rootObject;
+
         public TPoolElement GetObject(string poolId)
         {
-            if (!_pools.TryGetValue(poolId, out var pool)) _pools.Add(poolId, pool = new PoolContainer(poolId, BasePath));
+            if (!_pools.TryGetValue(poolId, out var pool)) _pools.Add(poolId, pool = new PoolContainer(poolId, BasePath, _rootObject.transform));
             return pool.Get();
         }
 
@@ -56,11 +61,13 @@ namespace Pools
             private readonly GameObject _prefab;
             private readonly ObjectPool<TPoolElement> _pool;
             private readonly string _basePath;
+            private readonly Transform _root;
 
             public int ActiveCount => _pool.CountActive;
 
-            public PoolContainer(string type, string basePath)
+            public PoolContainer(string type, string basePath, Transform root)
             {
+                _root = root;
                 _prefab = Resources.Load<GameObject>($"{basePath}/{type}");
                 _pool = new ObjectPool<TPoolElement>(CreateElement, OnGet, OnRelease, OnDestroy, maxSize: 20);
             }
@@ -91,7 +98,7 @@ namespace Pools
 
             private TPoolElement CreateElement()
             {
-                var newInstance = Instantiate(_prefab);
+                var newInstance = Instantiate(_prefab, _root, true);
                 return newInstance.GetComponent<TPoolElement>();
             }
 
