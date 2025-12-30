@@ -1,37 +1,39 @@
 ﻿using System.IO;
 using System.Linq;
-using Enemies.Movement;
-using ObjectPools;
+using Entities.Enemies.Movement;
+using JetBrains.Annotations;
+using Pools;
 using Sirenix.OdinInspector;
 using UnityEngine;
-using UnityEngine.Serialization;
 using UnityEngine.Splines;
 
-namespace LevelTools
+namespace Tools.Enemies
 {
-    [RequireComponent(typeof(SplineContainer))]
     public class SplineSpawner : MonoBehaviour
     {
-        private SplineContainer _splineComponent;
-        [SerializeField] [ValueDropdown(nameof(Enemies))] private string _enemyId;
-        [FormerlySerializedAs("_speed")] [SerializeField] private float speed;
+        [SerializeField] [ReadOnly] private SplineContainer splineComponent;
+
+        [SerializeField] [ValueDropdown(nameof(Enemies))] private string enemyId;
+        [SerializeField] [Min(0)] private float speed = 1;
 
         private string[] Enemies => Directory.GetFiles("Assets/Resources/Enemies", "*.prefab")
             .Select(x => x.Split('/', '\\').Last().Split('.').First()).ToArray();
 
         private void Awake()
         {
-            _splineComponent = GetComponent<SplineContainer>();
+            splineComponent = GetComponentInParent<SplineContainer>();
+
+            if (splineComponent == null) Debug.LogError("SplineContainer not found on parent of " + gameObject.name);
         }
 
-        //TODO use a triggering system instead of this
-        private void Start()
+        [PublicAPI]
+        public void Spawn(int track)
         {
-            var enemy = EnemyPool.Instance.GetObject(_enemyId);
+            var enemy = EnemyPool.Instance.GetObject(enemyId);
 
             if (enemy.MovementPattern is SplineFollow splineFollow)
-                splineFollow.SetSpline(_splineComponent.Spline);
-            enemy.moveSpeed = speed;
+                splineFollow.SetSpline(splineComponent.Splines[track]);
+            enemy.moveSpeed.SetOverride(speed);
         }
     }
 }
