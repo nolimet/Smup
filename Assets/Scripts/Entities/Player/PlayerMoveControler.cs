@@ -2,7 +2,7 @@
 using UnityEngine;
 using Util;
 
-namespace Player
+namespace Entities.Player
 {
     [RequireComponent(typeof(Rigidbody2D))]
     public class PlayerMoveControler : MonoBehaviour

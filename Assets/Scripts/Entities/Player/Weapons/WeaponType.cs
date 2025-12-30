@@ -1,4 +1,4 @@
-﻿namespace Player.Weapons
+﻿namespace Entities.Player.Weapons
 {
     public enum WeaponType
     {

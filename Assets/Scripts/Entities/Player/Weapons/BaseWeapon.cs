@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Player.Weapons
+namespace Entities.Player.Weapons
 {
     public interface IBaseWeapon
     {
