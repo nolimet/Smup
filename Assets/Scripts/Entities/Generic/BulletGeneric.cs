@@ -1,13 +1,13 @@
 ﻿using System.Collections;
-using Interfaces;
-using ObjectPools;
+using Entities.Interfaces;
+using Pools;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Serialization;
 using Util;
 using Random = UnityEngine.Random;
 
-namespace Generic_Objects
+namespace Entities.Generic
 {
     [RequireComponent(typeof(Rigidbody2D), typeof(PolygonCollider2D))]
     public class BulletGeneric : MonoBehaviour, IPoolElement
@@ -75,29 +75,20 @@ namespace Generic_Objects
 
         public void OnCollisionEnter2D(Collision2D coll)
         {
-            if (MarkedForRemove || coll.gameObject.layer != _targetLayer || coll.collider.isTrigger)
-            {
-                return;
-            }
+            if (MarkedForRemove || coll.gameObject.layer != _targetLayer || coll.collider.isTrigger) return;
             var damageAble = coll.gameObject.GetComponent<IDamageAble>();
             if (damageAble != null)
             {
                 damageAble.ReceiveDamage(_damage);
                 StartCoroutine(Remove(0.5f));
 
-                if (_canExplode)
-                {
-                    Explode();
-                }
+                if (_canExplode) Explode();
             }
         }
 
         public void OnTriggerEnter2D(Collider2D other)
         {
-            if (other.gameObject.layer == LayerMask.NameToLayer("Wall"))
-            {
-                BulletPool.Instance.ReleaseObject(this);
-            }
+            if (other.gameObject.layer == LayerMask.NameToLayer("Wall")) BulletPool.Instance.ReleaseObject(this);
         }
 
         public void Init(float damage, float direction, float speed, int targetLayer, int? fragmentsExplosion = null, float? explosionDelayTime = null, bool? isTimeDelayed = null)
@@ -112,23 +103,16 @@ namespace Generic_Objects
             if (explosionDelayTime is not null && isTimeDelayed is not null)
             {
                 if (isTimeDelayed.Value)
-                {
                     _detonationTime = explosionDelayTime.Value;
-                }
                 else
-                {
                     _detonationTime = explosionDelayTime.Value / speed;
-                }
                 _canExplode = true;
             }
         }
 
         private void Explode()
         {
-            if (_fragmentsExplosion <= 0)
-            {
-                return;
-            }
+            if (_fragmentsExplosion <= 0) return;
 
             var radiusStep = 360f / _fragmentsExplosion;
             while (_fragmentsExplosion > 0)
@@ -145,10 +129,7 @@ namespace Generic_Objects
 
         private IEnumerator Remove(float delay)
         {
-            if (MarkedForRemove)
-            {
-                yield break;
-            }
+            if (MarkedForRemove) yield break;
 
             const float frag = 1f / 30;
             var startColor = _renderer.color;

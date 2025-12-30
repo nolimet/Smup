@@ -1,7 +1,7 @@
-﻿using ObjectPools;
+﻿using Pools;
 using UnityEngine;
 
-namespace Pickups
+namespace Entities.Generic
 {
     public class ScrapPickup : MonoBehaviour
     {
