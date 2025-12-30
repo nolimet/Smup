@@ -1,6 +1,6 @@
 ﻿using Enemies;
 
-namespace ObjectPools
+namespace Pools
 {
     public class EnemyPool : BasePool<Enemy, EnemyPool>
     {

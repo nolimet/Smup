@@ -4,7 +4,7 @@ using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Pool;
 
-namespace ObjectPools
+namespace Pools
 {
     public abstract class BasePool<TPoolElement, TSelf> : MonoBehaviour, IDisposable where TPoolElement : Component, IPoolElement where TSelf : BasePool<TPoolElement, TSelf>
     {

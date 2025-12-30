@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.Pool;
 using Random = UnityEngine.Random;
 
-namespace ObjectPools
+namespace Pools
 {
     public class ScrapPickupPool : MonoBehaviour
     {

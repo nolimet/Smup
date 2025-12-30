@@ -1,4 +1,4 @@
-﻿namespace ObjectPools
+﻿namespace Pools
 {
     public interface IPoolElement
     {

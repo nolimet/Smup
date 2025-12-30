@@ -1,6 +1,6 @@
 ﻿using Generic_Objects;
 
-namespace ObjectPools
+namespace Pools
 {
     public class BulletPool : BasePool<BulletGeneric, BulletPool>
     {
