@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using JetBrains.Annotations;
+using UnityEngine;
 using Util.StateMachine.Interfaces;
 
 namespace Util.StateMachine
@@ -82,6 +83,7 @@ namespace Util.StateMachine
 
         private readonly List<IState> _states;
         private int _currentStateIndex;
+        private bool _debuggingEnabled;
 
         /// <summary>
         /// Gets the current state of the state machine.
@@ -106,7 +108,7 @@ namespace Util.StateMachine
         /// </remarks>
         /// <exception cref="ArgumentNullException">Thrown if the list of states is null during initialization.</exception>
         /// <exception cref="ArgumentException">Thrown if the list of states is empty during initialization.</exception>
-        public StateMachineRuntime([NotNull] List<IState> states)
+        public StateMachineRuntime([NotNull] List<IState> states, bool debuggingEnabled = false)
         {
             _states = states ?? throw new ArgumentNullException(nameof(states));
 
@@ -117,6 +119,7 @@ namespace Util.StateMachine
                 _states.Add(new EndState());
 
             _currentStateIndex = -1;
+            _debuggingEnabled = debuggingEnabled;
         }
 
         /// <summary>
@@ -136,10 +139,16 @@ namespace Util.StateMachine
         }
 
         /// <summary>
-        /// Transitions the state machine to the next state in the sequence.
+        /// Advances the state machine to the next state in the predefined sequence of states.
         /// </summary>
-        /// <exception cref="InvalidOperationException">Thrown if attempting to transition beyond the last state in the sequence.</exception>
-        public void ToNextState() { }
+        /// <remarks>
+        /// This method transitions the state machine to the state immediately following the current state
+        /// in the internal state list. If there are no more states in the list, it transitions to the terminal state.
+        /// </remarks>
+        /// <exception cref="InvalidOperationException">
+        /// Thrown if called when the state machine is already at the terminal state or the state sequence is improperly configured.
+        /// </exception>
+        public void ToNextState() => ToState(_currentStateIndex + 1);
 
         /// <summary>
         /// Transitions the state machine to the specified state.
@@ -149,6 +158,8 @@ namespace Util.StateMachine
         /// <exception cref="ArgumentOutOfRangeException">Thrown if the provided state does not exist in the list of states.</exception>
         public void ToState([NotNull] IState state)
         {
+            if (state == null) throw new ArgumentNullException(nameof(state));
+
             var newIndex = _states.IndexOf(state);
             ToState(newIndex);
         }
@@ -174,6 +185,8 @@ namespace Util.StateMachine
             var newState = _states[index];
             newState.StateMachine = this;
             newState.OnEnter();
+
+            if (_debuggingEnabled) Debug.Log($"Transitioning from ({_currentStateIndex}){currentState?.GetType().Name} to({index}){_states[index].GetType().Name}");
 
             StateChanged?.Invoke(currentState, newState);
             _currentStateIndex = index;
