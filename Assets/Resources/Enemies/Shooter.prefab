@@ -62,32 +62,21 @@ MonoBehaviour:
   <MaxHealth>k__BackingField:
     defaultValue: 1
   movementPattern:
-    rid: 1722505068064538627
+    rid: 4221604180488093759
   attackPattern:
-    rid: 1194487505303371823
+    rid: -2
   references:
     version: 2
     RefIds:
-    - rid: 1194487505303371823
-      type: {class: ShootFixedIntervalAttack, ns: Enemies.Attack, asm: Assembly-CSharp}
+    - rid: -2
+      type: {class: , ns: , asm: }
+    - rid: 4221604180488093759
+      type: {class: SplineFollow, ns: Entities.Enemies.Movement, asm: Assembly-CSharp}
       data:
-        salvoInterval:
-          defaultValue: 0.5
-        shotInterval:
-          defaultValue: 0.1
-        salvoSize:
-          defaultValue: 3
-        damagePerShot:
-          defaultValue: 5
-        shotSpeed:
-          defaultValue: 5
-    - rid: 1722505068064538627
-      type: {class: SpeedUpSlowDown, ns: Enemies.Movement, asm: Assembly-CSharp}
-      data:
-        speedFactor: []
-        intervalRange: {x: 0, y: 0}
+        rotate: 0
 --- !u!212 &21268758
 SpriteRenderer:
+  serializedVersion: 2
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -133,6 +122,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: 14f32ad46ac29b64fa6b86e20b23d508, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -142,7 +132,6 @@ SpriteRenderer:
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
-  m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!50 &5096528
 Rigidbody2D:

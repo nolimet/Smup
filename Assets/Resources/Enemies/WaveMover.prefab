@@ -61,7 +61,7 @@ MonoBehaviour:
   <MaxHealth>k__BackingField:
     defaultValue: 1
   movementPattern:
-    rid: 1194487505303371819
+    rid: 4221604180488093760
   attackPattern:
     rid: -2
   references:
@@ -69,13 +69,13 @@ MonoBehaviour:
     RefIds:
     - rid: -2
       type: {class: , ns: , asm: }
-    - rid: 1194487505303371819
-      type: {class: UpDownWaveMove, ns: Enemies.Movement, asm: Assembly-CSharp}
+    - rid: 4221604180488093760
+      type: {class: SplineFollow, ns: Entities.Enemies.Movement, asm: Assembly-CSharp}
       data:
-        amplitude: 1
-        frequency: 2
+        rotate: 0
 --- !u!212 &21296868
 SpriteRenderer:
+  serializedVersion: 2
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -121,6 +121,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: 4430cfa4c27ba1a4da2b4e941d71b19d, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -130,7 +131,6 @@ SpriteRenderer:
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
-  m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!50 &5039482
 Rigidbody2D:

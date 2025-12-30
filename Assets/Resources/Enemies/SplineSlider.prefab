@@ -62,7 +62,7 @@ MonoBehaviour:
   <MaxHealth>k__BackingField:
     defaultValue: 1
   movementPattern:
-    rid: 4221603814822641713
+    rid: 4221604180488093757
   attackPattern:
     rid: -2
   references:
@@ -70,8 +70,8 @@ MonoBehaviour:
     RefIds:
     - rid: -2
       type: {class: , ns: , asm: }
-    - rid: 4221603814822641713
-      type: {class: SplineFollow, ns: Enemies.Movement, asm: Assembly-CSharp}
+    - rid: 4221604180488093757
+      type: {class: SplineFollow, ns: Entities.Enemies.Movement, asm: Assembly-CSharp}
       data:
         rotate: 0
 --- !u!212 &21268758
