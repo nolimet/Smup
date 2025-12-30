@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Linq;
 using Entities.Enemies.Movement;
 using JetBrains.Annotations;
@@ -29,10 +30,14 @@ namespace Tools.Enemies
         [PublicAPI]
         public void Spawn(int track)
         {
+            if (!splineComponent)
+                throw new NullReferenceException();
+
             var enemy = EnemyPool.Instance.GetObject(enemyId);
 
             if (enemy.MovementPattern is SplineFollow splineFollow)
                 splineFollow.SetSpline(splineComponent.Splines[track]);
+            else Debug.LogWarning($"Enemy does not have SplineFollow movement pattern {enemyId}", this);
             enemy.moveSpeed.SetOverride(speed);
         }
     }
