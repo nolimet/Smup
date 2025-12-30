@@ -194,6 +194,7 @@ namespace Util.StateMachine
         {
             if (CurrentState is not EndState)
                 ToState(_states.Count - 1);
+            else throw new InvalidOperationException("state machine is already in terminal state");
         }
     }
 }
