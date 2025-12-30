@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace Enemies.Movement
+namespace Entities.Enemies.Movement
 {
     [Serializable]
     public class LinearMovement : IMovement

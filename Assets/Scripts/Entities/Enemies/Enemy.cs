@@ -1,13 +1,13 @@
 ﻿using Cysharp.Threading.Tasks;
 using Data;
-using Enemies.Movement;
-using Interfaces;
-using ObjectPools;
+using Entities.Enemies.Movement;
+using Entities.Interfaces;
+using Pools;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-namespace Enemies
+namespace Entities.Enemies
 {
     [RequireComponent(typeof(Rigidbody2D), typeof(SpriteRenderer))]
     public sealed class Enemy : MonoBehaviour, IPoolElement, IDamageAble

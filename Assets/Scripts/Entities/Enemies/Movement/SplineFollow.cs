@@ -3,7 +3,7 @@ using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.Splines;
 
-namespace Enemies.Movement
+namespace Entities.Enemies.Movement
 {
     [Serializable]
     public class SplineFollow : IMovement

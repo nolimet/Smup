@@ -1,10 +1,10 @@
 ﻿using System;
 using Data;
-using Generic_Objects;
-using ObjectPools;
+using Entities.Generic;
+using Pools;
 using UnityEngine;
 
-namespace Enemies.Attack
+namespace Entities.Enemies.Attack
 {
     [Serializable]
     public class ShootFixedIntervalAttack : IAttack
@@ -27,13 +27,9 @@ namespace Enemies.Attack
                 _shotsLeft--;
 
                 if (_shotsLeft > 0)
-                {
                     _timer = shotInterval;
-                }
                 else
-                {
                     _timer = salvoInterval;
-                }
             }
             else if (_shotsLeft == 0 && _timer <= 0)
             {

@@ -2,7 +2,7 @@
 using Sirenix.OdinInspector;
 using UnityEngine;
 
-namespace Enemies.Movement
+namespace Entities.Enemies.Movement
 {
     [Serializable]
     public class SpeedUpSlowDown : IMovement
