@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿/*
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -43,3 +44,4 @@ namespace Depricated_Scripts.Enemies_old.Behaviours
         }
     }
 }
+*/
