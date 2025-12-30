@@ -1,5 +1,6 @@
 ﻿using Cysharp.Threading.Tasks;
 using Data;
+using Entities.Enemies.Interfaces;
 using Entities.Enemies.Movement;
 using Entities.Interfaces;
 using Pools;
@@ -46,8 +47,39 @@ namespace Entities.Enemies
         private void Start()
         {
             movementPattern ??= new LinearMovement();
-
             movementPattern.SetTarget(gameObject);
+
+            if (movementPattern is IKillAtEnd killAtEnd)
+                killAtEnd.AtEnd += () => Kill(false);
+        }
+
+        private void Kill(bool doReward)
+        {
+            if (enabled)
+                DestroyLoop().Forget();
+            enabled = false;
+            return;
+
+            async UniTaskVoid DestroyLoop()
+            {
+                _collider2D.enabled = false;
+
+                while (_spriteRenderer.color.a > 0.01f)
+                {
+                    var color = _spriteRenderer.color;
+                    color.a = Mathf.MoveTowards(color.a, 0f, Time.deltaTime / fadeDuration);
+                    _spriteRenderer.color = color;
+                    await UniTask.Yield();
+                }
+
+                EnemyPool.Instance.ReleaseObject(this);
+
+                if (doReward && scrapValue > 0)
+                {
+                    var cloudSize = Random.Range(4, 20);
+                    ScrapPickupPool.CreateScrapCloud(transform.position, scrapCloudSize, cloudSize, scrapValue);
+                }
+            }
         }
 
         public void OnSpawn()
@@ -77,12 +109,12 @@ namespace Entities.Enemies
                 if (damageAble != null)
                 {
                     damageAble.ReceiveDamage(contactDamage);
-                    DestroyLoop(true).Forget();
+                    Kill(false);
                     Health = 0;
                 }
             }
 
-            if (other.collider.CompareTag("Enemy Kill Plane")) DestroyLoop(true).Forget();
+            if (other.collider.CompareTag("Enemy Kill Plane")) Kill(false);
         }
 
         public void ReceiveDamage(double damage)
@@ -90,28 +122,7 @@ namespace Entities.Enemies
             if (Health <= 0) return;
 
             Health -= damage;
-            if (Health <= 0) DestroyLoop(false).Forget();
-        }
-
-        private async UniTaskVoid DestroyLoop(bool skipReward)
-        {
-            _collider2D.enabled = false;
-
-            while (_spriteRenderer.color.a > 0.01f)
-            {
-                var color = _spriteRenderer.color;
-                color.a = Mathf.MoveTowards(color.a, 0f, Time.deltaTime / fadeDuration);
-                _spriteRenderer.color = color;
-                await UniTask.Yield();
-            }
-
-            EnemyPool.Instance.ReleaseObject(this);
-
-            if (!skipReward && scrapValue > 0)
-            {
-                var cloudSize = Random.Range(4, 20);
-                ScrapPickupPool.CreateScrapCloud(transform.position, scrapCloudSize, cloudSize, scrapValue);
-            }
+            if (Health <= 0) Kill(true);
         }
     }
 }
