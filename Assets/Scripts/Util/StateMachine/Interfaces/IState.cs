@@ -3,17 +3,15 @@
     public interface IState
     {
         /// <summary>
-        /// Represents a property that provides access to the state machine associated
-        /// with the current state.
+        /// Represents the state machine controller that manages the transitions between different states.
         /// </summary>
         /// <remarks>
-        /// This property allows the current <see cref="IState"/> implementation to interact
-        /// with the parent <see cref="IStateMachine"/> that manages the state transitions
-        /// and runtime behavior. It enables states to coordinate with the state machine for
-        /// various operations such as transitioning to the next state, accessing runtime
-        /// data, or invoking specific events.
+        /// The StateMachine property provides access to the underlying runtime mechanism used
+        /// for controlling state transitions. It allows states to interact with the state machine
+        /// runtime, triggering transitions or accessing the current state. Implementations of IState
+        /// use this property to coordinate their behavior within the state machine.
         /// </remarks>
-        public IStateMachine StateMachine { get; set; }
+        public StateMachineRuntime StateMachine { get; set; }
 
         /// <summary>
         /// Defines the behavior to execute when entering the current state in the state machine.
