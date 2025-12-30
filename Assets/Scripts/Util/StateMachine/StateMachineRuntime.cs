@@ -115,6 +115,24 @@ namespace Util.StateMachine
 
             if (_states[^1] is not EndState)
                 _states.Add(new EndState());
+
+            _currentStateIndex = -1;
+        }
+
+        /// <summary>
+        /// Resets the state machine to the first state in the predefined sequence of states.
+        /// </summary>
+        /// <remarks>
+        /// This method triggers a transition to the first state in the state machine and raises
+        /// the <see cref="StateChanged"/> event if a transition occurs. It can only transition
+        /// to the first state defined in the list of states during initialization.
+        /// </remarks>
+        /// <exception cref="InvalidOperationException">
+        /// Thrown if the state machine contains no states or is in an invalid state.
+        /// </exception>
+        public void ToFirstState()
+        {
+            ToState(0);
         }
 
         /// <summary>
@@ -147,11 +165,17 @@ namespace Util.StateMachine
 
             if (index == _currentStateIndex) return;
 
-            CurrentState.OnExit();
+            IState currentState = null;
+            if (_currentStateIndex >= 0) currentState = _states[_currentStateIndex];
+
+            currentState?.OnExit();
+            if (currentState != null) currentState.StateMachine = null;
+
             var newState = _states[index];
+            newState.StateMachine = this;
             newState.OnEnter();
 
-            StateChanged?.Invoke(CurrentState, newState);
+            StateChanged?.Invoke(currentState, newState);
             _currentStateIndex = index;
 
             if (CurrentState is EndState)
@@ -159,14 +183,17 @@ namespace Util.StateMachine
         }
 
         /// <summary>
-        /// Transitions the state machine to the end state.
+        /// Transitions the state machine to the terminal state, ensuring the current state becomes the end state.
         /// </summary>
-        /// <exception cref="IndexOutOfRangeException">
-        /// Thrown if the end state is not present at the last position in the list of states.
-        /// </exception>
+        /// <remarks>
+        /// This method sets the state machine to the final state in its predefined sequence of states.
+        /// If the current state is not already of type <see cref="EndState"/>, it transitions to the last state in the list.
+        /// </remarks>
+        /// <exception cref="InvalidOperationException">Thrown if the state machine has not been properly initialized or the list of states is empty.</exception>
         public void ToEndState()
         {
-            ToState(_states.Count - 1);
+            if (CurrentState is not EndState)
+                ToState(_states.Count - 1);
         }
     }
 }
