@@ -1,4 +1,4 @@
-﻿using Player.Weapons;
+﻿using Entities.Player.Weapons;
 using UnityEngine;
 
 public class StaticCannon : MonoBehaviour

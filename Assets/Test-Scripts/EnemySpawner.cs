@@ -1,5 +1,5 @@
-﻿using Enemies;
-using ObjectPools;
+﻿using Entities.Enemies;
+using Pools;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
