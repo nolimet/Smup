@@ -13,6 +13,8 @@ namespace World.Level
         public event Action Stopped;
         public StateMachineRuntime Runtime { get; private set; }
 
+        [SerializeField] private bool autoStart;
+
         [TypeFilter(nameof(TypeFilter))]
         [SerializeReference] private List<IState> states = new();
 
@@ -21,9 +23,14 @@ namespace World.Level
             return new[] { typeof(WaveState) };
         }
 
+        private void Start()
+        {
+            if (autoStart) StartStateMachine();
+        }
+
         public void StartStateMachine()
         {
-            Runtime = new StateMachineRuntime(states);
+            Runtime = new StateMachineRuntime(states, true);
             Runtime.EndStateEntered += () => Stopped?.Invoke();
             Runtime.ToFirstState();
         }

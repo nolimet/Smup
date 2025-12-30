@@ -39,7 +39,7 @@ namespace World.Level.States
             if (Runtime != null) Runtime.EndStateEntered -= StopStateMachine;
             Runtime?.ToEndState();
 
-            Runtime = new StateMachineRuntime(sequence);
+            Runtime = new StateMachineRuntime(sequence, true);
             Runtime.EndStateEntered += StopStateMachine;
             Runtime.ToFirstState();
         }
