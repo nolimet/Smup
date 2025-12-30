@@ -1,8 +1,8 @@
-﻿using Enemies;
+﻿using Entities.Enemies;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
-namespace LevelTools
+namespace Tools
 {
     public class EnemyGroup : MonoBehaviour
     {
