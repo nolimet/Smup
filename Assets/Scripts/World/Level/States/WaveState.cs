@@ -21,7 +21,7 @@ namespace World.Level.States
 
         public IEnumerable<Type> TypeFilter()
         {
-            return typeof(WaveState).Assembly.GetTypes().Where(x => x.GetInterfaces().Contains(typeof(ISequenceElement)));
+            return typeof(WaveState).Assembly.GetTypes().Where(x => x.IsSerializable && x.GetInterfaces().Contains(typeof(ISequenceElement)));
         }
 
         public void OnEnter()
