@@ -211,6 +211,69 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &437555649
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 437555651}
+  - component: {fileID: 437555650}
+  m_Layer: 0
+  m_Name: TestLevel
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &437555650
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 437555649}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3dc1bedaf25944a981f863bdeb3b551f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::World.Level.LevelStateMachine
+  states:
+  - rid: 4221604173981417520
+  references:
+    version: 2
+    RefIds:
+    - rid: 4221604173981417520
+      type: {class: WaveState, ns: World.Level.States, asm: Assembly-CSharp}
+      data:
+        sequence:
+        - rid: 4221604173981417692
+        - rid: 4221604173981417691
+    - rid: 4221604173981417691
+      type: {class: PlayableDirectorState, ns: World.Waves.States, asm: Assembly-CSharp}
+      data:
+        director: {fileID: 0}
+    - rid: 4221604173981417692
+      type: {class: DelayState, ns: World.Waves.States, asm: Assembly-CSharp}
+      data:
+        delayInMs: 0
+--- !u!4 &437555651
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 437555649}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -1.21333, y: -1.50664, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1181904151
 GameObject:
   m_ObjectHideFlags: 0
@@ -449,3 +512,4 @@ SceneRoots:
   - {fileID: 140652438}
   - {fileID: 1600506928}
   - {fileID: 1181904153}
+  - {fileID: 437555651}
