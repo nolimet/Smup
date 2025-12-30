@@ -1,4 +1,4 @@
-﻿using Generic_Objects;
+﻿using Entities.Generic;
 
 namespace Pools
 {

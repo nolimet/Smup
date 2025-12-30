@@ -1,5 +1,5 @@
 ﻿using System;
-using Pickups;
+using Entities.Generic;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Pool;

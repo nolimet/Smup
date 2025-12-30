@@ -1,4 +1,4 @@
-﻿using Enemies;
+﻿using Entities.Enemies;
 
 namespace Pools
 {
