@@ -16,6 +16,7 @@ namespace World.Level
         [SerializeField] private bool autoStart;
 
         [TypeFilter(nameof(TypeFilter))]
+        [DisableInPlayMode]
         [SerializeReference] private List<IState> states = new();
 
         public IEnumerable<Type> TypeFilter()
