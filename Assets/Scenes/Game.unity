@@ -202,6 +202,34 @@ PrefabInstance:
       value: 'Game controlers '
       objectReference: {fileID: 0}
     - target: {fileID: 467888, guid: 42742daa4e221cd44a74857facc9cf07, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 467888, guid: 42742daa4e221cd44a74857facc9cf07, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 467888, guid: 42742daa4e221cd44a74857facc9cf07, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 467888, guid: 42742daa4e221cd44a74857facc9cf07, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 467888, guid: 42742daa4e221cd44a74857facc9cf07, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 467888, guid: 42742daa4e221cd44a74857facc9cf07, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 467888, guid: 42742daa4e221cd44a74857facc9cf07, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 467888, guid: 42742daa4e221cd44a74857facc9cf07, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
       value: 0
       objectReference: {fileID: 0}
@@ -212,10 +240,6 @@ PrefabInstance:
     - target: {fileID: 467888, guid: 42742daa4e221cd44a74857facc9cf07, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 11404262, guid: 42742daa4e221cd44a74857facc9cf07, type: 3}
-      propertyPath: screen
-      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 11404262, guid: 42742daa4e221cd44a74857facc9cf07, type: 3}
       propertyPath: playerStats
@@ -229,10 +253,6 @@ PrefabInstance:
       propertyPath: playerWeaponControler
       value: 
       objectReference: {fileID: 2064760418}
-    - target: {fileID: 11463972, guid: 42742daa4e221cd44a74857facc9cf07, type: 3}
-      propertyPath: m_BlockingMask.m_Bits
-      value: 65335
-      objectReference: {fileID: 0}
     - target: {fileID: 11491046, guid: 42742daa4e221cd44a74857facc9cf07, type: 3}
       propertyPath: camera
       value: 
@@ -68471,15 +68491,14 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2064760417}
-  - component: {fileID: 2064760416}
-  - component: {fileID: 2064760415}
-  - component: {fileID: 2064760419}
   - component: {fileID: 2064760414}
   - component: {fileID: 2064760418}
   - component: {fileID: 2064760420}
-  - component: {fileID: 2064760421}
-  - component: {fileID: 2064760422}
   - component: {fileID: 2064760423}
+  - component: {fileID: 2064760416}
+  - component: {fileID: 2064760415}
+  - component: {fileID: 2064760419}
+  - component: {fileID: 2064760421}
   m_Layer: 8
   m_Name: Player
   m_TagString: Untagged
@@ -68730,52 +68749,6 @@ CircleCollider2D:
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
   m_Radius: 7
---- !u!61 &2064760422
-BoxCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2064760413}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ForceSendLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_CompositeOperation: 0
-  m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 2.02, y: 0.58}
-    newSize: {x: 1, y: 1}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  m_Size: {x: 0.0001, y: 0.0001}
-  m_EdgeRadius: 0
 --- !u!114 &2064760423
 MonoBehaviour:
   m_ObjectHideFlags: 0
