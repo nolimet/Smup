@@ -18,5 +18,12 @@ namespace Util
             transform.localScale = new Vector3(p1.x, p1.y, 1) * 2f;
             screenSize = new Vector3(p1.x, p1.y, 1) * 2f;
         }
+
+#if UNITY_EDITOR
+        private void Update()
+        {
+            Awake();
+        }
+#endif
     }
 }

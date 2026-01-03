@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Linq;
+using JetBrains.Annotations;
 using UnityEngine;
 
-/// <summary>
-/// Util libary
-/// Contains a quite a few usefull things like a serialization module, A event system and some hacks for the UI system
-/// </summary>
 namespace Util
 {
     /// <summary>
@@ -23,7 +19,7 @@ namespace Util
             Vector2 output;
             var radians = angle * Mathf.Deg2Rad;
 
-            output = new Vector2((float)Mathf.Cos(radians), (float)Mathf.Sin(radians));
+            output = new Vector2(Mathf.Cos(radians), Mathf.Sin(radians));
             return output;
         }
 
@@ -35,199 +31,11 @@ namespace Util
         public static float VectorToAngle(Vector2 v2) => Mathf.Atan2(v2.y, v2.x) * 180f / Mathf.PI;
 
         /// <summary>
-        /// Coverts bool into a int
-        /// </summary>
-        /// <param name="b">Bool that will be converted</param>
-        /// <returns>0 if false| 1 if true</returns>
-        public static int ToInt(this bool b)
-        {
-            if (b)
-                return 1;
-            return 0;
-        }
-
-        /// <summary>
         /// Get the length of a vector
         /// </summary>
         /// <param name="obj">Vector of wich you want to know the length</param>
         /// <returns>Length of the vector</returns>
         public static float GetLength(this Vector2 obj) => Mathf.Sqrt(Mathf.Pow(obj.x, 2) + Mathf.Pow(obj.y, 2));
-
-        /// <summary>
-        /// Gets the bounds of a object including it's childeren
-        /// </summary>
-        /// <param name="obj">object's transform that contains the childeren</param>
-        /// <returns>Bounds including Parents childeren</returns>
-        public static Bounds GetChildBounds(this Transform obj)
-        {
-            Bounds bounds;
-            // First find a center for your bounds.
-            var center = Vector3.zero;
-            foreach (Transform child in obj.transform) center += child.gameObject.GetComponent<SpriteRenderer>().bounds.center;
-            center /= obj.transform.childCount; //center is average center of children
-
-            //Now you have a center, calculate the bounds by creating a zero sized 'Bounds', 
-            bounds = new Bounds(center, Vector3.zero);
-
-            foreach (Transform child in obj.transform) bounds.Encapsulate(child.gameObject.GetComponent<SpriteRenderer>().bounds);
-            return bounds;
-        }
-
-        /// <summary>
-        /// Gets the bounds of a object including it's childeren
-        /// </summary>
-        /// <param name="obj">object's transform that contains the childeren</param>
-        /// <param name="ignorNameTag">Object names to ignor usefull to create mask</param>
-        /// <returns>Bounds including Parents childeren</returns>
-        public static Bounds GetChildBounds(this Transform obj, string ignorNameTag)
-        {
-            Bounds bounds;
-
-            //so i don't do useless checks
-            if (ignorNameTag == "")
-            {
-                // First find a center for your bounds.
-                var center = Vector3.zero;
-                foreach (Transform child in obj.transform) center += child.gameObject.GetComponent<SpriteRenderer>().bounds.center;
-                center /= obj.transform.childCount; //center is average center of children
-
-                //Now you have a center, calculate the bounds by creating a zero sized 'Bounds', 
-                bounds = new Bounds(center, Vector3.zero);
-
-                foreach (Transform child in obj.transform) bounds.Encapsulate(child.gameObject.GetComponent<SpriteRenderer>().bounds);
-            }
-            //
-            else
-            {
-                ignorNameTag = ignorNameTag.ToLower();
-                // First find a center for your bounds.
-                var center = Vector3.zero;
-                var i = 0;
-                foreach (Transform child in obj.transform)
-                    if (!child.gameObject.name.ToLower().Contains(ignorNameTag))
-                    {
-                        //Debug.Log(child.name);
-                        center += child.gameObject.GetComponent<SpriteRenderer>().bounds.center;
-                        i++;
-                    }
-
-                center /= i; //center is average center of children
-
-                //Now you have a center, calculate the bounds by creating a zero sized 'Bounds', 
-                bounds = new Bounds(center, Vector3.zero);
-
-                foreach (Transform child in obj.transform)
-                    if (!child.name.ToLower().Contains(ignorNameTag))
-                        bounds.Encapsulate(child.gameObject.GetComponent<SpriteRenderer>().bounds);
-            }
-
-            return bounds;
-        }
-
-        /// <summary>
-        /// Gets the bounds of a object including it's childeren
-        /// </summary>
-        /// <param name="obj">object's transform that contains the childeren</param>
-        /// <param name="ignorNameTags">A set of name part to ignor used to create more complex masks</param>
-        /// <returns>Bounds including Parents childeren</returns>
-        public static Bounds GetChildBounds(this Transform obj, string[] ignorNameTags)
-        {
-            if (ignorNameTags.Length == 0)
-                return obj.GetChildBounds();
-
-            Bounds bounds;
-            var center = Vector3.zero;
-            var i = 0;
-            string n;
-
-            for (var j = 0; j < ignorNameTags.Length; j++) ignorNameTags[j] = ignorNameTags[j].ToLower();
-
-            // First find a center for your bounds.s
-            foreach (Transform child in obj.transform)
-            {
-                n = child.gameObject.name.ToLower();
-                if (ignorNameTags.Any(str => n.Contains(str)))
-                {
-                    //Debug.Log(child.name);
-                    center += child.gameObject.GetComponent<SpriteRenderer>().bounds.center;
-                    i++;
-                }
-            }
-
-            center /= i; //center is average center of children
-
-            //Now you have a center, calculate the bounds by creating a zero sized 'Bounds', 
-            bounds = new Bounds(center, Vector3.zero);
-
-            foreach (Transform child in obj.transform)
-            {
-                n = child.gameObject.name.ToLower();
-                if (ignorNameTags.Any(str => n.Contains(str)))
-                    bounds.Encapsulate(child.gameObject.GetComponent<SpriteRenderer>().bounds);
-            }
-
-            return bounds;
-        }
-
-        /// <summary>
-        /// Input array to return combined bounds of array
-        /// </summary>
-        /// <param name="objs">objects to get combined bound of</param>
-        /// <returns>Combined bound</returns>
-        public static Bounds GetBounds(this Transform[] objs)
-        {
-            Bounds bounds;
-            // First find a center for your bounds.
-            var center = Vector3.zero;
-            foreach (var child in objs) center += child.gameObject.GetComponent<SpriteRenderer>().bounds.center;
-            center /= objs.Length; //center is average center of children
-
-            //Now you have a center, calculate the bounds by creating a zero sized 'Bounds', 
-            bounds = new Bounds(center, Vector3.zero);
-
-            foreach (var child in objs) bounds.Encapsulate(child.gameObject.GetComponent<SpriteRenderer>().bounds);
-            return bounds;
-        }
-
-        public static Bounds GetBounds(this Transform obj) => obj.gameObject.GetComponent<SpriteRenderer>().bounds;
-
-        /// <summary>
-        /// Draw the bounds of a object
-        /// </summary>
-        /// <param name="b">Bounds that will be drawn</param>
-        public static void DrawBounds(Bounds b)
-        {
-            Debug.DrawLine(b.max, new Vector3(b.max.x, b.min.y));
-            Debug.DrawLine(new Vector3(b.max.x, b.min.y), b.min);
-            Debug.DrawLine(b.min, new Vector3(b.min.x, b.max.y));
-            Debug.DrawLine(new Vector3(b.min.x, b.max.y), b.max);
-            Debug.DrawLine(b.max, b.min, Color.red);
-            Debug.DrawLine(new Vector3(b.min.x, b.max.y), new Vector3(b.max.x, b.min.y), Color.red);
-        }
-
-        /// <summary>
-        /// Check if bounds are inside the target
-        /// </summary>
-        /// <param name="bounds"></param>
-        /// <param name="target">Object contained in other bound</param>
-        /// <returns></returns>
-        public static bool ContainBounds(this Bounds bounds, Bounds target) => bounds.Contains(target.min) && bounds.Contains(target.max);
-
-        public static float CalculateJumpVerticalSpeed(float targetJumpHeight)
-        {
-            // From the jump height and gravity we deduce the upwards speed 
-            // for the character to reach at the apex.
-            Debug.Log(2f * targetJumpHeight * Physics2D.gravity.y);
-            return Mathf.Sqrt(2f * targetJumpHeight * Physics2D.gravity.y);
-        }
-
-        /// <summary>
-        /// breaks up a number into pieces and return the value at the point of the power
-        /// </summary>
-        /// <param name="number">should not be seen. The number to exstract from</param>
-        /// <param name="power">wat what point do i need to take the return number. In powers of 10( 3, 2 ,1 ,0 )</param>
-        /// <returns>a number from 0-9</returns>
-        public static int GetNumbAt(this int number, int power) => number / (int)Mathf.Pow(10, power) % 10;
 
         /// <summary>
         /// Resizes an array to new size.
@@ -236,13 +44,16 @@ namespace Util
         /// <param name="arr">The array to be resized</param>
         /// <param name="newSizes">the new size of the array</param>
         /// <returns>The resized array</returns>
-        public static Array ResizeArray(Array arr, int[] newSizes)
+        public static Array ResizeArray([NotNull] Array arr, int[] newSizes)
         {
             if (newSizes.Length != arr.Rank)
                 throw new ArgumentException("arr must have the same number of dimensions " +
                                             "as there are elements in newSizes", "newSizes");
 
-            var temp = Array.CreateInstance(arr.GetType().GetElementType(), newSizes);
+            var elementType = arr.GetType().GetElementType();
+            if (elementType == null) throw new ArgumentException("arr must have an element type");
+
+            var temp = Array.CreateInstance(elementType, newSizes);
             var length = arr.Length <= temp.Length ? arr.Length : temp.Length;
             Array.ConstrainedCopy(arr, 0, temp, 0, length);
             return temp;
@@ -257,7 +68,7 @@ namespace Util
             var width = spriteRenderer.sprite.bounds.size.x;
             var height = spriteRenderer.sprite.bounds.size.y;
 
-            var worldScreenHeight = Camera.main.orthographicSize * 2.0f;
+            var worldScreenHeight = Camera.main!.orthographicSize * 2.0f;
             var worldScreenWidth = worldScreenHeight / Screen.height * Screen.width;
 
             newScale.x = worldScreenWidth / width;
@@ -273,35 +84,6 @@ namespace Util
 
             spriteRenderer.transform.localScale = newScale;
         }
-
-        /// <summary>
-        /// Rotate a Vector2 to a angle
-        /// </summary>
-        /// <param name="v"></param>
-        /// <param name="degrees">The angle to rotate it to</param>
-        /// <returns>Rotated Vector2</returns>
-        public static Vector2 Rotate(this Vector2 v, float degrees) =>
-            /*
-            Actual Calculation
-
-            float radians = degrees * Mathf.Deg2Rad;
-             float sin = Mathf.Sin(radians);
-             float cos = Mathf.Cos(radians);
-
-             float tx = v.x;
-             float ty = v.y;
-
-             return new Vector2(cos * tx - sin * ty, sin * tx + cos * ty);
-            */
-            Quaternion.Euler(0, 0, degrees) * v;
-
-        /// <summary>
-        /// Rotates a Vector2 to a Quaternion
-        /// </summary>
-        /// <param name="v"></param>
-        /// <param name="rotation">The rotation used to to calculate the new vector</param>
-        /// <returns>Rotated Vector2</returns>
-        public static Vector2 Rotate(this Vector2 v, Quaternion rotation) => new Quaternion(0, 0, rotation.z, rotation.w) * v;
 
         public static Vector2 Round(this Vector2 v)
         {

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization.Formatters.Binary;
@@ -45,15 +44,6 @@ namespace Util.Saving
                 {
                     FileTypes.Binary, ".bin"
                 },
-                /*{
-                    FileTypes.Text, ".txt"
-                },
-                {
-                    FileTypes.SaveHead, ".sav"
-                },
-                {
-                    FileTypes.GameState, ".sav"
-                },*/
                 {
                     FileTypes.Wave, ".wva"
                 },
@@ -63,15 +53,6 @@ namespace Util.Saving
                 {
                     FileTypes.Binary, "Data"
                 },
-                /*{
-                    FileTypes.Text, "Data"
-                },
-                {
-                    FileTypes.SaveHead, "Saves\\" + "Head"
-                },
-                {
-                    FileTypes.GameState, "Saves\\" + "GameState"
-                },*/
                 {
                     FileTypes.Wave, "Waves"
                 },
@@ -155,43 +136,5 @@ namespace Util.Saving
         }
 
         #endregion Binary Saving & Loading
-
-        #region Waves Saving & Loading
-
-        [Obsolete("Currently not supported... rework wave editor")]
-        public static void SaveWave(string fileName, WaveClass wave)
-        {
-            throw new NotImplementedException("Currently not supported... rework wave editor");
-        }
-
-        [Obsolete]
-        public static bool TryLoadWave(string fileName, out WaveClass wave)
-        {
-            var filePath = Path.Combine(SaveLocation(FileTypes.Wave), GetFileType(fileName, FileTypes.Wave));
-            if (!File.Exists(filePath))
-            {
-                wave = null;
-                return false;
-            }
-
-            //TODO replace with a json or binary format
-            using var stream = new FileStream(filePath, FileMode.Open);
-            wave = (WaveClass)BinaryFormatter.Deserialize(stream);
-            return true;
-        }
-
-        #endregion Waves Saving & Loading
-
-        /// <summary>
-        /// Used to generate an error when there is one while saving or loading
-        /// </summary>
-        /// <param name="message">The message that will be shown</param>
-        private static void PlatformSafeMessage(string message)
-        {
-            if (Application.platform == RuntimePlatform.WebGLPlayer)
-                WindowAlert(message);
-            else
-                Debug.Log(message);
-        }
     }
 }

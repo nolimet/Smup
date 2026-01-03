@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Util.UI
 {
@@ -9,7 +10,7 @@ namespace Util.UI
     {
         public void OpenScene(string name)
         {
-            SceneControler.Load(name);
+            SceneManager.LoadScene(name, LoadSceneMode.Single);
         }
 
         public void CloseGame()
