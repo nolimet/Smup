@@ -181,10 +181,10 @@ namespace Util.StateMachine
             if (_currentStateIndex >= 0) currentState = _states[_currentStateIndex];
 
             currentState?.OnExit();
-            if (currentState != null) currentState.StateMachineRuntime = null;
+            if (currentState != null) currentState.CurrentStateMachine = null;
 
             var newState = _states[index];
-            newState.StateMachineRuntime = this;
+            newState.CurrentStateMachine = this;
             newState.OnEnter();
 
             if (_debuggingEnabled) Debug.Log($"Transitioning from ({_currentStateIndex}){currentState?.GetType().Name} to({index}){_states[index].GetType().Name}");

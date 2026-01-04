@@ -11,7 +11,7 @@
         /// runtime, triggering transitions or accessing the current state. Implementations of IState
         /// use this property to coordinate their behavior within the state machine.
         /// </remarks>
-        public StateMachineRuntime StateMachineRuntime { get; set; }
+        public StateMachineRuntime CurrentStateMachine { get; set; }
 
         /// <summary>
         /// Defines the behavior to execute when entering the current state in the state machine.

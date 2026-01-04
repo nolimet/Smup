@@ -14,7 +14,7 @@ namespace World.Level.States
     {
         public event Action Stopped;
         public StateMachineRuntime Runtime { get; private set; }
-        public StateMachineRuntime StateMachine { get; set; }
+        public StateMachineRuntime CurrentStateMachine { get; set; }
 
         [TypeFilter(nameof(TypeFilter))]
         [SerializeReference] private List<IState> sequence;
@@ -40,14 +40,18 @@ namespace World.Level.States
             Runtime?.ToEndState();
 
             Runtime = new StateMachineRuntime(sequence, true);
-            Runtime.EndStateEntered += StopStateMachine;
+            Runtime.EndStateEntered += CurrentStateMachine.ToNextState;
             Runtime.ToFirstState();
         }
 
         public void StopStateMachine()
         {
             if (Runtime.CurrentState is not EndState)
+            {
+                Runtime.EndStateEntered -= CurrentStateMachine.ToNextState;
                 Runtime?.ToEndState();
+            }
+
             Runtime = null;
         }
     }
