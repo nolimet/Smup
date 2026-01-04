@@ -8,7 +8,7 @@ namespace Util.StateMachine
     /// </summary>
     public sealed class EndState : IState
     {
-        public StateMachineRuntime StateMachine { get; set; }
+        public StateMachineRuntime StateMachineRuntime { get; set; }
 
         public void OnEnter() { }
         public void OnExit() { }
