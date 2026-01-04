@@ -6,9 +6,16 @@ using UnityEngine.Pool;
 
 namespace Pools
 {
-    public abstract class BasePool<TPoolElement, TSelf> : MonoBehaviour, IDisposable where TPoolElement : Component, IPoolElement where TSelf : BasePool<TPoolElement, TSelf>
+    public interface IPool<TPoolElement> : IDisposable where TPoolElement : Component, IPoolElement
     {
-        public static TSelf Instance;
+        int ActiveItems { get; }
+        TPoolElement GetObject(string poolId);
+        void ReleaseObject(TPoolElement obj);
+    }
+
+    public abstract class BasePool<TPoolElement, TSelf> : MonoBehaviour, IPool<TPoolElement> where TPoolElement : Component, IPoolElement where TSelf : BasePool<TPoolElement, TSelf>
+    {
+        public static IPool<TPoolElement> Instance;
 
         protected virtual void Awake()
         {
