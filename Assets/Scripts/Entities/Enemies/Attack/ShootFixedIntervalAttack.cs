@@ -42,7 +42,7 @@ namespace Entities.Enemies.Attack
 
         private void Shoot(Vector2 position, Vector2 motionVector)
         {
-            var bullet = BulletPool.Instance.GetObject(BulletGeneric.BulletType.Bullet);
+            var bullet = BulletPool.Instance.GetObject(nameof(BulletGeneric.BulletType.Bullet));
             bullet.transform.position = position;
             bullet.Init(damagePerShot, -180, motionVector.x + shotSpeed, LayerMask.NameToLayer("Player"));
             bullet.gameObject.layer = LayerMask.NameToLayer("EnemyBullets");
