@@ -24,16 +24,16 @@ namespace Entities.Generic
         private SpriteRenderer _renderer;
         private PolygonCollider2D _collider;
 
-        [ShowInInspector] [Sirenix.OdinInspector.ReadOnly] private int _targetLayer;
-        [ShowInInspector] [Sirenix.OdinInspector.ReadOnly] private int _fragmentsExplosion;
-        [ShowInInspector] [Sirenix.OdinInspector.ReadOnly] private float _detonationTime;
-        [ShowInInspector] [Sirenix.OdinInspector.ReadOnly] private bool _canExplode;
-        [ShowInInspector] [Sirenix.OdinInspector.ReadOnly] private float _damage;
-        [ShowInInspector] [Sirenix.OdinInspector.ReadOnly] private float _speed;
+        [ShowInInspector] [ReadOnly] private int _targetLayer;
+        [ShowInInspector] [ReadOnly] private int _fragmentsExplosion;
+        [ShowInInspector] [ReadOnly] private float _detonationTime;
+        [ShowInInspector] [ReadOnly] private bool _canExplode;
+        [ShowInInspector] [ReadOnly] private float _damage;
+        [ShowInInspector] [ReadOnly] private float _speed;
 
         public float Damage => _damage;
 
-        [ShowInInspector] [Sirenix.OdinInspector.ReadOnly] protected bool MarkedForRemove;
+        [ShowInInspector] [ReadOnly] protected bool MarkedForRemove;
 
         private void Awake()
         {
@@ -121,7 +121,7 @@ namespace Entities.Generic
 
                 //TODO: Make Dedicated Explosive bullet
 
-                var fragment = BulletPool.Instance.GetObject(BulletType.Fragment);
+                var fragment = BulletPool.Instance.GetObject(nameof(BulletType.Fragment));
                 fragment.transform.position = transform.position;
                 fragment.Init(_damage, radiusStep * _fragmentsExplosion + Random.Range(-radiusStep / 2f, radiusStep / 2f), _speed, _targetLayer);
             }
