@@ -17,7 +17,7 @@ namespace World.Level.States
         public StateMachineRuntime CurrentStateMachine { get; set; }
 
         [TypeFilter(nameof(TypeFilter))]
-        [SerializeReference] private List<IState> sequence;
+        [SerializeReference] private List<IState> sequence = new();
 
         public IEnumerable<Type> TypeFilter()
         {
