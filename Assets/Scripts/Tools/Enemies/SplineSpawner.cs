@@ -1,7 +1,6 @@
 ﻿using System;
-using System.IO;
-using System.Linq;
 using Entities.Enemies.Movement;
+using Helpers;
 using JetBrains.Annotations;
 using Pools;
 using Sirenix.OdinInspector;
@@ -17,8 +16,7 @@ namespace Tools.Enemies
         [SerializeField] [ValueDropdown(nameof(Enemies))] private string enemyId;
         [SerializeField] [Min(0)] private float speed = 1;
 
-        private string[] Enemies => Directory.GetFiles("Assets/Resources/Enemies", "*.prefab")
-            .Select(x => x.Split('/', '\\').Last().Split('.').First()).ToArray();
+        private string[] Enemies => EnemyTypeHelper.GetEnemyTypes();
 
         private void Awake()
         {
