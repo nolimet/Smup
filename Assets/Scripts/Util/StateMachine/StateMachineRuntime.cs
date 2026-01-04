@@ -196,6 +196,30 @@ namespace Util.StateMachine
         }
 
         /// <summary>
+        /// Transitions to a state that matches the provided condition.
+        /// The method iterates through all available states and selects the first one that satisfies the given condition.
+        /// </summary>
+        /// <param name="expression">A predicate function that specifies the condition a state must satisfy to be selected.</param>
+        /// <exception cref="ArgumentNullException">Thrown when the expression is null.</exception>
+        /// <remarks>
+        /// If no state satisfies the provided condition, a warning is logged, and no transition occurs.
+        /// </remarks>
+        public void ToState(Func<IState, bool> expression)
+        {
+            if (expression == null) throw new ArgumentNullException(nameof(expression), "Expression cannot be null");
+
+            for (var i = 0; i < _states.Count; i++)
+            {
+                if (!expression(_states[i])) continue;
+
+                ToState(i);
+                return;
+            }
+
+            Debug.LogWarning("Failed to find state matching expression");
+        }
+
+        /// <summary>
         /// Transitions the state machine to the terminal state, ensuring the current state becomes the end state.
         /// </summary>
         /// <remarks>
