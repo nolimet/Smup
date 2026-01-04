@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Cube
   m_EditorClassIdentifier: Assembly-CSharp::World.Waves.Data.SpawnPattern
   parts:
-  - typeName: Cube/Forward-Move
+  - typeName: CubeThing
     positions:
     - {x: 19, y: 9.5}
     - {x: 19, y: 8.444445}
