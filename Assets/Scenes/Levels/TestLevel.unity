@@ -180,7 +180,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 5
+  orthographic size: 10
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -251,15 +251,17 @@ MonoBehaviour:
       type: {class: WaveState, ns: World.Level.States, asm: Assembly-CSharp}
       data:
         sequence:
+        - rid: 6525113437093101622
         - rid: 4221604173981417692
         - rid: 4221604173981417691
         - rid: 4221604180488093748
+        - rid: 6525113437093101628
     - rid: 4221604173981417691
       type: {class: PlayableDirectorState, ns: World.Waves.States, asm: Assembly-CSharp}
       data:
         director: {fileID: 4881140120956020267, guid: 2c5584ae9947925479b1861f1dc0ce08,
           type: 3}
-        waitTillAllEnemiesDead: 1
+        waitTillAllEnemiesDead: 0
     - rid: 4221604173981417692
       type: {class: DelayState, ns: World.Waves.States, asm: Assembly-CSharp}
       data:
@@ -270,7 +272,22 @@ MonoBehaviour:
     - rid: 6525113391262466116
       type: {class: WaveState, ns: World.Level.States, asm: Assembly-CSharp}
       data:
-        sequence: []
+        sequence:
+        - rid: 6525113437093101627
+    - rid: 6525113437093101622
+      type: {class: SpawnPatternState, ns: World.Waves.States, asm: Assembly-CSharp}
+      data:
+        WaitForZeroEnemies: 1
+        dynamicSpawnOffset: {fileID: 1548411266}
+        spawnOffset: {x: 5, y: 0}
+        spawnPattern: {fileID: 11400000, guid: 59787b9fc4269e244af42d9562afa4e0, type: 2}
+    - rid: 6525113437093101627
+      type: {class: DelayState, ns: World.Waves.States, asm: Assembly-CSharp}
+      data:
+        delayInMs: 1000
+    - rid: 6525113437093101628
+      type: {class: WaitTillAllEnemiesDeadState, ns: World.Waves.States, asm: Assembly-CSharp}
+      data: 
 --- !u!4 &437555651
 Transform:
   m_ObjectHideFlags: 0
@@ -280,7 +297,7 @@ Transform:
   m_GameObject: {fileID: 437555649}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.21333, y: -1.50664, z: 0}
+  m_LocalPosition: {x: -0.602, y: -1.50664, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -330,6 +347,52 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1548411264
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1548411266}
+  - component: {fileID: 1548411265}
+  m_Layer: 0
+  m_Name: GameObject
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1548411265
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1548411264}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1700349c8c15d7a449b5a96678c34c86, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Util.SnapToScreenPoint
+  camera: {fileID: 140652437}
+  screenPosition: {x: 1, y: 0, z: 0}
+--- !u!4 &1548411266
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1548411264}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -337,3 +400,4 @@ SceneRoots:
   - {fileID: 140652438}
   - {fileID: 1181904153}
   - {fileID: 437555651}
+  - {fileID: 1548411266}
