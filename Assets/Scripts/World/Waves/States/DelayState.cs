@@ -9,13 +9,13 @@ namespace World.Waves.States
     [Serializable]
     public class DelayState : ISequenceElement
     {
-        public StateMachineRuntime StateMachine { get; set; }
+        public StateMachineRuntime CurrentStateMachine { get; set; }
 
         [SerializeField] [Min(0)] private int delayInMs;
 
         public void OnEnter()
         {
-            UniTask.Delay(delayInMs).ContinueWith(() => StateMachine.ToNextState()).Forget();
+            UniTask.Delay(delayInMs).ContinueWith(() => CurrentStateMachine.ToNextState()).Forget();
         }
 
         public void OnExit() { }

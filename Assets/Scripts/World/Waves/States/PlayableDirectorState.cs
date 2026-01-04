@@ -15,7 +15,7 @@ namespace World.Waves.States
     [Serializable]
     public class PlayableDirectorState : ISequenceElement
     {
-        public StateMachineRuntime StateMachine { get; set; }
+        public StateMachineRuntime CurrentStateMachine { get; set; }
 
         [AssetsOnly]
         [SerializeField] private PlayableDirector director;
@@ -56,7 +56,7 @@ namespace World.Waves.States
 
         private void ToNextState()
         {
-            StateMachine.ToNextState();
+            CurrentStateMachine.ToNextState();
         }
 
         public void OnExit()

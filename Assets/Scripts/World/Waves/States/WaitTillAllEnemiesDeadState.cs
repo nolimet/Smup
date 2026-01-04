@@ -9,11 +9,11 @@ namespace World.Waves.States
     [Serializable]
     public class WaitTillAllEnemiesDeadState : ISequenceElement
     {
-        public StateMachineRuntime StateMachine { get; set; }
+        public StateMachineRuntime CurrentStateMachine { get; set; }
 
         public void OnEnter()
         {
-            UniTask.WaitUntil(() => EnemyPool.Instance.ActiveItems == 0).ContinueWith(StateMachine.ToNextState).Forget();
+            UniTask.WaitUntil(() => EnemyPool.Instance.ActiveItems == 0).ContinueWith(CurrentStateMachine.ToNextState).Forget();
         }
 
         public void OnExit() { }
