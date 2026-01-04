@@ -1,0 +1,8 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
+    <ui:VisualElement style="flex-direction: row; flex-shrink: 0; flex-grow: 0;">
+        <ui:TextField label="Save Path" placeholder-text="Save folder path" name="saveFolderField" hide-placeholder-on-focus="true" style="flex-grow: 1;"/>
+        <ui:Button text="Set Save Path" name="setSaveDirButton"/>
+    </ui:VisualElement>
+    <uie:ObjectField label="Root Element" name="rootElementField" type="UnityEngine.GameObject, UnityEngine.CoreModule"/>
+    <ui:Button text="Save Pattern" name="saveButton"/>
+</ui:UXML>
