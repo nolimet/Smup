@@ -18,8 +18,10 @@ namespace Entities.Enemies
         private Rigidbody2D _rigidBody2D;
         private Collider2D _collider2D;
         private SpriteRenderer _spriteRenderer;
+        private bool _wasOnScreen;
 
         [field: SerializeField] public string TypeName { get; private set; }
+        [SerializeField] private bool killWhenOffScreen;
 
         public Overrideable<float> moveSpeed = 1f;
         public Overrideable<float> fadeDuration = 1f;
@@ -64,13 +66,15 @@ namespace Entities.Enemies
             {
                 _collider2D.enabled = false;
 
-                while (_spriteRenderer.color.a > 0.01f)
+                while (_spriteRenderer && _spriteRenderer.color.a > 0.01f)
                 {
                     var color = _spriteRenderer.color;
                     color.a = Mathf.MoveTowards(color.a, 0f, Time.deltaTime / fadeDuration);
                     _spriteRenderer.color = color;
                     await UniTask.Yield();
                 }
+
+                if (!_spriteRenderer) return;
 
                 EnemyPool.Instance.ReleaseObject(this);
 
@@ -89,9 +93,21 @@ namespace Entities.Enemies
             var color = _spriteRenderer.color;
             color.a = 1;
             _spriteRenderer.color = color;
+            _wasOnScreen = false;
         }
 
         public void OnDespawn() { }
+
+        private void OnBecameVisible()
+        {
+            _wasOnScreen = true;
+        }
+
+        private void OnBecameInvisible()
+        {
+            if (_wasOnScreen && killWhenOffScreen)
+                Kill(false);
+        }
 
         private void Update()
         {
