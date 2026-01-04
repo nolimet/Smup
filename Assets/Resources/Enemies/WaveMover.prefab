@@ -48,6 +48,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Enemies.EnemyBase
   <TypeName>k__BackingField: WaveMover
+  killWhenOffScreen: 1
   moveSpeed:
     defaultValue: 5
   fadeDuration:
@@ -73,6 +74,7 @@ MonoBehaviour:
       type: {class: SplineFollow, ns: Entities.Enemies.Movement, asm: Assembly-CSharp}
       data:
         rotate: 0
+        killAtEnd: 1
 --- !u!212 &21296868
 SpriteRenderer:
   serializedVersion: 2

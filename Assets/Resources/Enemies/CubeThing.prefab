@@ -47,7 +47,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9773ef5e816b9c14882be1e7f7069282, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Enemies.EnemyBase
-  <TypeName>k__BackingField: Cube/Forward-Move
+  <TypeName>k__BackingField: CubeThing
+  killWhenOffScreen: 1
   moveSpeed:
     defaultValue: 1
   fadeDuration:
