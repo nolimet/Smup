@@ -243,6 +243,7 @@ MonoBehaviour:
   autoStart: 1
   states:
   - rid: 4221604173981417520
+  - rid: 6525113391262466116
   references:
     version: 2
     RefIds:
@@ -266,6 +267,10 @@ MonoBehaviour:
     - rid: 4221604180488093748
       type: {class: WaitTillAllEnemiesDeadState, ns: World.Waves.States, asm: Assembly-CSharp}
       data: 
+    - rid: 6525113391262466116
+      type: {class: WaveState, ns: World.Level.States, asm: Assembly-CSharp}
+      data:
+        sequence: []
 --- !u!4 &437555651
 Transform:
   m_ObjectHideFlags: 0
