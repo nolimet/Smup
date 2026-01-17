@@ -1,7 +1,9 @@
 ﻿using System;
+using Entities.ECS.Bullet;
 using Entities.Generic;
 using Managers;
-using Pools;
+using Sirenix.OdinInspector;
+using Unity.Mathematics;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -11,16 +13,16 @@ namespace Entities.Player.Weapons
     {
         private DateTime _lastShot;
 
-        private readonly int _bulletsPerShot;
+        [ShowInInspector] private readonly int _bulletsPerShot;
 
-        private readonly float _fireDelay; //in miliseconds
-        private readonly float _accuracy;
-        private readonly float _bulletSpeed;
-        private readonly float _bulletDamage;
+        [ShowInInspector] private readonly float _fireDelay; //in miliseconds
+        [ShowInInspector] private readonly float _accuracy;
+        [ShowInInspector] private readonly float _bulletSpeed;
+        [ShowInInspector] private readonly float _bulletDamage;
 
-        private readonly int _energyCost;
-        public float EnergyCost => _energyCost;
-        public float DelayDelta => (float)(DateTime.Now - _lastShot).TotalMilliseconds / _fireDelay;
+        [ShowInInspector] private readonly int _energyCost;
+        [ShowInInspector] public float EnergyCost => _energyCost;
+        [ShowInInspector] public float DelayDelta => (float)(DateTime.Now - _lastShot).TotalMilliseconds / _fireDelay;
 
         public Cannon()
         {
@@ -50,21 +52,18 @@ namespace Entities.Player.Weapons
             _energyCost = 20;
         }
 
-        public bool TryShoot(GameObject entiy, Vector3 weaponOffSet, Vector2 inherentVelocity)
+        public bool TryShoot(Vector3 shooterPosition, Vector3 weaponOffSet, Vector2 inherentVelocity)
         {
             if ((DateTime.Now - _lastShot).TotalMilliseconds >= _fireDelay)
             {
                 _lastShot = DateTime.Now;
-                float angle;
+                var totalPosition = shooterPosition + weaponOffSet;
+                var position = new float3(totalPosition.x, totalPosition.y, totalPosition.z);
+                var inheritVelocity = new float3(inherentVelocity.x, inherentVelocity.y, 0);
                 for (var i = 0; i < _bulletsPerShot; i++)
                 {
-                    var bullet = BulletPool.Instance.GetObject(nameof(BulletGeneric.BulletType.Bullet));
-
-                    angle = Random.Range(-0.5f, 0.5f) * _accuracy;
-
-                    bullet.transform.position = entiy.transform.position + weaponOffSet;
-                    bullet.Init(_bulletDamage, angle, _bulletSpeed, LayerMask.NameToLayer("Enemy"));
-                    bullet.gameObject.layer = LayerMask.NameToLayer("PlayerBullets");
+                    var angle = Random.Range(-0.5f, 0.5f) * _accuracy;
+                    BulletSpawner.Shoot(BulletGeneric.BulletType.Bullet, position, inheritVelocity, angle, _bulletSpeed, _bulletDamage);
                 }
 
                 return true;

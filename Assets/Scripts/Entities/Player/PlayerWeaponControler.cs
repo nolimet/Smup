@@ -87,7 +87,7 @@ namespace Entities.Player
         private void FireMain()
         {
             if (!GameManager.Stats.CanFire(MainWeapon.EnergyCost)) return;
-            if (MainWeapon.TryShoot(gameObject, weaponOffset, GetAddedVelocity()))
+            if (MainWeapon.TryShoot(transform.position, weaponOffset, GetAddedVelocity()))
             {
                 GameManager.Stats.RemoveEnergy(MainWeapon.EnergyCost);
                 OnFireWeapon?.Invoke(_currentWeapon);

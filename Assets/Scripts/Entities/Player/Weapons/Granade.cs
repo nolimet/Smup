@@ -1,9 +1,6 @@
 ﻿using System;
-using Entities.Generic;
 using Managers;
-using Pools;
 using UnityEngine;
-using Random = UnityEngine.Random;
 
 namespace Entities.Player.Weapons
 {
@@ -56,9 +53,8 @@ namespace Entities.Player.Weapons
             // bulletsPerShot *= Mathf.RoundToInt(5*Mathf.Pow(1.2f, GameManager.upgrades.ShotGunBulletsPerShot));
         }
 
-        public bool TryShoot(GameObject entiy, Vector3 weaponOffSet, Vector2 inherentVelocity)
-        {
-            if ((DateTime.Now - _lastShot).TotalMilliseconds >= _fireDelay)
+        public bool TryShoot(Vector3 shooterPosition, Vector3 weaponOffSet, Vector2 inherentVelocity) =>
+            /*if ((DateTime.Now - _lastShot).TotalMilliseconds >= _fireDelay)
             {
                 _lastShot = DateTime.Now;
                 float angle;
@@ -74,9 +70,7 @@ namespace Entities.Player.Weapons
                 }
 
                 return true;
-            }
-
-            return false;
-        }
+            }*/
+            false;
     }
 }
