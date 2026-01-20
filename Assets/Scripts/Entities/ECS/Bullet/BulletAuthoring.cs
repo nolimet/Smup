@@ -27,12 +27,7 @@ namespace Entities.ECS.Bullet
                 // and this component will be baked automatically. 
                 // But we add the data component here for logic.
                 AddComponent(entity, new PhysicsVelocity());
-                AddComponent(entity, new PhysicsMass
-                {
-                    CenterOfMass = float3.zero,
-                    InverseMass = 1f,
-                    InverseInertia = float3.zero
-                });
+                AddComponent(entity, PhysicsMass.CreateDynamic(MassProperties.CreateBox(new float3(0.119999997f, 0.0700000003f, 0.200000003f)), 5f));
             }
         }
     }
