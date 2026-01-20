@@ -1,4 +1,3 @@
-using Entities.Generic;
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Physics;
@@ -7,6 +6,12 @@ using UnityEngine;
 
 namespace Entities.ECS.Bullet
 {
+    public enum BulletType
+    {
+        Fragment,
+        Bullet
+    }
+
     public class BulletSpawner
     {
         private EntityQuery _bulletQuery;
@@ -28,7 +33,7 @@ namespace Entities.ECS.Bullet
             _instance = null;
         }
 
-        public static void Shoot(BulletGeneric.BulletType type, float3 position, float3 inheritVelocity, float angle, float speed, float damage)
+        public static void Shoot(BulletType type, float3 position, float3 inheritVelocity, float[] angles, float speed, float damage)
         {
             var em = Unity.Entities.World.DefaultGameObjectInjectionWorld.EntityManager;
 
@@ -36,27 +41,29 @@ namespace Entities.ECS.Bullet
             var prefab = _instance.GetPrefabFromLibrary(type);
 
             if (prefab != Entity.Null)
-            {
-                var bullet = em.Instantiate(prefab);
-                var velocity = new float3(
-                    math.cos(math.radians(angle)) * speed,
-                    math.sin(math.radians(angle)) * speed,
-                    0
-                );
-
-                em.SetComponentData(bullet, new BulletData { Damage = damage });
-                em.SetComponentData(bullet, new PhysicsVelocity
+                for (var i = 0; i < angles.Length; i++)
                 {
-                    Linear = velocity + inheritVelocity
-                });
-                em.SetComponentData(bullet, LocalTransform.FromPositionRotation(
-                    position,
-                    quaternion.Euler(0, 0, math.radians(angle)))
-                );
-            }
+                    var angle = angles[i];
+                    var bullet = em.Instantiate(prefab);
+                    var velocity = new float3(
+                        math.cos(math.radians(angle)) * speed,
+                        math.sin(math.radians(angle)) * speed,
+                        0
+                    );
+
+                    em.SetComponentData(bullet, new BulletData { Damage = damage });
+                    em.SetComponentData(bullet, new PhysicsVelocity
+                    {
+                        Linear = velocity + inheritVelocity
+                    });
+                    em.SetComponentData(bullet, LocalTransform.FromPositionRotation(
+                        position,
+                        quaternion.Euler(0, 0, math.radians(angle)))
+                    );
+                }
         }
 
-        private Entity GetPrefabFromLibrary(BulletGeneric.BulletType type)
+        private Entity GetPrefabFromLibrary(BulletType type)
         {
             var entityManager = Unity.Entities.World.DefaultGameObjectInjectionWorld.EntityManager;
             _bulletQuery = entityManager.CreateEntityQuery(typeof(BulletTag));

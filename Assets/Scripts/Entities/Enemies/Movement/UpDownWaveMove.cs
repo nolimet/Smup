@@ -10,12 +10,12 @@ namespace Entities.Enemies.Movement
         [SerializeField] private float amplitude = 1f;
         [SerializeField] private float frequency = 2f;
 
-        private Rigidbody2D _rigidbody;
+        private Rigidbody _rigidbody;
         private float _yMovement;
 
         public void SetTarget(GameObject entity)
         {
-            _rigidbody = entity.GetComponent<Rigidbody2D>();
+            _rigidbody = entity.GetComponent<Rigidbody>();
         }
 
         public void Move(Vector2 currentPosition, float speed, float deltaTime)
@@ -23,7 +23,7 @@ namespace Entities.Enemies.Movement
             _yMovement = amplitude * (Mathf.Sin(2 * Mathf.PI * frequency * Time.time) - Mathf.Sin(2 * Mathf.PI * frequency * (Time.time - deltaTime)));
 
             _rigidbody.AddForce(new Vector2(deltaTime * -10f * speed, _yMovement) * _rigidbody.mass);
-            _rigidbody.linearVelocityX = Mathf.Clamp(_rigidbody.linearVelocityX, -speed, speed);
+            _rigidbody.maxLinearVelocity = speed;
             //enity.transform.Translate(Time.deltaTime * 10f, yMovement, 0f);
         }
     }

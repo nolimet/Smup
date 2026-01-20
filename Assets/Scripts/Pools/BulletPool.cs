@@ -1,11 +1,9 @@
-﻿using Entities.Generic;
-
-namespace Pools
+﻿namespace Pools
 {
-    public class BulletPool : BasePool<BulletGeneric, BulletPool>
+    /*public class BulletPool : BasePool<MonoBehaviour, BulletPool>
     {
         protected override string BasePath => "Weapons";
 
-        public BulletGeneric GetObject(BulletGeneric.BulletType poolId) => GetObject(poolId.ToString());
-    }
+        public BulletGeneric GetObject(BulletType poolId) => GetObject(poolId.ToString());
+    }*/
 }

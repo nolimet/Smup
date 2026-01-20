@@ -48,12 +48,12 @@ namespace Entities.Player
 
         public IBaseWeapon MainWeapon;
 
-        private Rigidbody2D _rigi;
+        private Rigidbody _rigi;
         // Use this for initialization
 
         private void Start()
         {
-            _rigi = GetComponent<Rigidbody2D>();
+            _rigi = GetComponent<Rigidbody>();
             MainWeapon = new Cannon();
         }
 

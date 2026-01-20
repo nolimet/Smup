@@ -4,19 +4,19 @@ using Util;
 
 namespace Entities.Player
 {
-    [RequireComponent(typeof(Rigidbody2D))]
+    [RequireComponent(typeof(Rigidbody))]
     public class PlayerMoveControler : MonoBehaviour
     {
         private const float Speed = 6f;
         private float _booster = 1.8f;
         private float _boostCost = 20; // persecond value
 
-        private Rigidbody2D _rig;
+        private Rigidbody _rig;
 
         // Use this for initialization
         private void Start()
         {
-            _rig = GetComponent<Rigidbody2D>();
+            _rig = GetComponent<Rigidbody>();
         }
 
         // Update is called once per frame

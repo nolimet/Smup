@@ -158,7 +158,7 @@ MonoBehaviour:
   m_EnableSolverStabilizationHeuristic: 0
   m_MultiThreaded: 1
   m_CollisionTolerance: 0.01
-  m_SynchronizeCollisionWorld: 0
+  m_SynchronizeCollisionWorld: 1
   m_IncrementalDynamicBroadphase: 0
   m_IncrementalStaticBroadphase: 0
   m_MaxDynamicDepenetrationVelocity: 3

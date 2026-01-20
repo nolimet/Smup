@@ -10,13 +10,13 @@ using Random = UnityEngine.Random;
 
 namespace Entities.Enemies
 {
-    [RequireComponent(typeof(Rigidbody2D), typeof(SpriteRenderer))]
+    [RequireComponent(typeof(Rigidbody), typeof(SpriteRenderer))]
     public sealed class Enemy : MonoBehaviour, IPoolElement, IDamageAble
     {
         public string PoolId => TypeName;
 
-        private Rigidbody2D _rigidBody2D;
-        private Collider2D _collider2D;
+        private Rigidbody _rigidBody;
+        private Collider _collider;
         private SpriteRenderer _spriteRenderer;
         private bool _wasOnScreen;
 
@@ -41,8 +41,8 @@ namespace Entities.Enemies
 
         private void Awake()
         {
-            _rigidBody2D = GetComponent<Rigidbody2D>();
-            _collider2D = GetComponent<Collider2D>();
+            _rigidBody = GetComponent<Rigidbody>();
+            _collider = GetComponent<Collider>();
             _spriteRenderer = GetComponent<SpriteRenderer>();
         }
 
@@ -64,7 +64,7 @@ namespace Entities.Enemies
 
             async UniTaskVoid DestroyLoop()
             {
-                _collider2D.enabled = false;
+                _collider.enabled = false;
 
                 while (_spriteRenderer && _spriteRenderer.color.a > 0.01f)
                 {
@@ -89,7 +89,7 @@ namespace Entities.Enemies
         public void OnSpawn()
         {
             Health = MaxHealth;
-            _collider2D.enabled = true;
+            _collider.enabled = true;
             var color = _spriteRenderer.color;
             color.a = 1;
             _spriteRenderer.color = color;
@@ -112,10 +112,10 @@ namespace Entities.Enemies
         private void Update()
         {
             movementPattern.Move(transform.position, moveSpeed, Time.deltaTime);
-            attackPattern?.Attack(transform.position, _rigidBody2D.linearVelocity);
+            attackPattern?.Attack(transform.position, _rigidBody.linearVelocity);
         }
 
-        private void OnCollisionEnter2D(Collision2D other)
+        private void OnCollisionEnter(Collision other)
         {
             if (Health <= double.Epsilon) return;
 

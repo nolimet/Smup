@@ -1,6 +1,5 @@
 ﻿using System;
 using Entities.ECS.Bullet;
-using Entities.Generic;
 using Managers;
 using Sirenix.OdinInspector;
 using Unity.Mathematics;
@@ -60,12 +59,10 @@ namespace Entities.Player.Weapons
                 var totalPosition = shooterPosition + weaponOffSet;
                 var position = new float3(totalPosition.x, totalPosition.y, totalPosition.z);
                 var inheritVelocity = new float3(inherentVelocity.x, inherentVelocity.y, 0);
-                for (var i = 0; i < _bulletsPerShot; i++)
-                {
-                    var angle = Random.Range(-0.5f, 0.5f) * _accuracy;
-                    BulletSpawner.Shoot(BulletGeneric.BulletType.Bullet, position, inheritVelocity, angle, _bulletSpeed, _bulletDamage);
-                }
+                var angles = new float[_bulletsPerShot];
+                for (var i = 0; i < angles.Length; i++) angles[i] = Random.Range(-0.5f, 0.5f) * _accuracy;
 
+                BulletSpawner.Shoot(BulletType.Bullet, position, inheritVelocity, angles, _bulletSpeed, _bulletDamage);
                 return true;
             }
 

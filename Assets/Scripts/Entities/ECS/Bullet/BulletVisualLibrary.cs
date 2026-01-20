@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Entities.Generic;
 using Unity.Entities;
 using UnityEngine;
 
@@ -10,7 +9,7 @@ namespace Entities.ECS.Bullet
 
     public struct BulletVisualElement : IBufferElementData
     {
-        public BulletGeneric.BulletType Type;
+        public BulletType Type;
         public Entity Prefab;
     }
 
@@ -19,7 +18,7 @@ namespace Entities.ECS.Bullet
         [Serializable]
         public struct BulletVisualMapping
         {
-            public BulletGeneric.BulletType type;
+            public BulletType type;
             public GameObject prefab; // Each prefab has its own Sprite/Material
         }
 
