@@ -1,4 +1,5 @@
-﻿using Entities.ECS.Bullet;
+﻿using Cysharp.Threading.Tasks;
+using Entities.ECS.Bullet;
 using Entities.Player.Weapons;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -9,26 +10,17 @@ namespace Test_Scripts
     {
         [ShowInInspector] public IBaseWeapon Gun;
         public Vector3 spawnPosition = new(0.5f, 0);
-        public Vector2 inheritVelocity = new();
-
-        public float shootInterval = 0.2f;
-        private float _timer = 0;
+        public Vector2 inheritVelocity;
 
         private void Start()
         {
             Gun = new Cannon();
-            _timer = shootInterval;
-            BulletSpawner.Init();
+            UniTask.Delay(1000).ContinueWith(BulletSpawner.Init).Forget();
         }
 
         private void Update()
         {
-            _timer -= Time.deltaTime;
-            if (_timer <= 0)
-            {
-                Gun.TryShoot(transform.position, spawnPosition, inheritVelocity);
-                _timer = shootInterval;
-            }
+            Gun.TryShoot(transform.position, spawnPosition, inheritVelocity);
         }
 
         private void OnDrawGizmos()
