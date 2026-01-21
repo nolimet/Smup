@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Entities.ECS.Bullet
 {
-    public struct BulletTag : IComponentData { }
+    public struct BulletLibaryTag : IComponentData { }
 
     public struct BulletVisualElement : IBufferElementData
     {
@@ -30,7 +30,7 @@ namespace Entities.ECS.Bullet
             {
                 var entity = GetEntity(TransformUsageFlags.None);
                 var buffer = AddBuffer<BulletVisualElement>(entity);
-                AddComponent(entity, new BulletTag());
+                AddComponent(entity, new BulletLibaryTag());
 
                 foreach (var map in authoring.visuals)
                     buffer.Add(new BulletVisualElement
@@ -40,10 +40,5 @@ namespace Entities.ECS.Bullet
                     });
             }
         }
-    }
-
-    namespace Entities.ECS.Bullet
-    {
-        // Attach THIS to your actual Bullet Prefabs (the ones with the Mesh/Material)
     }
 }
