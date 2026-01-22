@@ -1,4 +1,7 @@
 using System.Collections.Generic;
+using Entities.ECS.Bullet.Components;
+using Entities.ECS.Bullet.Enums;
+using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Physics;
@@ -7,12 +10,6 @@ using UnityEngine;
 
 namespace Entities.ECS.Bullet
 {
-    public enum BulletType
-    {
-        Fragment,
-        Bullet
-    }
-
     public class BulletSpawner
     {
         private static BulletSpawner _instance;
@@ -25,7 +22,7 @@ namespace Entities.ECS.Bullet
         private Dictionary<BulletType, Entity> GetPrefabsFromLibrary()
         {
             _entityManager = Unity.Entities.World.DefaultGameObjectInjectionWorld.EntityManager;
-            var _bulletQuery = _entityManager.CreateEntityQuery(typeof(BulletLibaryTag));
+            var _bulletQuery = _entityManager.CreateEntityQuery(typeof(BulletLibraryTag));
 
             if (_bulletQuery.IsEmpty)
             {
@@ -36,7 +33,7 @@ namespace Entities.ECS.Bullet
             Dictionary<BulletType, Entity> library = new();
 
             var libraryEntity = _bulletQuery.GetSingletonEntity();
-            var buffer = _entityManager.GetBuffer<BulletVisualElement>(libraryEntity);
+            var buffer = _entityManager.GetBuffer<BulletPrefabContainer>(libraryEntity);
 
             for (var i = 0; i < buffer.Length; i++)
                 library.Add(buffer[i].Type, buffer[i].Prefab);
@@ -60,10 +57,14 @@ namespace Entities.ECS.Bullet
             var em = Unity.Entities.World.DefaultGameObjectInjectionWorld.EntityManager;
             if (!_instance._bulletLibrary.TryGetValue(type, out var prefab)) return;
 
-            for (var i = 0; i < angles.Length; i++)
+            var count = angles.Length;
+            using var instances = new NativeArray<Entity>(count, Allocator.Temp);
+            em.Instantiate(prefab, instances);
+
+            for (var i = 0; i < count; i++)
             {
                 var angle = angles[i];
-                var bullet = em.Instantiate(prefab);
+                var bullet = instances[i];
                 var velocity = new float3(
                     math.cos(math.radians(angle)) * speed,
                     math.sin(math.radians(angle)) * speed,

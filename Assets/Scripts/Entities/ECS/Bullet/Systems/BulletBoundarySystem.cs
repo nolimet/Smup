@@ -1,9 +1,10 @@
+using Entities.ECS.Bullet.Components;
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Transforms;
 using UnityEngine;
 
-namespace Entities.ECS.Bullet
+namespace Entities.ECS.Bullet.Systems
 {
     [UpdateInGroup(typeof(SimulationSystemGroup))]
     public partial struct BulletBoundarySystem : ISystem
