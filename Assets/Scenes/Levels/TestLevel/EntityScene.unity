@@ -187,7 +187,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1640633323}
-  - component: {fileID: 1640633322}
+  - component: {fileID: 1640633324}
   m_Layer: 0
   m_Name: Bullet Libary
   m_TagString: Untagged
@@ -195,23 +195,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1640633322
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1640633321}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e391c8013cfa49f086de1ed1ea14391f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Entities.ECS.Bullet.BulletVisualLibrary
-  visuals:
-  - type: 1
-    prefab: {fileID: 193392, guid: a38f4f0972b41d0439e84f15b2bf19f9, type: 3}
-  - type: 0
-    prefab: {fileID: 193392, guid: 046166390779fbe4d91e4e622a61bee5, type: 3}
 --- !u!4 &1640633323
 Transform:
   m_ObjectHideFlags: 0
@@ -227,6 +210,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1640633324
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1640633321}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 732128c6f27a4bb49489991f8ae5efa5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Entities.ECS.Bullet.BulletLibraryAuthoring
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
