@@ -15,7 +15,8 @@ namespace Test_Scripts
         private void Start()
         {
             Gun = new Cannon();
-            UniTask.Delay(1000).ContinueWith(BulletSpawner.Init).Forget();
+            enabled = false;
+            UniTask.Delay(1000).ContinueWith(BulletSpawner.Init).ContinueWith(() => enabled = true).Forget();
         }
 
         private void Update()
