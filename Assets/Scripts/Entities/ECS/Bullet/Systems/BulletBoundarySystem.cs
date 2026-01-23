@@ -1,6 +1,7 @@
 using Entities.ECS.Bullet.Components;
 using Unity.Entities;
 using Unity.Mathematics;
+using Unity.Physics;
 using Unity.Transforms;
 using UnityEngine;
 
@@ -19,6 +20,9 @@ namespace Entities.ECS.Bullet.Systems
 
         public void OnUpdate(ref SystemState state)
         {
+            if (!SystemAPI.HasSingleton<PhysicsWorldSingleton>())
+                Debug.LogError("PhysicsWorldSingleton still missing.");
+
             if (!_initialized)
             {
                 var cam = Camera.main;
@@ -39,7 +43,8 @@ namespace Entities.ECS.Bullet.Systems
             {
                 var pos = transform.ValueRO.Position;
 
-                if (pos.x < _bounds.x || pos.x > _bounds.y || pos.y < _bounds.z || pos.y > _bounds.w) ecb.DestroyEntity(entity);
+                if (pos.x < _bounds.x || pos.x > _bounds.y || pos.y < _bounds.z || pos.y > _bounds.w)
+                    ecb.AddComponent<Disabled>(entity);
             }
         }
     }

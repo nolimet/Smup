@@ -58,13 +58,43 @@ namespace Entities.ECS.Bullet
             if (!_instance._bulletLibrary.TryGetValue(type, out var prefab)) return;
 
             var count = angles.Length;
-            using var instances = new NativeArray<Entity>(count, Allocator.Temp);
-            em.Instantiate(prefab, instances);
+            var bullets = new NativeArray<Entity>(count, Allocator.Temp);
 
+            // 1) Pull from pool (Disabled bullets of this type)
+            var pooledQuery = em.CreateEntityQuery(
+                ComponentType.ReadOnly<BulletTypeShared>(),
+                ComponentType.ReadWrite<Disabled>()
+            );
+            pooledQuery.SetSharedComponentFilter(new BulletTypeShared { Value = type });
+
+            var pooled = pooledQuery.ToEntityArray(Allocator.Temp);
+            var reuseCount = math.min(pooled.Length, count);
+
+            for (var i = 0; i < reuseCount; i++)
+            {
+                var bullet = pooled[i];
+                em.RemoveComponent<Disabled>(bullet);
+                bullets[i] = bullet;
+            }
+
+            pooled.Dispose();
+            pooledQuery.ResetFilter();
+
+            // 2) Instantiate remainder
+            var remaining = count - reuseCount;
+            if (remaining > 0)
+            {
+                using var instances = new NativeArray<Entity>(remaining, Allocator.Temp);
+                em.Instantiate(prefab, instances);
+                for (var i = 0; i < remaining; i++)
+                    bullets[reuseCount + i] = instances[i];
+            }
+
+            // 3) Set data on all bullets
             for (var i = 0; i < count; i++)
             {
                 var angle = angles[i];
-                var bullet = instances[i];
+                var bullet = bullets[i];
                 var velocity = new float3(
                     math.cos(math.radians(angle)) * speed,
                     math.sin(math.radians(angle)) * speed,
@@ -81,6 +111,8 @@ namespace Entities.ECS.Bullet
                     quaternion.Euler(0, 0, math.radians(angle)))
                 );
             }
+
+            bullets.Dispose();
         }
     }
 }

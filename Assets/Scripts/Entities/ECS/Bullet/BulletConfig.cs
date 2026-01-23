@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Entities.ECS.Bullet.Enums;
+using Unity.Entities;
 using UnityEngine;
 
 namespace Entities.ECS.Bullet
@@ -16,6 +17,12 @@ namespace Entities.ECS.Bullet
             public Material material;
             public Vector2 colliderSize;
             public float mass;
+
+            [LayerField]
+            public uint belongsToMask;
+
+            [SerializeField] private LayerMask colliderWithMask;
+            public uint CollidesWithMask => (uint)(int)colliderWithMask;
         }
 
         public List<BulletEntry> entries = new();

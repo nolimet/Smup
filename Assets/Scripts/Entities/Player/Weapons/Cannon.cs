@@ -1,5 +1,6 @@
 ﻿using System;
 using Entities.ECS.Bullet;
+using Entities.ECS.Bullet.Enums;
 using Managers;
 using Sirenix.OdinInspector;
 using Unity.Mathematics;
@@ -47,6 +48,9 @@ namespace Entities.Player.Weapons
             {
                 _bulletsPerShot = 1;
             }
+
+            _fireDelay = 0; //TODO REMOVE THIS
+            _bulletsPerShot = 300;
 
             _energyCost = 20;
         }
