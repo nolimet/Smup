@@ -1,9 +1,6 @@
 ﻿using System;
-using Entities.Generic;
 using Managers;
-using Pools;
 using UnityEngine;
-using Random = UnityEngine.Random;
 
 namespace Entities.Player.Weapons
 {
@@ -50,9 +47,8 @@ namespace Entities.Player.Weapons
             EnergyCost = 0.7f * _bulletsPerShot;
         }
 
-        public bool TryShoot(GameObject entiy, Vector3 weaponOffSet, Vector2 inherentVelocity)
-        {
-            if ((DateTime.Now - _lastShot).TotalMilliseconds >= _fireDelay)
+        public bool TryShoot(Vector3 shooterPosition, Vector3 weaponOffSet, Vector2 inherentVelocity) =>
+            /*if ((DateTime.Now - _lastShot).TotalMilliseconds >= _fireDelay)
             {
                 _lastShot = DateTime.Now;
                 for (var i = 0; i < _bulletsPerShot; i++)
@@ -66,9 +62,7 @@ namespace Entities.Player.Weapons
                 }
 
                 return true;
-            }
-
-            return false;
-        }
+            }*/
+            false;
     }
 }

@@ -1,10 +1,13 @@
-﻿using System.Collections;
+﻿/*
+using System.Collections;
 using Entities.Interfaces;
 using Pools;
 using Sirenix.OdinInspector;
+using Unity.Physics;
 using UnityEngine;
 using UnityEngine.Serialization;
 using Util;
+using Collider = UnityEngine.Collider;
 using Random = UnityEngine.Random;
 
 namespace Entities.Generic
@@ -12,11 +15,7 @@ namespace Entities.Generic
     [RequireComponent(typeof(Rigidbody2D), typeof(PolygonCollider2D))]
     public class BulletGeneric : MonoBehaviour, IPoolElement
     {
-        public enum BulletType
-        {
-            Fragment,
-            Bullet
-        }
+
 
         [FormerlySerializedAs("WeaponType")] public BulletType weaponType;
         public string PoolId { get; private set; }
@@ -37,9 +36,9 @@ namespace Entities.Generic
 
         private void Awake()
         {
-            _rigidbody = GetComponent<Rigidbody2D>();
+            _rigidbody = GetComponent<Rigidbody>();
             _renderer = GetComponent<SpriteRenderer>();
-            _collider = GetComponent<PolygonCollider2D>();
+            _collider = GetComponent<PolygonCollider>();
 
             PoolId = weaponType.ToString();
         }
@@ -73,7 +72,7 @@ namespace Entities.Generic
 
         public void OnDespawn() { }
 
-        public void OnCollisionEnter2D(Collision2D coll)
+        public void OnCollisionEnter(Collision coll)
         {
             if (MarkedForRemove || coll.gameObject.layer != _targetLayer || coll.collider.isTrigger) return;
             var damageAble = coll.gameObject.GetComponent<IDamageAble>();
@@ -86,7 +85,7 @@ namespace Entities.Generic
             }
         }
 
-        public void OnTriggerEnter2D(Collider2D other)
+        public void OnTriggerEnter(Collider other)
         {
             if (other.gameObject.layer == LayerMask.NameToLayer("Wall")) BulletPool.Instance.ReleaseObject(this);
         }
@@ -151,3 +150,6 @@ namespace Entities.Generic
         }
     }
 }
+*/
+
+

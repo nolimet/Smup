@@ -48,12 +48,12 @@ namespace Entities.Player
 
         public IBaseWeapon MainWeapon;
 
-        private Rigidbody2D _rigi;
+        private Rigidbody _rigi;
         // Use this for initialization
 
         private void Start()
         {
-            _rigi = GetComponent<Rigidbody2D>();
+            _rigi = GetComponent<Rigidbody>();
             MainWeapon = new Cannon();
         }
 
@@ -87,7 +87,7 @@ namespace Entities.Player
         private void FireMain()
         {
             if (!GameManager.Stats.CanFire(MainWeapon.EnergyCost)) return;
-            if (MainWeapon.TryShoot(gameObject, weaponOffset, GetAddedVelocity()))
+            if (MainWeapon.TryShoot(transform.position, weaponOffset, GetAddedVelocity()))
             {
                 GameManager.Stats.RemoveEnergy(MainWeapon.EnergyCost);
                 OnFireWeapon?.Invoke(_currentWeapon);

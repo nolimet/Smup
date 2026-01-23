@@ -1,33 +1,37 @@
-﻿using Entities.Player.Weapons;
+﻿using Cysharp.Threading.Tasks;
+using Entities.ECS.Bullet;
+using Entities.Player.Weapons;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
-public class StaticCannon : MonoBehaviour
+namespace Test_Scripts
 {
-    public IBaseWeapon Gun;
-    public Vector3 spawnPosition = new(0.5f, 0);
-    public Vector2 inheritVelocity = new();
-
-    public float shootInterval = 0.2f;
-    private float _timer = 0;
-
-    private void Start()
+    public class StaticCannon : MonoBehaviour
     {
-        Gun = new Cannon();
-        _timer = shootInterval;
-    }
+        [ShowInInspector] public IBaseWeapon Gun;
+        public Vector3 spawnPosition = new(0.5f, 0);
+        public Vector2 inheritVelocity;
 
-    private void Update()
-    {
-        _timer -= Time.deltaTime;
-        if (_timer <= 0)
+        private void Start()
         {
-            Gun.TryShoot(gameObject, spawnPosition, inheritVelocity);
-            _timer = shootInterval;
+            Gun = new Cannon();
+            enabled = false;
+            UniTask.Delay(1000).ContinueWith(BulletSpawner.Init).ContinueWith(() => enabled = true).Forget();
         }
-    }
 
-    private void OnDrawGizmos()
-    {
-        Gizmos.DrawSphere(transform.position + spawnPosition, 0.1f);
+        private void Update()
+        {
+            Gun.TryShoot(transform.position, spawnPosition, inheritVelocity);
+        }
+
+        private void OnDrawGizmos()
+        {
+            Gizmos.DrawSphere(transform.position + spawnPosition, 0.1f);
+        }
+
+        private void OnDestroy()
+        {
+            BulletSpawner.DeInit();
+        }
     }
 }

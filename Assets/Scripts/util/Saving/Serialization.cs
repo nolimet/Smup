@@ -1,7 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.IO;
-using System.Runtime.InteropServices;
-using System.Runtime.Serialization.Formatters.Binary;
 using JetBrains.Annotations;
 using UnityEngine;
 
@@ -12,16 +10,6 @@ namespace Util.Saving
     /// </summary>
     public static class Serialization
     {
-        [DllImport("__Internal")]
-        private static extern void SyncFiles();
-
-        [DllImport("__Internal")]
-        private static extern void WindowAlert(string message);
-
-        #region fileSaveSettings
-
-        private static readonly BinaryFormatter BinaryFormatter = new();
-
         /// <summary>
         /// File types that are defined.
         /// </summary>
@@ -58,8 +46,6 @@ namespace Util.Saving
                 },
             };
 
-        #endregion
-
         /// <summary>
         /// Generates a string for where the file is located
         /// </summary>
@@ -84,8 +70,6 @@ namespace Util.Saving
         /// <returns>Name + Type </returns>
         private static string GetFileType(string fileName, FileTypes fileType) => fileName + FileExstentions[fileType];
 
-        #region Binary Saving & Loading
-
         public static void SaveBinary<T>([NotNull] T instance) where T : IBinarySerializable
         {
             SaveBinaryInternal(instance.FileName, instance);
@@ -104,8 +88,6 @@ namespace Util.Saving
             var filePath = Path.Combine(targetDirectory, GetFileType(fileName, FileTypes.Binary));
             var bytes = instance.GetBytes();
             File.WriteAllBytes(filePath, bytes);
-
-            if (Application.platform == RuntimePlatform.WebGLPlayer) SyncFiles();
         }
 
         public static bool TryLoadBinary<T>(out T data) where T : IBinarySerializable, new()
@@ -134,7 +116,5 @@ namespace Util.Saving
             data.ApplyBytes(bytes);
             return true;
         }
-
-        #endregion Binary Saving & Loading
     }
 }

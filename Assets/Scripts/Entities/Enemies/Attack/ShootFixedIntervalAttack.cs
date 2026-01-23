@@ -1,8 +1,6 @@
 ﻿using System;
 using Data;
 using Entities.Enemies.Interfaces;
-using Entities.Generic;
-using Pools;
 using UnityEngine;
 
 namespace Entities.Enemies.Attack
@@ -42,10 +40,10 @@ namespace Entities.Enemies.Attack
 
         private void Shoot(Vector2 position, Vector2 motionVector)
         {
-            var bullet = BulletPool.Instance.GetObject(nameof(BulletGeneric.BulletType.Bullet));
+            /*var bullet = BulletPool.Instance.GetObject(nameof(BulletType.Bullet));
             bullet.transform.position = position;
             bullet.Init(damagePerShot, -180, motionVector.x + shotSpeed, LayerMask.NameToLayer("Player"));
-            bullet.gameObject.layer = LayerMask.NameToLayer("EnemyBullets");
+            bullet.gameObject.layer = LayerMask.NameToLayer("EnemyBullets");*/
         }
     }
 }

@@ -1,11 +1,10 @@
 ﻿using Entities.Generic;
 using Pools;
 using UnityEngine;
-using Util;
 
 namespace Managers
 {
-    [RequireComponent(typeof(CircleCollider2D))]
+    [RequireComponent(typeof(SphereCollider))]
     public class PickupManager : MonoBehaviour
     {
         private int _pickupLayer;
@@ -15,7 +14,7 @@ namespace Managers
         private void Start()
         {
             _pickupLayer = LayerMask.NameToLayer("Pickup");
-            GetComponent<CircleCollider2D>().radius = 7 * Mathf.Pow(1.2f, SaveDataManager.Upgrades.ScrapCollectionRange);
+            GetComponent<SphereCollider>().radius = 7 * Mathf.Pow(1.2f, SaveDataManager.Upgrades.ScrapCollectionRange);
         }
 
         private void OnDestroy()
@@ -24,14 +23,14 @@ namespace Managers
             SaveDataManager.Upgrades.upgradeCurrency += Mathf.FloorToInt(PickedUpScrap * ((dat.ScrapConversionRate + 1) * 1.1f));
         }
 
-        public void OnTriggerStay2D(Collider2D col)
+        public void OnTriggerStay(Collider col)
         {
             if (col.gameObject.layer == _pickupLayer)
             {
-                var rigidBody = col.GetComponent<Rigidbody2D>();
+                var rigidBody = col.GetComponent<Rigidbody>();
                 if (!rigidBody) return;
 
-                var speed = rigidBody.linearVelocity.GetLength();
+                var speed = rigidBody.linearVelocity.magnitude;
                 if (speed < 0) speed *= -1;
 
                 if (speed < 20)
@@ -43,17 +42,17 @@ namespace Managers
             }
         }
 
-        public void OnTriggerExit2D(Collider2D col)
+        public void OnTriggerExit(Collider col)
         {
-            if (col.gameObject.layer == _pickupLayer) col.GetComponent<Rigidbody2D>().linearDamping = 5f;
+            if (col.gameObject.layer == _pickupLayer) col.GetComponent<Rigidbody>().linearDamping = 5f;
         }
 
-        public void OnTriggerEnter2D(Collider2D col)
+        public void OnTriggerEnter(Collider col)
         {
-            if (col.gameObject.layer == _pickupLayer) col.GetComponent<Rigidbody2D>().linearDamping = 1f;
+            if (col.gameObject.layer == _pickupLayer) col.GetComponent<Rigidbody>().linearDamping = 1f;
         }
 
-        public void OnCollisionEnter2D(Collision2D col)
+        public void OnCollisionEnter(Collision col)
         {
             if (col.gameObject.layer == _pickupLayer)
             {
