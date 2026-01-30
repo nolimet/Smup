@@ -402,6 +402,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1182021738}
   - component: {fileID: 1182021737}
+  - component: {fileID: 1182021739}
   m_Layer: 0
   m_Name: Cannon
   m_TagString: Untagged
@@ -423,7 +424,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::StaticCannon
   spawnPosition: {x: 0.5, y: 0, z: 0}
   inheritVelocity: {x: 0, y: 0}
-  shootInterval: 0.2
 --- !u!4 &1182021738
 Transform:
   m_ObjectHideFlags: 0
@@ -439,6 +439,20 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1182021739
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1182021736}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1700349c8c15d7a449b5a96678c34c86, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Util.SnapToScreenPoint
+  camera: {fileID: 140652437}
+  screenPosition: {x: -1, y: 0, z: 0}
 --- !u!1 &1419598861
 GameObject:
   m_ObjectHideFlags: 0
