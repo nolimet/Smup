@@ -1,4 +1,3 @@
-using Entities.ECS.Bullet.Components;
 using Entities.ECS.ScreenBoundery.Components;
 using Unity.Burst;
 using Unity.Entities;
@@ -27,13 +26,21 @@ namespace Entities.ECS.ScreenBoundery.Systems
 			var ecbSingleton = SystemAPI.GetSingleton<EndSimulationEntityCommandBufferSystem.Singleton>();
 			var ecb = ecbSingleton.CreateCommandBuffer(state.WorldUnmanaged);
 
-			foreach (var (transform, entity) in SystemAPI.Query<RefRO<LocalTransform>>().WithAll<BulletData>().WithEntityAccess())
+			foreach (var (transform, entity) in SystemAPI.Query<RefRO<LocalTransform>>().WithAll<ViewBoundComponent>().WithEntityAccess())
 			{
 				var pos = transform.ValueRO.Position;
 
 				if (pos.x < bounds.x || pos.x > bounds.y || pos.y < bounds.z || pos.y > bounds.w)
 				{
-					ecb.AddComponent<Disabled>(entity);
+					var comp = SystemAPI.GetComponent<ViewBoundComponent>(entity);
+					if (comp.DestroyWhenOutOfView)
+					{
+						ecb.DestroyEntity(entity);
+					}
+					else
+					{
+						ecb.AddComponent<Disabled>(entity);
+					}
 				}
 			}
 		}

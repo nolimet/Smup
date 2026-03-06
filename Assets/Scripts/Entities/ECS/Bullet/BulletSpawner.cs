@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using Entities.ECS.Bullet.Components;
 using Entities.ECS.Bullet.Enums;
-using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
@@ -53,10 +52,9 @@ namespace Entities.ECS.Bullet
 			_instance = null;
 		}
 
-		[BurstCompile]
 		public static void Shoot(BulletType type, float3 position, float3 inheritVelocity, float[] angles, float speed, float damage)
 		{
-			var em = Unity.Entities.World.DefaultGameObjectInjectionWorld.EntityManager;
+			var em = _instance._entityManager;
 			if (!_instance._bulletLibrary.TryGetValue(type, out var prefab))
 			{
 				return;
