@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4859480240518947410}
   - component: {fileID: 6042981469840433425}
+  - component: {fileID: 4776874476216103189}
   - component: {fileID: 8581253181137185551}
   - component: {fileID: 9138320436802600281}
   - component: {fileID: 4999364255621465803}
@@ -74,6 +75,22 @@ MonoBehaviour:
     - rid: 6525113431072440401
       type: {class: LinearMovement, ns: Entities.Enemies.Movement, asm: Assembly-CSharp}
       data: 
+--- !u!114 &4776874476216103189
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7444935995485977337}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0e18ed8b2cb24c43a4706d4c8d4582ed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Entities.ECS.Enemies.EnemyAuthoring
+  health: 1
+  scrapValue: 50
+  scrapCloudSize: 7
+  contactDamage: 40
 --- !u!212 &8581253181137185551
 SpriteRenderer:
   serializedVersion: 2
