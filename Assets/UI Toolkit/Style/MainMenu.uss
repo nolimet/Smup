@@ -1,0 +1,20 @@
+.main-menu {
+
+}
+
+.main-menu__container {
+    width: 300px;
+    align-self: center;
+
+    background-color: #303030;
+    padding: 10px;
+    border-radius: 10px;
+
+}
+
+.main-menu .unity-button {
+    background-color: #222222;
+    border-width: 0;
+    border-radius: 0;
+    
+}

@@ -24,15 +24,19 @@ namespace Smup.UI.MainMenu.Upgrade.Elements
         {
             AddToClassList(ussClassName);
 
+            var container = new VisualElement();
+            container.AddToClassList(ussClassName + "__container");
+            hierarchy.Add(container);
+
             _scrollView = new ScrollView();
             _scrollView.AddToClassList(ussUpgradesContainerClassName);
-            hierarchy.Add(_scrollView);
+            container.Add(_scrollView);
 
             GenerateElements();
 
             var closeButton = new Button(() => CloseClicked?.Invoke()) { text = "Close" };
             closeButton.AddToClassList(ussCloseButtonClassName);
-            hierarchy.Add(closeButton);
+            container.Add(closeButton);
         }
 
         private void GenerateElements()

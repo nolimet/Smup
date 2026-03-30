@@ -1,6 +1,8 @@
 @import url("/Assets/UI Toolkit/UnityThemes/UnityDefaultRuntimeTheme.tss");
 
 @import url("/Assets/UI Toolkit/Style/UpgradeMenuStyle.uss");
+@import url("/Assets/UI Toolkit/Style/MainMenu.uss");
+
 
 
 VisualElement {}

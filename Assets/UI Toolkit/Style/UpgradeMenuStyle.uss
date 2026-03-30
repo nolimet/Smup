@@ -8,11 +8,35 @@
 }
 
 .upgrade-container {
-    width: 100%;
-    min-width: 575px;
-    flex-grow: 1;
-    flex-shrink: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+    justify-content: center;
+}
+
+.upgrade-container__container {
+    width: 600px;
+    min-height: 400px;
     align-self: center;
+    margin-top: 30px;
+    margin-bottom: 30px;
+    flex-grow: 1;
+}
+
+.upgrade-container__close-button {
+    position: absolute;
+    top: 0;
+    right: -50px;
+
+    width: 50px;
+
+    padding: 0;
+    margin: 0;
+
+    background-color: rgba(0, 0, 0, .4);
 }
 
 .category, .upgrade {
