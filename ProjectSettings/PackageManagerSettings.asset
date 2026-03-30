@@ -47,6 +47,8 @@ MonoBehaviour:
   m_RegistryInfoDraft:
     m_Modified: 0
     m_ErrorMessage: 
-    m_UserModificationsInstanceId: -894
-    m_OriginalInstanceId: -898
-  m_LoadAssets: 0
+    m_UserModificationsEntityId:
+      m_Data: -918
+    m_OriginalEntityId:
+      m_Data: -920
+  m_LoadAssets: -1
