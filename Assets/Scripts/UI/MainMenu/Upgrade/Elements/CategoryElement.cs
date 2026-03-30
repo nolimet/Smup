@@ -1,7 +1,7 @@
-﻿using UnityEngine.UIElements;
-using UpgradeSystem.Attributes;
+﻿using Smup.UpgradeSystem.Attributes;
+using UnityEngine.UIElements;
 
-namespace UpgradeSystem.UI.Elements
+namespace Smup.UI.MainMenu.Upgrade.Elements
 {
     public class CategoryElement : Foldout
     {

@@ -1,7 +1,8 @@
 using System.Reflection;
-using UpgradeSystem.Attributes;
+using Smup.UpgradeSystem;
+using Smup.UpgradeSystem.Attributes;
 
-namespace UpgradeSystem.UI.Elements
+namespace Smup.UI.MainMenu.Upgrade.Elements
 {
     internal class WeaponUpgradeGroup : CategoryElement
     {

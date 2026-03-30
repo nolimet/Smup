@@ -1,20 +1,38 @@
-﻿using System.Reflection;
-using Managers;
+﻿using System;
+using System.Reflection;
+using Smup.Managers;
+using Smup.UpgradeSystem;
+using Smup.UpgradeSystem.Attributes;
 using UnityEngine;
 using UnityEngine.UIElements;
-using UpgradeSystem.Attributes;
 
-namespace UpgradeSystem.UI.Elements
+namespace Smup.UI.MainMenu.Upgrade.Elements
 {
     [UxmlElement]
     public partial class UpgradeContainer : VisualElement
     {
+        public event Action CloseClicked;
+
         public const string ussClassName = "upgrade-container";
+        public const string ussCloseButtonClassName = ussClassName + "__close-button";
+        public const string ussUpgradesContainerClassName = ussClassName + "__upgrades-container";
+
+        private readonly ScrollView _scrollView;
+        public override VisualElement contentContainer => _scrollView;
 
         public UpgradeContainer()
         {
             AddToClassList(ussClassName);
+
+            _scrollView = new ScrollView();
+            _scrollView.AddToClassList(ussUpgradesContainerClassName);
+            hierarchy.Add(_scrollView);
+
             GenerateElements();
+
+            var closeButton = new Button(() => CloseClicked?.Invoke()) { text = "Close" };
+            closeButton.AddToClassList(ussCloseButtonClassName);
+            hierarchy.Add(closeButton);
         }
 
         private void GenerateElements()

@@ -1,9 +1,10 @@
 ﻿using System.Globalization;
-using Managers;
+using Smup.Managers;
+using Smup.UpgradeSystem;
+using Smup.UpgradeSystem.Attributes;
 using UnityEngine.UIElements;
-using UpgradeSystem.Attributes;
 
-namespace UpgradeSystem.UI.Elements
+namespace Smup.UI.MainMenu.Upgrade.Elements
 {
     public class UpgradableElement : VisualElement
     {
