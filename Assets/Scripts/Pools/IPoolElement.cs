@@ -1,4 +1,4 @@
-﻿namespace Pools
+﻿namespace Smup.Pools
 {
     public interface IPoolElement
     {

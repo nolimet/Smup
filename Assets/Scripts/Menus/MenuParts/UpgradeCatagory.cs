@@ -2,7 +2,7 @@
 using UnityEngine.Serialization;
 using UnityEngine.UI;
 
-namespace Menus.MenuParts
+namespace Smup.Menus.MenuParts
 {
     public class UpgradeCatagory : MonoBehaviour
     {

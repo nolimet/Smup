@@ -3,7 +3,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Util.DebugHelpers
+namespace Smup.Util.DebugHelpers
 {
     /// <summary>
     /// On screen debugger usefull when working with a game build but you want to do some error tracking

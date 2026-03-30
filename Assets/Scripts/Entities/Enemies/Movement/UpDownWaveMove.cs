@@ -1,8 +1,8 @@
 ﻿using System;
-using Entities.Enemies.Interfaces;
+using Smup.Entities.Enemies.Interfaces;
 using UnityEngine;
 
-namespace Entities.Enemies.Movement
+namespace Smup.Entities.Enemies.Movement
 {
     [Serializable]
     public class UpDownWaveMove : IMovement

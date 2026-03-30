@@ -5,7 +5,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using JetBrains.Annotations;
 using UnityEngine;
 
-namespace Util.Saving
+namespace Smup.Util.Saving
 {
     /// <summary>
     /// class that handels serialization and writing to disk

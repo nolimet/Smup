@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace UpgradeSystem.Attributes
+namespace Smup.UpgradeSystem.Attributes
 {
     [AttributeUsage(AttributeTargets.Field)]
     public class ElementAttribute : Attribute

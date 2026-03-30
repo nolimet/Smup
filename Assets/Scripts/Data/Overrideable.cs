@@ -2,7 +2,7 @@
 using Sirenix.OdinInspector;
 using UnityEngine;
 
-namespace Data
+namespace Smup.Data
 {
     [Serializable] [InlineProperty]
     public class Overrideable<T> where T : IEquatable<T>, IFormattable

@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Util
+namespace Smup.Util
 {
     /// <summary>
     /// Scales with screen dimensions

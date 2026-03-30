@@ -1,7 +1,7 @@
 using System.IO;
 using System.Linq;
 
-namespace Helpers
+namespace Smup.Helpers
 {
     public class EnemyTypeHelper
     {

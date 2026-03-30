@@ -1,8 +1,8 @@
-﻿using Entities.Enemies;
-using Sirenix.OdinInspector;
+﻿using Sirenix.OdinInspector;
+using Smup.Entities.Enemies;
 using UnityEngine;
 
-namespace Tools
+namespace Smup.Tools
 {
     public class EnemyGroup : MonoBehaviour
     {

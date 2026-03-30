@@ -1,9 +1,9 @@
-﻿using Entities.Player.Weapons;
-using Managers;
+﻿using Smup.Entities.Player.Weapons;
+using Smup.Managers;
+using Smup.Util;
 using UnityEngine;
-using Util;
 
-namespace Entities.Player
+namespace Smup.Entities.Player
 {
     public class PlayerWeaponControler : MonoBehaviour
     {

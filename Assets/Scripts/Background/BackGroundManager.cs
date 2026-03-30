@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace Background
+namespace Smup.Background
 {
     public class BackGroundManager : MonoBehaviour
     {

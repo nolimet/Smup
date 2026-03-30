@@ -1,53 +1,53 @@
 ﻿using System;
 using Sirenix.OdinInspector;
 
-namespace UpgradeSystem
+namespace Smup.UpgradeSystem
 {
-	[Serializable]
-	public abstract class Upgradable
-	{
-		public const int ByteSize = 4;
-		public static readonly byte[] Empty = new byte[ByteSize];
+    [Serializable]
+    public abstract class Upgradable
+    {
+        public const int ByteSize = 4;
+        public static readonly byte[] Empty = new byte[ByteSize];
 
-		public delegate double GetCostDelegate(int level);
+        public delegate double GetCostDelegate(int level);
 
-		private readonly GetCostDelegate _getCostFunc;
-		public double Cost => _getCostFunc(CurrentLevel);
+        private readonly GetCostDelegate _getCostFunc;
+        public double Cost => _getCostFunc(CurrentLevel);
 
-		[ShowInInspector] protected int CurrentLevel;
-		[ShowInInspector] [ReadOnly] protected readonly int MaxLevel;
+        [ShowInInspector] protected int CurrentLevel;
+        [ShowInInspector] [ReadOnly] protected readonly int MaxLevel;
 
-		protected Upgradable(int maxLevel, GetCostDelegate getCostFunc)
-		{
-			_getCostFunc = getCostFunc;
-			MaxLevel = maxLevel;
-		}
+        protected Upgradable(int maxLevel, GetCostDelegate getCostFunc)
+        {
+            _getCostFunc = getCostFunc;
+            MaxLevel = maxLevel;
+        }
 
-		public byte[] ToBytes() => BitConverter.GetBytes(CurrentLevel);
+        public byte[] ToBytes() => BitConverter.GetBytes(CurrentLevel);
 
-		public void ApplyBytes(ReadOnlySpan<byte> bytes)
-		{
-			CurrentLevel = BitConverter.ToInt32(bytes);
-		}
+        public void ApplyBytes(ReadOnlySpan<byte> bytes)
+        {
+            CurrentLevel = BitConverter.ToInt32(bytes);
+        }
 
-		public (int current, int max) GetLevels() => (CurrentLevel, MaxLevel);
+        public (int current, int max) GetLevels() => (CurrentLevel, MaxLevel);
 
-		public void IncrementLevel()
-		{
-			CurrentLevel++;
-		}
-	}
+        public void IncrementLevel()
+        {
+            CurrentLevel++;
+        }
+    }
 
-	[Serializable]
-	public class Upgradable<TValueType> : Upgradable
-	{
-		public delegate TValueType GetValueDelegate(int level);
+    [Serializable]
+    public class Upgradable<TValueType> : Upgradable
+    {
+        public delegate TValueType GetValueDelegate(int level);
 
-		private readonly GetValueDelegate _getValueFunc;
-		[ShowInInspector] [ReadOnly] public TValueType Value => _getValueFunc(CurrentLevel);
+        private readonly GetValueDelegate _getValueFunc;
+        [ShowInInspector] [ReadOnly] public TValueType Value => _getValueFunc(CurrentLevel);
 
-		public Upgradable(int maxLevel, GetValueDelegate getValueFunc, GetCostDelegate getCostFunc) : base(maxLevel, getCostFunc) => _getValueFunc = getValueFunc;
+        public Upgradable(int maxLevel, GetValueDelegate getValueFunc, GetCostDelegate getCostFunc) : base(maxLevel, getCostFunc) => _getValueFunc = getValueFunc;
 
-		public static implicit operator TValueType(Upgradable<TValueType> value) => value.Value;
-	}
+        public static implicit operator TValueType(Upgradable<TValueType> value) => value.Value;
+    }
 }

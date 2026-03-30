@@ -1,11 +1,11 @@
-﻿using Entities.Interfaces;
-using Managers;
+﻿using Smup.Entities.Interfaces;
+using Smup.Managers;
+using Smup.UI.Game;
 using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
-using ValueClasses;
 
-namespace Entities.Player
+namespace Smup.Entities.Player
 {
     public class PlayerStats : MonoBehaviour, IDamageAble
     {

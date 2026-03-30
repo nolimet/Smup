@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using JetBrains.Annotations;
+using Smup.Util.StateMachine.Interfaces;
 using UnityEngine;
-using Util.StateMachine.Interfaces;
 
-namespace Util.StateMachine
+namespace Smup.Util.StateMachine
 {
     /// <summary>
     /// Manages the execution and transitions of a finite state machine, tracking the current state

@@ -1,11 +1,11 @@
 ﻿using System;
-using Entities.Generic;
 using Sirenix.OdinInspector;
+using Smup.Entities.Generic;
 using UnityEngine;
 using UnityEngine.Pool;
 using Random = UnityEngine.Random;
 
-namespace Pools
+namespace Smup.Pools
 {
     public class ScrapPickupPool : MonoBehaviour
     {

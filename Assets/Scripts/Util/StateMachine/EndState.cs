@@ -1,6 +1,6 @@
-﻿using Util.StateMachine.Interfaces;
+﻿using Smup.Util.StateMachine.Interfaces;
 
-namespace Util.StateMachine
+namespace Smup.Util.StateMachine
 {
     /// <summary>
     /// Represents the final state in a state machine.

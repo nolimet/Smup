@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace UpgradeSystem.Attributes
+namespace Smup.UpgradeSystem.Attributes
 {
     public class CategoryAttribute : Attribute
     {

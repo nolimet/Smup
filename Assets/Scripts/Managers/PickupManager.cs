@@ -1,9 +1,9 @@
-﻿using Entities.Generic;
-using Pools;
+﻿using Smup.Entities.Generic;
+using Smup.Pools;
+using Smup.Util;
 using UnityEngine;
-using Util;
 
-namespace Managers
+namespace Smup.Managers
 {
     [RequireComponent(typeof(CircleCollider2D))]
     public class PickupManager : MonoBehaviour

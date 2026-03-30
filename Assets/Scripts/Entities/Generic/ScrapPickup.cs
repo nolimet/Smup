@@ -1,7 +1,7 @@
-﻿using Pools;
+﻿using Smup.Pools;
 using UnityEngine;
 
-namespace Entities.Generic
+namespace Smup.Entities.Generic
 {
     public class ScrapPickup : MonoBehaviour
     {

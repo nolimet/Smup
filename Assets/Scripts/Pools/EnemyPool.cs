@@ -1,6 +1,6 @@
-﻿using Entities.Enemies;
+﻿using Smup.Entities.Enemies;
 
-namespace Pools
+namespace Smup.Pools
 {
     public class EnemyPool : BasePool<Enemy, EnemyPool>
     {

@@ -1,4 +1,4 @@
-﻿namespace Util
+﻿namespace Smup.Util
 {
     public class Axis
     {

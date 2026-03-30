@@ -1,8 +1,8 @@
 ﻿using JetBrains.Annotations;
-using UpgradeSystem;
-using Util.Saving;
+using Smup.UpgradeSystem;
+using Smup.Util.Saving;
 
-namespace Managers
+namespace Smup.Managers
 {
     public static class SaveDataManager
     {

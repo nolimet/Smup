@@ -1,8 +1,8 @@
-﻿using UnityEngine;
+﻿using Smup.Util;
+using UnityEngine;
 using UnityEngine.Serialization;
-using Util;
 
-namespace Graphical
+namespace Smup.Graphical
 {
     public class PlayerThrusterEffect : MonoBehaviour
     {

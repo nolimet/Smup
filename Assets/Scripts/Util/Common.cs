@@ -2,7 +2,7 @@
 using JetBrains.Annotations;
 using UnityEngine;
 
-namespace Util
+namespace Smup.Util
 {
     /// <summary>
     /// Common Utily libary. It contains fuctions that I used regulary or where very hard to figure out.

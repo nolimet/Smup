@@ -1,11 +1,11 @@
 ﻿using System;
-using Entities.Generic;
-using Managers;
-using Pools;
+using Smup.Entities.Generic;
+using Smup.Managers;
+using Smup.Pools;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-namespace Entities.Player.Weapons
+namespace Smup.Entities.Player.Weapons
 {
     public class MiniGun : IBaseWeapon
     {

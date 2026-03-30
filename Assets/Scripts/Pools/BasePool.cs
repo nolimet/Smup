@@ -4,7 +4,7 @@ using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Pool;
 
-namespace Pools
+namespace Smup.Pools
 {
     public interface IPool<TPoolElement> : IDisposable where TPoolElement : Component, IPoolElement
     {

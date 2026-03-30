@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using Sirenix.OdinInspector;
+using Smup.Util.StateMachine;
+using Smup.Util.StateMachine.Interfaces;
+using Smup.World.Level.States;
 using UnityEngine;
-using Util.StateMachine;
-using Util.StateMachine.Interfaces;
-using World.Level.States;
 
-namespace World.Level
+namespace Smup.World.Level
 {
     public class LevelStateMachine : MonoBehaviour, IStateMachine
     {

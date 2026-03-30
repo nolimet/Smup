@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Util
+namespace Smup.Util
 {
     /// <summary>
     /// Snaps a Object to a position on screen

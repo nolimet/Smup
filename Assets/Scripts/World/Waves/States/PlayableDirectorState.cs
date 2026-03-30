@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Threading;
 using Cysharp.Threading.Tasks;
-using Pools;
 using Sirenix.OdinInspector;
+using Smup.Pools;
+using Smup.Util.StateMachine;
+using Smup.World.Waves.Interfaces;
 using UnityEngine;
 using UnityEngine.Playables;
 using UnityEngine.SceneManagement;
-using Util.StateMachine;
-using World.Waves.Interfaces;
 using Object = UnityEngine.Object;
 
-namespace World.Waves.States
+namespace Smup.World.Waves.States
 {
     [Serializable]
     public class PlayableDirectorState : ISequenceElement

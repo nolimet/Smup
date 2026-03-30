@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Util
+namespace Smup.Util
 {
     public class MoveBoxScaler : MonoBehaviour
     {

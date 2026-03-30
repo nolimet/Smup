@@ -1,10 +1,10 @@
 using System;
-using Helpers;
 using Sirenix.OdinInspector;
+using Smup.Helpers;
 using UnityEngine;
 using UnityEngine.Serialization;
 
-namespace World.Waves.Data
+namespace Smup.World.Waves.Data
 {
     [Serializable]
     public class SpawnPatternPart

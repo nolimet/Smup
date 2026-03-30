@@ -1,8 +1,8 @@
-﻿using Managers;
+﻿using Smup.Managers;
+using Smup.Util;
 using UnityEngine;
-using Util;
 
-namespace Entities.Player
+namespace Smup.Entities.Player
 {
     [RequireComponent(typeof(Rigidbody2D))]
     public class PlayerMoveControler : MonoBehaviour

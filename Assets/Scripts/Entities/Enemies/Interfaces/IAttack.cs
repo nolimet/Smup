@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Entities.Enemies.Interfaces
+namespace Smup.Entities.Enemies.Interfaces
 {
     public interface IAttack
     {

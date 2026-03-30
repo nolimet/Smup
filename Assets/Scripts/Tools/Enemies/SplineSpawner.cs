@@ -1,13 +1,13 @@
 ﻿using System;
-using Entities.Enemies.Movement;
-using Helpers;
 using JetBrains.Annotations;
-using Pools;
 using Sirenix.OdinInspector;
+using Smup.Entities.Enemies.Movement;
+using Smup.Helpers;
+using Smup.Pools;
 using UnityEngine;
 using UnityEngine.Splines;
 
-namespace Tools.Enemies
+namespace Smup.Tools.Enemies
 {
     public class SplineSpawner : MonoBehaviour
     {

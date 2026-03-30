@@ -1,10 +1,10 @@
-﻿namespace Util.Saving
+﻿namespace Smup.Util.Saving
 {
-	public interface IBinarySerializable
-	{
-		string FileName { get; }
+    public interface IBinarySerializable
+    {
+        string FileName { get; }
 
-		byte[] GetBytes();
-		void ApplyBytes(byte[] bytes);
-	}
+        byte[] GetBytes();
+        void ApplyBytes(byte[] bytes);
+    }
 }

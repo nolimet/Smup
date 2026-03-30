@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using Sirenix.OdinInspector;
+using Smup.Util.StateMachine;
+using Smup.Util.StateMachine.Interfaces;
+using Smup.World.Waves.Interfaces;
 using UnityEngine;
-using Util.StateMachine;
-using Util.StateMachine.Interfaces;
-using World.Waves.Interfaces;
 
-namespace World.Level.States
+namespace Smup.World.Level.States
 {
     [Serializable]
     public class WaveState : IState, IStateMachine

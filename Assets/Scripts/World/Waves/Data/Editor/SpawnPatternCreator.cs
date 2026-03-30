@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
-using Entities.Enemies;
+using Smup.Entities.Enemies;
+using Smup.World.Waves.Data;
 using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine;

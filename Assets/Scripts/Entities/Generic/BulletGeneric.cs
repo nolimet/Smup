@@ -1,13 +1,13 @@
 ﻿using System.Collections;
-using Entities.Interfaces;
-using Pools;
 using Sirenix.OdinInspector;
+using Smup.Entities.Interfaces;
+using Smup.Pools;
+using Smup.Util;
 using UnityEngine;
 using UnityEngine.Serialization;
-using Util;
 using Random = UnityEngine.Random;
 
-namespace Entities.Generic
+namespace Smup.Entities.Generic
 {
     [RequireComponent(typeof(Rigidbody2D), typeof(PolygonCollider2D))]
     public class BulletGeneric : MonoBehaviour, IPoolElement

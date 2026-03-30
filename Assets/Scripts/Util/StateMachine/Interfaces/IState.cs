@@ -1,4 +1,4 @@
-﻿namespace Util.StateMachine.Interfaces
+﻿namespace Smup.Util.StateMachine.Interfaces
 {
     public interface IState
     {

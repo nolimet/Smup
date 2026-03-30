@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Entities.Enemies.Interfaces
+namespace Smup.Entities.Enemies.Interfaces
 {
     public interface IKillAtEnd
     {

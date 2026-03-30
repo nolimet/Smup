@@ -1,6 +1,6 @@
-﻿using Util.StateMachine.Interfaces;
+﻿using Smup.Util.StateMachine.Interfaces;
 
-namespace World.Waves.Interfaces
+namespace Smup.World.Waves.Interfaces
 {
     public interface ISequenceElement : IState { }
 }

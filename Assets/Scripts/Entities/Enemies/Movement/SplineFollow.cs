@@ -1,10 +1,10 @@
 ﻿using System;
-using Entities.Enemies.Interfaces;
 using JetBrains.Annotations;
+using Smup.Entities.Enemies.Interfaces;
 using UnityEngine;
 using UnityEngine.Splines;
 
-namespace Entities.Enemies.Movement
+namespace Smup.Entities.Enemies.Movement
 {
     [Serializable]
     public class SplineFollow : IMovement, IKillAtEnd

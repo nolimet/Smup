@@ -1,11 +1,11 @@
-﻿using Entities.Player;
-using Sirenix.OdinInspector;
+﻿using Sirenix.OdinInspector;
+using Smup.Entities.Player;
+using Smup.UpgradeSystem;
+using Smup.Util.DebugHelpers;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UpgradeSystem;
-using Util.DebugHelpers;
 
-namespace Managers
+namespace Smup.Managers
 {
     public class GameManager : MonoBehaviour
     {

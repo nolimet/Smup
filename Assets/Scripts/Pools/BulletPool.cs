@@ -1,6 +1,6 @@
-﻿using Entities.Generic;
+﻿using Smup.Entities.Generic;
 
-namespace Pools
+namespace Smup.Pools
 {
     public class BulletPool : BasePool<BulletGeneric, BulletPool>
     {

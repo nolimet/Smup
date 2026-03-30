@@ -1,11 +1,11 @@
 ﻿using System;
-using Data;
-using Entities.Enemies.Interfaces;
-using Entities.Generic;
-using Pools;
+using Smup.Data;
+using Smup.Entities.Enemies.Interfaces;
+using Smup.Entities.Generic;
+using Smup.Pools;
 using UnityEngine;
 
-namespace Entities.Enemies.Attack
+namespace Smup.Entities.Enemies.Attack
 {
     [Serializable]
     public class ShootFixedIntervalAttack : IAttack

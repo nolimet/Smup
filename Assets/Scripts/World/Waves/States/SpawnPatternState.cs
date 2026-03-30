@@ -2,16 +2,16 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Cysharp.Threading.Tasks;
-using Helpers;
-using Pools;
 using Sirenix.OdinInspector;
 using Sirenix.Serialization;
+using Smup.Helpers;
+using Smup.Pools;
+using Smup.Util.StateMachine;
+using Smup.World.Waves.Data;
+using Smup.World.Waves.Interfaces;
 using UnityEngine;
-using Util.StateMachine;
-using World.Waves.Data;
-using World.Waves.Interfaces;
 
-namespace World.Waves.States
+namespace Smup.World.Waves.States
 {
     [Serializable]
     public class SpawnPatternState : ISequenceElement

@@ -1,9 +1,9 @@
-using Helpers;
-using Pools;
 using Sirenix.OdinInspector;
+using Smup.Helpers;
+using Smup.Pools;
 using UnityEngine;
 
-namespace Tools.Enemies
+namespace Smup.Tools.Enemies
 {
     public class SpawnPoint : MonoBehaviour
     {

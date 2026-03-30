@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.Serialization;
 
-namespace Util
+namespace Smup.Util
 {
     /// <summary>
     /// 3d version of Scale to ScreenSize

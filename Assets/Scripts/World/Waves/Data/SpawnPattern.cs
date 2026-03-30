@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace World.Waves.Data
+namespace Smup.World.Waves.Data
 {
     public class SpawnPattern : ScriptableObject
     {

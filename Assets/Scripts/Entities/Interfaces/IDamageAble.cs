@@ -1,4 +1,4 @@
-﻿namespace Entities.Interfaces
+﻿namespace Smup.Entities.Interfaces
 {
     public interface IDamageAble
     {

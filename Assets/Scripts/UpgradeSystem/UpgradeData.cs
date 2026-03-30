@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Sirenix.OdinInspector;
-using UpgradeSystem.Attributes;
-using Util.Saving;
+using Smup.UpgradeSystem.Attributes;
+using Smup.Util.Saving;
 
-namespace UpgradeSystem
+namespace Smup.UpgradeSystem
 {
     [Serializable]
     public class UpgradeData : IBinarySerializable

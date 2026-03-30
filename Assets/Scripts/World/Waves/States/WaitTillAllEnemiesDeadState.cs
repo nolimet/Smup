@@ -1,10 +1,10 @@
 ﻿using System;
 using Cysharp.Threading.Tasks;
-using Pools;
-using Util.StateMachine;
-using World.Waves.Interfaces;
+using Smup.Pools;
+using Smup.Util.StateMachine;
+using Smup.World.Waves.Interfaces;
 
-namespace World.Waves.States
+namespace Smup.World.Waves.States
 {
     [Serializable]
     public class WaitTillAllEnemiesDeadState : ISequenceElement

@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace Util.UI
+namespace Smup.Util.UI
 {
     /// <summary>
     /// Used in quick prototyping of buttons for the UI sytem

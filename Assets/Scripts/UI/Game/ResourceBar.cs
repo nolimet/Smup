@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace ValueClasses
+namespace Smup.UI.Game
 {
     [Serializable]
     public class Bar
