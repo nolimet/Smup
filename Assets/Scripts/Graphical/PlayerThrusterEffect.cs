@@ -1,5 +1,7 @@
-﻿using Smup.Util;
+﻿using Smup.Managers;
+using Smup.Util;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.Serialization;
 
 namespace Smup.Graphical
@@ -16,10 +18,21 @@ namespace Smup.Graphical
         [FormerlySerializedAs("BoostLeft")] [SerializeField] private ParticleSystem[] boostLeft;
         [FormerlySerializedAs("BoostRight")] [SerializeField] private ParticleSystem[] boostRight;
 
+        private InputActions.PlayerActions _actions;
+
+        private InputAction _boostAction, _moveAction;
+
+        private void Start()
+        {
+            _actions = GameManager.Input.Player;
+            _boostAction = _actions.Boost;
+            _moveAction = _actions.PlayerMove;
+        }
+
         private void Update()
         {
-            var dir = new Vector2(Input.GetAxis(Axis.Horizontal), Input.GetAxis(Axis.Vertical));
-            if (Input.GetAxis(Axis.Boost) == 0)
+            var dir = _moveAction.ReadValue<Vector2>();
+            if (!_boostAction.IsPressed())
             {
                 UpdateThursters(dir);
                 UpdateBoostThursters(Vector2.zero);

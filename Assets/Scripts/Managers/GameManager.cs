@@ -3,7 +3,7 @@ using Smup.Entities.Player;
 using Smup.UpgradeSystem;
 using Smup.Util.DebugHelpers;
 using UnityEngine;
-using UnityEngine.SceneManagement;
+using UnityEngine.InputSystem;
 
 namespace Smup.Managers
 {
@@ -19,6 +19,7 @@ namespace Smup.Managers
         public static PlayerStats Stats => Instance.playerStats;
         public static PlayerWeaponControler WeaponController => Instance.playerWeaponControler;
         public static PickupManager PickupManager => Instance.pickupManager;
+        public static InputActions Input => Instance._input;
 
         public static GameManager Instance
         {
@@ -33,6 +34,8 @@ namespace Smup.Managers
         }
 
         private static GameManager _instance;
+        private PlayerInput _playerInput;
+        private InputActions _input;
 
         public void Awake()
         {
@@ -44,6 +47,9 @@ namespace Smup.Managers
             }
 
             _instance = this;
+            _input = new InputActions();
+            _playerInput = GetComponent<PlayerInput>();
+            _playerInput.actions = _input.asset;
 
             Debugger.DebugEnabled = true;
         }
@@ -54,10 +60,10 @@ namespace Smup.Managers
             SaveDataManager.SaveAll();
         }
 
-        private void Update()
+        /*private void Update()
         {
             if (Input.GetKeyDown(KeyCode.Escape)) //TODO refactor to use a asset refrence. To make sure we returned to the menu
                 SceneManager.LoadScene(0, LoadSceneMode.Single);
-        }
+        }*/
     }
 }

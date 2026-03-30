@@ -1,7 +1,7 @@
 ﻿using Smup.Entities.Player.Weapons;
 using Smup.Managers;
-using Smup.Util;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace Smup.Entities.Player
 {
@@ -19,31 +19,22 @@ namespace Smup.Entities.Player
 
         public WeaponType CurrentWeapon
         {
+            get => _currentWeapon;
+
             set
             {
                 if (value != _currentWeapon)
-                    switch (value)
+                    MainWeapon = value switch
                     {
-                        case WeaponType.Cannon:
-                            MainWeapon = new Cannon();
-                            break;
-                        case WeaponType.Minigun:
-                            MainWeapon = new MiniGun();
-                            break;
-
-                        case WeaponType.Shotgun:
-                            MainWeapon = new ShotGun();
-                            break;
-
-                        case WeaponType.Granade:
-                            MainWeapon = new Granade();
-                            break;
-                    }
+                        WeaponType.Cannon => new Cannon(),
+                        WeaponType.Minigun => new MiniGun(),
+                        WeaponType.Shotgun => new ShotGun(),
+                        WeaponType.Granade => new Granade(),
+                        _ => MainWeapon
+                    };
 
                 _currentWeapon = value;
             }
-
-            get => _currentWeapon;
         }
 
         public IBaseWeapon MainWeapon;
@@ -51,40 +42,47 @@ namespace Smup.Entities.Player
         private Rigidbody2D _rigi;
         // Use this for initialization
 
+        private InputActions.PlayerActions _playerInput;
+        private InputActions.SwitchWeaponActions _switchWeapon;
+
         private void Start()
         {
+            _playerInput = GameManager.Input.Player;
             _rigi = GetComponent<Rigidbody2D>();
             MainWeapon = new Cannon();
+
+            _playerInput.Shoot.performed += FireMain;
+            _playerInput.Shoot.Enable();
+
+            _switchWeapon = GameManager.Input.SwitchWeapon;
+            _switchWeapon.Enable();
+            _switchWeapon.Cannon.performed += SwitchToCannon;
+            _switchWeapon.Minigun.performed += SwitchToMinigun;
+            _switchWeapon.Shotgun.performed += SwitchToShotgun;
+            _switchWeapon.Granade.performed += SwitchToGranade;
         }
 
-        // Update is called once per frame
-        private void Update()
+        private void SwitchToGranade(InputAction.CallbackContext ctx) => SwitchToWeapon(WeaponType.Granade);
+
+        private void SwitchToShotgun(InputAction.CallbackContext ctx) => SwitchToWeapon(WeaponType.Shotgun);
+
+        private void SwitchToMinigun(InputAction.CallbackContext ctx) => SwitchToWeapon(WeaponType.Minigun);
+
+        private void SwitchToCannon(InputAction.CallbackContext ctx) => SwitchToWeapon(WeaponType.Cannon);
+
+        private void SwitchToWeapon(WeaponType type)
         {
-            if (Input.GetButton(Axis.Fire))
-                FireMain();
-            else
-                Firing = false;
-
-            SwitchWeapon();
+            CurrentWeapon = type switch
+            {
+                WeaponType.Cannon => type,
+                WeaponType.Minigun when SaveDataManager.Upgrades.Minigun.Unlocked => type,
+                WeaponType.Shotgun when SaveDataManager.Upgrades.Shotgun.Unlocked => type,
+                WeaponType.Granade when SaveDataManager.Upgrades.Grenade.Unlocked => type,
+                _ => _currentWeapon
+            };
         }
 
-        private void SwitchWeapon()
-        {
-            if (Input.GetKeyDown(KeyCode.Alpha1)) CurrentWeapon = WeaponType.Cannon;
-            if (Input.GetKeyDown(KeyCode.Alpha2))
-                if (SaveDataManager.Upgrades.Minigun.Unlocked)
-                    CurrentWeapon = WeaponType.Minigun;
-
-            if (Input.GetKeyDown(KeyCode.Alpha3))
-                if (SaveDataManager.Upgrades.Shotgun.Unlocked)
-                    CurrentWeapon = WeaponType.Shotgun;
-
-            if (Input.GetKeyDown(KeyCode.Alpha4))
-                if (SaveDataManager.Upgrades.Grenade.Unlocked)
-                    CurrentWeapon = WeaponType.Granade;
-        }
-
-        private void FireMain()
+        private void FireMain(InputAction.CallbackContext callbackContext)
         {
             if (!GameManager.Stats.CanFire(MainWeapon.EnergyCost)) return;
             if (MainWeapon.TryShoot(gameObject, weaponOffset, GetAddedVelocity()))
@@ -94,15 +92,18 @@ namespace Smup.Entities.Player
             }
         }
 
-        private Vector2 GetAddedVelocity()
-        {
-            Vector2 output;
+        private Vector2 GetAddedVelocity() => _rigi.linearVelocity.x > 0 ? new Vector2(_rigi.linearVelocity.x, 0f) : Vector2.zero;
 
-            if (_rigi.linearVelocity.x > 0)
-                output = new Vector2(_rigi.linearVelocity.x, 0f);
-            else
-                output = Vector2.zero;
-            return output;
+        private void OnDestroy()
+        {
+            _switchWeapon.Disable();
+            _switchWeapon.Cannon.performed -= SwitchToCannon;
+            _switchWeapon.Minigun.performed -= SwitchToMinigun;
+            _switchWeapon.Shotgun.performed -= SwitchToShotgun;
+            _switchWeapon.Granade.performed -= SwitchToGranade;
+
+            _playerInput.Shoot.Disable();
+            _playerInput.Shoot.performed -= FireMain;
         }
     }
 }

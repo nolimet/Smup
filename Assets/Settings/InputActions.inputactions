@@ -115,6 +115,94 @@
             ]
         },
         {
+            "name": "SwitchWeapon",
+            "id": "561abd15-1598-4bf3-84fb-088c1c9d63e4",
+            "actions": [
+                {
+                    "name": "Cannon",
+                    "type": "Button",
+                    "id": "dfa81b19-b2e3-4c03-a7e2-1bc6b3bc220a",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Minigun",
+                    "type": "Button",
+                    "id": "950d6318-3b39-4b16-9f44-e26f2deee0b7",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Shotgun",
+                    "type": "Button",
+                    "id": "3c27eb3c-8344-4b2d-b742-0e588e3ffcc0",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Granade",
+                    "type": "Button",
+                    "id": "14b5b9f9-71ab-4136-9899-486f07a49cf8",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "d52ce069-0df0-4f9f-a5fc-5627118dc909",
+                    "path": "<Keyboard>/1",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Cannon",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "82317c25-3bd8-4d0b-af35-548d9f10a971",
+                    "path": "<Keyboard>/2",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Minigun",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "cb02b233-ebd1-4fa6-b829-ddf8117e71e5",
+                    "path": "<Keyboard>/3",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Shotgun",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "dca6f7e6-3604-4e2c-98c5-e1d7d05a76f5",
+                    "path": "<Keyboard>/4",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Granade",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
             "name": "UI",
             "id": "9eae5cb7-9167-442d-961d-cadc90f79bfc",
             "actions": [

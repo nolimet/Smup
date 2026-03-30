@@ -201,6 +201,94 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
             ]
         },
         {
+            ""name"": ""SwitchWeapon"",
+            ""id"": ""561abd15-1598-4bf3-84fb-088c1c9d63e4"",
+            ""actions"": [
+                {
+                    ""name"": ""Cannon"",
+                    ""type"": ""Button"",
+                    ""id"": ""dfa81b19-b2e3-4c03-a7e2-1bc6b3bc220a"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Minigun"",
+                    ""type"": ""Button"",
+                    ""id"": ""950d6318-3b39-4b16-9f44-e26f2deee0b7"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Shotgun"",
+                    ""type"": ""Button"",
+                    ""id"": ""3c27eb3c-8344-4b2d-b742-0e588e3ffcc0"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Granade"",
+                    ""type"": ""Button"",
+                    ""id"": ""14b5b9f9-71ab-4136-9899-486f07a49cf8"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""d52ce069-0df0-4f9f-a5fc-5627118dc909"",
+                    ""path"": ""<Keyboard>/1"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Cannon"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""82317c25-3bd8-4d0b-af35-548d9f10a971"",
+                    ""path"": ""<Keyboard>/2"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Minigun"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""cb02b233-ebd1-4fa6-b829-ddf8117e71e5"",
+                    ""path"": ""<Keyboard>/3"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Shotgun"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""dca6f7e6-3604-4e2c-98c5-e1d7d05a76f5"",
+                    ""path"": ""<Keyboard>/4"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Granade"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
+        },
+        {
             ""name"": ""UI"",
             ""id"": ""9eae5cb7-9167-442d-961d-cadc90f79bfc"",
             ""actions"": [
@@ -724,6 +812,12 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
         m_Player_PlayerMove = m_Player.FindAction("PlayerMove", throwIfNotFound: true);
         m_Player_Boost = m_Player.FindAction("Boost", throwIfNotFound: true);
         m_Player_Shoot = m_Player.FindAction("Shoot", throwIfNotFound: true);
+        // SwitchWeapon
+        m_SwitchWeapon = asset.FindActionMap("SwitchWeapon", throwIfNotFound: true);
+        m_SwitchWeapon_Cannon = m_SwitchWeapon.FindAction("Cannon", throwIfNotFound: true);
+        m_SwitchWeapon_Minigun = m_SwitchWeapon.FindAction("Minigun", throwIfNotFound: true);
+        m_SwitchWeapon_Shotgun = m_SwitchWeapon.FindAction("Shotgun", throwIfNotFound: true);
+        m_SwitchWeapon_Granade = m_SwitchWeapon.FindAction("Granade", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -741,6 +835,7 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
     ~@InputActions()
     {
         UnityEngine.Debug.Assert(!m_Player.enabled, "This will cause a leak and performance issues, InputActions.Player.Disable() has not been called.");
+        UnityEngine.Debug.Assert(!m_SwitchWeapon.enabled, "This will cause a leak and performance issues, InputActions.SwitchWeapon.Disable() has not been called.");
         UnityEngine.Debug.Assert(!m_UI.enabled, "This will cause a leak and performance issues, InputActions.UI.Disable() has not been called.");
     }
 
@@ -931,6 +1026,135 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
     /// Provides a new <see cref="PlayerActions" /> instance referencing this action map.
     /// </summary>
     public PlayerActions @Player => new PlayerActions(this);
+
+    // SwitchWeapon
+    private readonly InputActionMap m_SwitchWeapon;
+    private List<ISwitchWeaponActions> m_SwitchWeaponActionsCallbackInterfaces = new List<ISwitchWeaponActions>();
+    private readonly InputAction m_SwitchWeapon_Cannon;
+    private readonly InputAction m_SwitchWeapon_Minigun;
+    private readonly InputAction m_SwitchWeapon_Shotgun;
+    private readonly InputAction m_SwitchWeapon_Granade;
+    /// <summary>
+    /// Provides access to input actions defined in input action map "SwitchWeapon".
+    /// </summary>
+    public struct SwitchWeaponActions
+    {
+        private @InputActions m_Wrapper;
+
+        /// <summary>
+        /// Construct a new instance of the input action map wrapper class.
+        /// </summary>
+        public SwitchWeaponActions(@InputActions wrapper) { m_Wrapper = wrapper; }
+        /// <summary>
+        /// Provides access to the underlying input action "SwitchWeapon/Cannon".
+        /// </summary>
+        public InputAction @Cannon => m_Wrapper.m_SwitchWeapon_Cannon;
+        /// <summary>
+        /// Provides access to the underlying input action "SwitchWeapon/Minigun".
+        /// </summary>
+        public InputAction @Minigun => m_Wrapper.m_SwitchWeapon_Minigun;
+        /// <summary>
+        /// Provides access to the underlying input action "SwitchWeapon/Shotgun".
+        /// </summary>
+        public InputAction @Shotgun => m_Wrapper.m_SwitchWeapon_Shotgun;
+        /// <summary>
+        /// Provides access to the underlying input action "SwitchWeapon/Granade".
+        /// </summary>
+        public InputAction @Granade => m_Wrapper.m_SwitchWeapon_Granade;
+        /// <summary>
+        /// Provides access to the underlying input action map instance.
+        /// </summary>
+        public InputActionMap Get() { return m_Wrapper.m_SwitchWeapon; }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Enable()" />
+        public void Enable() { Get().Enable(); }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Disable()" />
+        public void Disable() { Get().Disable(); }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.enabled" />
+        public bool enabled => Get().enabled;
+        /// <summary>
+        /// Implicitly converts an <see ref="SwitchWeaponActions" /> to an <see ref="InputActionMap" /> instance.
+        /// </summary>
+        public static implicit operator InputActionMap(SwitchWeaponActions set) { return set.Get(); }
+        /// <summary>
+        /// Adds <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
+        /// </summary>
+        /// <param name="instance">Callback instance.</param>
+        /// <remarks>
+        /// If <paramref name="instance" /> is <c>null</c> or <paramref name="instance"/> have already been added this method does nothing.
+        /// </remarks>
+        /// <seealso cref="SwitchWeaponActions" />
+        public void AddCallbacks(ISwitchWeaponActions instance)
+        {
+            if (instance == null || m_Wrapper.m_SwitchWeaponActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_SwitchWeaponActionsCallbackInterfaces.Add(instance);
+            @Cannon.started += instance.OnCannon;
+            @Cannon.performed += instance.OnCannon;
+            @Cannon.canceled += instance.OnCannon;
+            @Minigun.started += instance.OnMinigun;
+            @Minigun.performed += instance.OnMinigun;
+            @Minigun.canceled += instance.OnMinigun;
+            @Shotgun.started += instance.OnShotgun;
+            @Shotgun.performed += instance.OnShotgun;
+            @Shotgun.canceled += instance.OnShotgun;
+            @Granade.started += instance.OnGranade;
+            @Granade.performed += instance.OnGranade;
+            @Granade.canceled += instance.OnGranade;
+        }
+
+        /// <summary>
+        /// Removes <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
+        /// </summary>
+        /// <remarks>
+        /// Calling this method when <paramref name="instance" /> have not previously been registered has no side-effects.
+        /// </remarks>
+        /// <seealso cref="SwitchWeaponActions" />
+        private void UnregisterCallbacks(ISwitchWeaponActions instance)
+        {
+            @Cannon.started -= instance.OnCannon;
+            @Cannon.performed -= instance.OnCannon;
+            @Cannon.canceled -= instance.OnCannon;
+            @Minigun.started -= instance.OnMinigun;
+            @Minigun.performed -= instance.OnMinigun;
+            @Minigun.canceled -= instance.OnMinigun;
+            @Shotgun.started -= instance.OnShotgun;
+            @Shotgun.performed -= instance.OnShotgun;
+            @Shotgun.canceled -= instance.OnShotgun;
+            @Granade.started -= instance.OnGranade;
+            @Granade.performed -= instance.OnGranade;
+            @Granade.canceled -= instance.OnGranade;
+        }
+
+        /// <summary>
+        /// Unregisters <param cref="instance" /> and unregisters all input action callbacks via <see cref="SwitchWeaponActions.UnregisterCallbacks(ISwitchWeaponActions)" />.
+        /// </summary>
+        /// <seealso cref="SwitchWeaponActions.UnregisterCallbacks(ISwitchWeaponActions)" />
+        public void RemoveCallbacks(ISwitchWeaponActions instance)
+        {
+            if (m_Wrapper.m_SwitchWeaponActionsCallbackInterfaces.Remove(instance))
+                UnregisterCallbacks(instance);
+        }
+
+        /// <summary>
+        /// Replaces all existing callback instances and previously registered input action callbacks associated with them with callbacks provided via <param cref="instance" />.
+        /// </summary>
+        /// <remarks>
+        /// If <paramref name="instance" /> is <c>null</c>, calling this method will only unregister all existing callbacks but not register any new callbacks.
+        /// </remarks>
+        /// <seealso cref="SwitchWeaponActions.AddCallbacks(ISwitchWeaponActions)" />
+        /// <seealso cref="SwitchWeaponActions.RemoveCallbacks(ISwitchWeaponActions)" />
+        /// <seealso cref="SwitchWeaponActions.UnregisterCallbacks(ISwitchWeaponActions)" />
+        public void SetCallbacks(ISwitchWeaponActions instance)
+        {
+            foreach (var item in m_Wrapper.m_SwitchWeaponActionsCallbackInterfaces)
+                UnregisterCallbacks(item);
+            m_Wrapper.m_SwitchWeaponActionsCallbackInterfaces.Clear();
+            AddCallbacks(instance);
+        }
+    }
+    /// <summary>
+    /// Provides a new <see cref="SwitchWeaponActions" /> instance referencing this action map.
+    /// </summary>
+    public SwitchWeaponActions @SwitchWeapon => new SwitchWeaponActions(this);
 
     // UI
     private readonly InputActionMap m_UI;
@@ -1154,6 +1378,42 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnShoot(InputAction.CallbackContext context);
+    }
+    /// <summary>
+    /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "SwitchWeapon" which allows adding and removing callbacks.
+    /// </summary>
+    /// <seealso cref="SwitchWeaponActions.AddCallbacks(ISwitchWeaponActions)" />
+    /// <seealso cref="SwitchWeaponActions.RemoveCallbacks(ISwitchWeaponActions)" />
+    public interface ISwitchWeaponActions
+    {
+        /// <summary>
+        /// Method invoked when associated input action "Cannon" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnCannon(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Minigun" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnMinigun(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Shotgun" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnShotgun(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Granade" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnGranade(InputAction.CallbackContext context);
     }
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "UI" which allows adding and removing callbacks.

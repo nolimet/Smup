@@ -1,5 +1,4 @@
 ﻿using Smup.Managers;
-using Smup.Util;
 using UnityEngine;
 
 namespace Smup.Entities.Player
@@ -13,25 +12,32 @@ namespace Smup.Entities.Player
 
         private Rigidbody2D _rig;
 
+        private InputActions.PlayerActions _playerInput;
+
         // Use this for initialization
         private void Start()
         {
             _rig = GetComponent<Rigidbody2D>();
+            _playerInput = GameManager.Input.Player;
+
+            _playerInput.PlayerMove.Enable();
+            _playerInput.Boost.Enable();
         }
 
         // Update is called once per frame
         private void Update()
         {
             var dir = Vector2.zero;
+            var input = _playerInput.PlayerMove.ReadValue<Vector2>();
 
-            if (Input.GetAxis(Axis.Horizontal) > 0)
-                dir.x = Speed * Input.GetAxis(Axis.Horizontal);
-            if (Input.GetAxis(Axis.Horizontal) < 0)
-                dir.x = Speed * 0.7f * Input.GetAxis(Axis.Horizontal);
-            if (Input.GetAxis(Axis.Vertical) != 0)
-                dir.y = Speed * 0.75f * Input.GetAxis(Axis.Vertical);
+            if (input.x > 0)
+                dir.x = Speed * input.x;
+            if (input.x < 0)
+                dir.x = Speed * 0.7f * input.x;
+            if (input.y != 0)
+                dir.y = Speed * 0.75f * input.y;
 
-            if (Input.GetAxis(Axis.Boost) != 0 && dir.magnitude > float.Epsilon)
+            if (_playerInput.Boost.IsPressed() && dir.magnitude > float.Epsilon)
                 if (GameManager.Stats.CanFire(_boostCost * Time.deltaTime))
                 {
                     GameManager.Stats.RemoveEnergy(_boostCost * Time.deltaTime);
@@ -39,6 +45,12 @@ namespace Smup.Entities.Player
                 }
 
             _rig.linearVelocity = dir;
+        }
+
+        private void OnDestroy()
+        {
+            _playerInput.PlayerMove.Disable();
+            _playerInput.Boost.Disable();
         }
     }
 }
