@@ -23,8 +23,8 @@ namespace Smup.UI.MainMenu
 
             _upgradeContainer.CloseClicked += OnCloseUpgradeClicked;
 
-            _upgradeContainer.style.display = DisplayStyle.Flex;
-            _mainMenuView.style.display = DisplayStyle.None;
+            _upgradeContainer.style.display = DisplayStyle.None;
+            _mainMenuView.style.display = DisplayStyle.Flex;
         }
 
         private void OnStartClicked()
