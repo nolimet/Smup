@@ -1,0 +1,16 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc700c4599784e37aa4df1630c66f9eb, type: 3}
+  m_Name: SpawnPattern-Test
+  m_EditorClassIdentifier: Assembly-CSharp::Smup.World.Waves.Data.SpawnPattern
+  parts: []
+  data: 1f8b080000000000000a636260608802622e28666068b067e46260646460e000919432b818f8d14d4f610000c0a3644875000000
