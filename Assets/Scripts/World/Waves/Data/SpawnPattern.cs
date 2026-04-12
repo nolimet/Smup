@@ -13,7 +13,7 @@ namespace Smup.World.Waves.Data
     public class SpawnPattern : ScriptableObject, ISerializationCallbackReceiver
     {
         public List<SpawnPatternPart> parts = new();
-        [ShowInInspector] public List<SpawnGroup> Groups = new();
+        [ShowInInspector] private List<SpawnGroup> Groups = new();
 
         [SerializeField] private byte[] data;
 
