@@ -88,6 +88,8 @@ namespace Smup.Pools
 
             private static void OnDestroy(TPoolElement obj)
             {
+                if (!obj) return;
+
                 Destroy(obj.gameObject);
             }
 
@@ -99,6 +101,8 @@ namespace Smup.Pools
 
             private static void OnRelease(TPoolElement obj)
             {
+                if (!obj) return;
+
                 obj.gameObject.SetActive(false);
                 obj.OnDespawn();
             }
