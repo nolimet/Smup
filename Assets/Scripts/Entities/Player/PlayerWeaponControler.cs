@@ -1,4 +1,5 @@
-﻿using Smup.Entities.Player.Weapons;
+﻿using System.Collections;
+using Smup.Entities.Player.Weapons;
 using Smup.Managers;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -44,6 +45,7 @@ namespace Smup.Entities.Player
 
         private InputActions.PlayerActions _playerInput;
         private InputActions.SwitchWeaponActions _switchWeapon;
+        private Coroutine _shootRepeaterRoutine;
 
         private void Start()
         {
@@ -51,7 +53,7 @@ namespace Smup.Entities.Player
             _rigi = GetComponent<Rigidbody2D>();
             MainWeapon = new Cannon();
 
-            _playerInput.Shoot.performed += FireMain;
+            _playerInput.Shoot.performed += OnShootPressed;
             _playerInput.Shoot.Enable();
 
             _switchWeapon = GameManager.Input.SwitchWeapon;
@@ -82,7 +84,23 @@ namespace Smup.Entities.Player
             };
         }
 
-        private void FireMain(InputAction.CallbackContext callbackContext)
+        private void OnShootPressed(InputAction.CallbackContext _)
+        {
+            _shootRepeaterRoutine ??= StartCoroutine(ShootRepeater());
+        }
+
+        private IEnumerator ShootRepeater()
+        {
+            while (_playerInput.Shoot.IsPressed())
+            {
+                FireMain();
+                yield return new WaitForSeconds(0.1f);
+            }
+
+            _shootRepeaterRoutine = null;
+        }
+
+        private void FireMain()
         {
             if (!GameManager.Stats.CanFire(MainWeapon.EnergyCost)) return;
             if (MainWeapon.TryShoot(gameObject, weaponOffset, GetAddedVelocity()))
@@ -103,7 +121,7 @@ namespace Smup.Entities.Player
             _switchWeapon.Granade.performed -= SwitchToGranade;
 
             _playerInput.Shoot.Disable();
-            _playerInput.Shoot.performed -= FireMain;
+            _playerInput.Shoot.performed -= OnShootPressed;
         }
     }
 }
