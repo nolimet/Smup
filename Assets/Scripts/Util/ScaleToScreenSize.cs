@@ -7,7 +7,7 @@ namespace Smup.Util
     /// </summary>
     public class ScaleToScreenSize : MonoBehaviour
     {
-        [SerializeField] private new Camera camera;
+        [SerializeField] private  Camera camera;
 
         public Vector3 screenSize = Vector3.zero;
 

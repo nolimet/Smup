@@ -7,7 +7,7 @@ namespace Smup.Util
     /// </summary>
     public class SnapToScreenPoint : MonoBehaviour
     {
-        [SerializeField] private new Camera camera;
+        [SerializeField] private Camera camera;
         public Vector3 screenPosition = Vector3.zero;
 
         private void Start()
