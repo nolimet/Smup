@@ -183,14 +183,16 @@ namespace Smup.Util.StateMachine
             currentState?.OnExit();
             if (currentState != null) currentState.CurrentStateMachine = null;
 
+            var previousStateIndex = _currentStateIndex;
+            _currentStateIndex = index;
+
             var newState = _states[index];
             newState.CurrentStateMachine = this;
             newState.OnEnter();
 
-            if (_debuggingEnabled) Debug.Log($"Transitioning from ({_currentStateIndex}){currentState?.GetType().Name} to({index}){_states[index].GetType().Name}");
+            if (_debuggingEnabled) Debug.Log($"Transitioning from ({previousStateIndex}){currentState?.GetType().Name} to({index}){_states[index].GetType().Name}");
 
             StateChanged?.Invoke(currentState, newState);
-            _currentStateIndex = index;
 
             if (CurrentState is EndState)
                 EndStateEntered?.Invoke();
