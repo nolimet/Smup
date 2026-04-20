@@ -1,7 +1,10 @@
+using System.Collections.Generic;
 using Smup.UI.MainMenu.Elements;
+using Smup.UI.MainMenu.States;
 using Smup.UI.MainMenu.Upgrade.Elements;
+using Smup.Util.StateMachine;
+using Smup.Util.StateMachine.Interfaces;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 
 namespace Smup.UI.MainMenu
@@ -11,42 +14,35 @@ namespace Smup.UI.MainMenu
     {
         private readonly MainMenuView _mainMenuView;
         private readonly UpgradeContainer _upgradeContainer;
+        public StateMachineRuntime Runtime { get; private set; }
 
         public MainMenuContainer()
         {
             Add(_upgradeContainer = new UpgradeContainer());
             Add(_mainMenuView = new MainMenuView());
 
-            _mainMenuView.StartClicked += OnStartClicked;
-            _mainMenuView.UpgradesClicked += OnUpgradeOpenClicked;
-            _mainMenuView.ExitClicked += OnExitClicked;
-
-            _upgradeContainer.CloseClicked += OnCloseUpgradeClicked;
-
-            _upgradeContainer.style.display = DisplayStyle.None;
-            _mainMenuView.style.display = DisplayStyle.Flex;
+            if (Application.isPlaying)
+            {
+                RegisterCallbackOnce<AttachToPanelEvent>(_ => StartStateMachine());
+                RegisterCallbackOnce<DetachFromPanelEvent>(_ => StopStateMachine());
+            }
         }
 
-        private void OnStartClicked()
+        public void StartStateMachine()
         {
-            SceneManager.LoadScene("Game", LoadSceneMode.Single);
+            Runtime = new StateMachineRuntime(new List<IState>
+            {
+                new SetupState(_mainMenuView, _upgradeContainer),
+                new MainMenuViewState(_mainMenuView),
+                new UpgradeScreenState(_upgradeContainer),
+                new StartGameState()
+            }, true);
+            Runtime.ToFirstState();
         }
 
-        private void OnCloseUpgradeClicked()
+        public void StopStateMachine()
         {
-            _upgradeContainer.style.display = DisplayStyle.None;
-            _mainMenuView.style.display = DisplayStyle.Flex;
-        }
-
-        private void OnUpgradeOpenClicked()
-        {
-            _mainMenuView.style.display = DisplayStyle.None;
-            _upgradeContainer.style.display = DisplayStyle.Flex;
-        }
-
-        private void OnExitClicked()
-        {
-            Application.Quit();
+            Runtime.ToEndState();
         }
     }
 }
