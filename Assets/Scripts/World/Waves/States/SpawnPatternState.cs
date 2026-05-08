@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Cysharp.Threading.Tasks;
 using Sirenix.OdinInspector;
 using Sirenix.Serialization;
@@ -34,13 +33,14 @@ namespace Smup.World.Waves.States
         private List<PartOverride> _typeOverrides = new();
 
         private void SpawnPatternChanged() => _typeOverrides.Clear();
-        private bool ShowTypeOverrides() => spawnPattern && spawnPattern.parts.Count > 0;
+        private bool ShowTypeOverrides() => spawnPattern && false; //spawnPattern.parts.Count > 0; //TODO FIX THIS
         private bool DynamicOffsetIsSet() => dynamicSpawnOffset;
 
         public void OnEnter()
         {
             Vector2 origin = dynamicSpawnOffset.position + (Vector3)spawnOffset;
 
+            /* //TODO fix this (Handle enemy spawning)
             foreach (var part in spawnPattern.parts)
             {
                 var enemyTypeName = _typeOverrides.FirstOrDefault(x => x.key == part.typeName)?.value;
@@ -52,6 +52,7 @@ namespace Smup.World.Waves.States
                     enemy.transform.position = origin + partPosition;
                 }
             }
+            */
 
             if (WaitForZeroEnemies)
                 UniTask.WaitUntil(() => EnemyPool.Instance.ActiveItems == 0).ContinueWith(CurrentStateMachine.ToNextState).Forget();

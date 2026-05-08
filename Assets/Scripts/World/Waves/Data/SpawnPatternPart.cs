@@ -17,6 +17,7 @@ namespace Smup.World.Waves.Data
         private string[] Enemies => EnemyTypeHelper.GetEnemyTypes();
     }
 
+    [Serializable]
     public readonly struct SpawnGroup
     {
         public readonly Vector2Int GridSize;
@@ -63,6 +64,7 @@ namespace Smup.World.Waves.Data
         public int GetByteLength() => Sections.Length * SpawnSection.ByteSize + 3 * 4;
     }
 
+    [Serializable]
     public readonly struct SpawnSection
     {
         public const int ByteSize = 3;

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using Sirenix.OdinInspector;
+using Sirenix.Serialization;
 using Smup.Util;
 using UnityEditor;
 using UnityEngine;
@@ -10,18 +11,19 @@ using CompressionLevel = System.IO.Compression.CompressionLevel;
 
 namespace Smup.World.Waves.Data
 {
-    public class SpawnPattern : ScriptableObject, ISerializationCallbackReceiver
+    [CreateAssetMenu(fileName = "SpawnPattern", menuName = "Smup/Spawn Pattern")]
+    public class SpawnPattern : SerializedScriptableObject
     {
-        public List<SpawnPatternPart> parts = new();
-        [ShowInInspector] private List<SpawnGroup> Groups = new();
+        public IReadOnlyList<SpawnGroup> Groups => _groups;
+        public string PatternID => _patternID;
 
-        [SerializeField] private byte[] data;
+        [SerializeField] private string _patternID;
+        [OdinSerialize] private List<SpawnGroup> _groups = new();
 
         [MenuItem("TEST/Create/SpawnPattern Test")]
         public static void CreateTestFile()
         {
-            var instance = CreateInstance<SpawnPattern>();
-            instance.Groups = new List<SpawnGroup>
+            var groups = new List<SpawnGroup>
             {
                 new(new Vector2Int(10, 10), 1f, new SpawnSection[]
                 {
@@ -42,38 +44,39 @@ namespace Smup.World.Waves.Data
                 })
             };
 
-            AssetDatabase.CreateAsset(instance, "Assets/SpawnPattern-Test.asset");
+            var path = Path.Combine(Application.dataPath, "SpawnPattern-Test.w");
+            File.WriteAllBytes(path, ExportBytes(groups));
         }
 
-        public void OnAfterDeserialize()
+        public void ImportBytes(byte[] bytes)
         {
-            Groups.Clear();
+            _groups.Clear();
 
-            if (data is not { Length: 0 }) return;
+            if (bytes is { Length: 0 }) return;
 
-            var span = Decompress(data).AsSpan();
+            var span = Decompress(bytes).AsSpan();
             var offset = 0;
             var groupCount = BytesHelper.ReadInt32(span, ref offset);
             for (var i = 0; i < groupCount; i++)
             {
                 var length = BytesHelper.ReadInt32(span, ref offset);
-                Groups.Add(new SpawnGroup(span[offset..]));
+                _groups.Add(new SpawnGroup(span[offset..]));
                 offset += length;
             }
         }
 
-        public void OnBeforeSerialize()
+        public static byte[] ExportBytes(IReadOnlyList<SpawnGroup> groups)
         {
             using var memoryStream = new MemoryStream();
-            BytesHelper.WriteInt32(memoryStream, Groups.Count);
-            for (var i = 0; i < Groups.Count; i++)
+            BytesHelper.WriteInt32(memoryStream, groups.Count);
+            for (var i = 0; i < groups.Count; i++)
             {
-                var bytes = Groups[i].ToBytes();
+                var bytes = groups[i].ToBytes();
                 BytesHelper.WriteInt32(memoryStream, bytes.Length);
                 memoryStream.Write(bytes);
             }
 
-            data = Compress(memoryStream.ToArray());
+            return Compress(memoryStream.ToArray());
         }
 
         private static byte[] Compress(byte[] input)

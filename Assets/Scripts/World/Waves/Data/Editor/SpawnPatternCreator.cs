@@ -1,13 +1,12 @@
 using System;
 using System.Linq;
 using Smup.Entities.Enemies;
-using Smup.World.Waves.Data;
 using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace World.Waves.Data.Editor
+namespace Smup.World.Waves.Data.Editor
 {
     public class SpawnPatternCreator : EditorWindow
     {
@@ -63,12 +62,7 @@ namespace World.Waves.Data.Editor
             var pattern = CreateInstance<SpawnPattern>();
             var groupedEnemies = gameObject.GetComponentsInChildren<Enemy>().GroupBy(x => x.TypeName);
 
-            foreach (var group in groupedEnemies)
-                pattern.parts.Add(new SpawnPatternPart
-                {
-                    typeName = group.Key,
-                    positions = group.Select(x => (Vector2)x.transform.position).ToArray()
-                });
+            //TODO generate groups from selection
 
             AssetDatabase.CreateAsset(pattern, savePath);
             AssetDatabase.SaveAssets();
